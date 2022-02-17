@@ -12,29 +12,25 @@ import java.util.*;
 public class FindNextGreaterElement {
 
 	public static void main(String[] args) {
-		int a[] = {2,5,7};
+//		int a[] = {2,5,7};
 //		int a[] = {2, 4, 8, 90, 77, 54};
-//		int a[] = {-1,2,6,1,10,23,4,5};//1 4 10 4 23 -1 5 -1 
+		int a[] = {-1,2,6,1,10,23,4,5};//1 4 10 4 23 -1 5 -1 
 		int n = a.length;
 		int result[] = new int[n];
+		result[n-1] = -1;
 		TreeSet<Integer> set = new TreeSet<>();
 		
 		for(int i= n-1; i>=0; i--) {
-			boolean isFound = false;
 			if(!set.isEmpty() && set.first() > a[i]) {
 				result[i] = set.first();
-				isFound = true;
 			}
 			else if(!set.isEmpty()) {
-				for(Integer val: set)
-					if(val > a[i]) {
-						result[i] = val;
-						isFound = true;
-						break;
-					}
+				Integer val = set.higher(a[i]);
+				if(val != null)
+					result[i] = val;
+				else 
+					result[i] = -1;
 			}
-			if(!isFound)
-				result[i] = -1;
 			set.add(a[i]);
 		}
 		for(int i=0; i<n; i++)
