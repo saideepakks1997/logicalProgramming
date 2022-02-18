@@ -2,6 +2,7 @@
 //int a[] = {26,1,4,23,9,67};//1,4,9,23,26,67
 package logical_programming;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FindKthLargestAndSmallestElement {
@@ -25,17 +26,31 @@ public class FindKthLargestAndSmallestElement {
 	}
 	//Get input from user
 	private static int[] getInputFromUser() {
-		System.out.println("Enter the number of digits");
-		int n = sc.nextInt();
-		int a[] = new int[n];
+		ArrayList<Integer> list = new ArrayList<>();
+		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter the numbers");
-		for(int i=0; i<n; i++) {
-			System.out.println("Enter number "+(i+1));
-			a[i] = sc.nextInt();
+		String str = sc.nextLine();
+		int sum = 0;
+		int pro = 1;
+		for(int i=0; i<str.length(); i++) {
+			if(str.charAt(i) == ' ' ) {
+				list.add(pro * sum);
+				sum = 0;
+				pro = 1;
+			}
+			else if(str.charAt(i) == '-') {
+				pro = -1;
+			}
+			else {
+				int val = str.charAt(i)-48;
+				sum =  (sum * 10) + val;
+			}
 		}
-		return a;
+		System.out.println(sum);
+		list.add(sum*pro);
+		return list.stream().mapToInt(i->i).toArray();
 	}
-
+	
 	private static int[] findLargeAndSmallElement(int[] a, int k) {
 		int n = a.length;
 		if(k > n) {
