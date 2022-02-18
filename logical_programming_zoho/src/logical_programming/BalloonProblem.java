@@ -2,8 +2,9 @@ package logical_programming;
 
 public class BalloonProblem {
 	public static void main(String args[]) {
-		char a[] = {'R','G','B','G','B','G','R'};
-//		 char a[] = {'B', 'G', 'B', 'R', 'G', 'R', 'B', 'G', 'R', 'R', 'B'};
+//		char a[] = {'R','G','B','G','B','G','R'};
+//		char a[] = {'R','R','B','R','G'};
+		 char a[] = {'B', 'G', 'B', 'R', 'G', 'R', 'B', 'G', 'R', 'R', 'B'};
 		 
 		char appearace[] = new char[3];
 		appearace[0] = a[0];
@@ -25,9 +26,13 @@ public class BalloonProblem {
 	private static void fillAppearanceArray(char[] appearace, char[] a) {
 		int curr = 0;
 		for(int i=0; i<a.length && curr < 3; i++) {
-			if(appearace[curr] != a[i]) {
+//			
+			if(curr == 0 && appearace[curr] != a[i]) {
 				appearace[1] = a[i];
 				curr++;
+			}
+			else if(appearace[0] != a[i] && appearace[1] != a[i]) {
+				appearace[2] = a[i];
 			}
 		}
 	}
