@@ -79,7 +79,7 @@ public class JustifyText {
 		String result = addSpace(L - str.length());
 		return str+result;
 	}
-
+	//It returns space string
 	private static String addSpace(int len) {
 		String str = new String(
 				new char[len]).replace('\0', ' ');

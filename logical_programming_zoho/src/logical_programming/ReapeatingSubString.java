@@ -19,7 +19,7 @@ class ReapeatingSubString {
 		 solve(str);
    }
 	
-    public static void solve (String str){
+    public static void solve(String str){
     	int length = str.length();
        if(length <= 3){
            return ;
@@ -42,7 +42,6 @@ class ReapeatingSubString {
                 	  {
                 		  break;
                 	  }
-                		
                 	  String str1 = str.substring(ptr,ptr+wordLen);
                 	  String str2 = str.substring(x,x+wordLen);
                       if(str1.equals(str2)) {
