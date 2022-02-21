@@ -18,10 +18,10 @@ class ReapeatingSubString {
 		 
 
 		 str = str.toLowerCase();
-		 solve(str);
+		 findRepeatedSubstring(str);
    }
 	
-    public static void solve(String str){
+    public static void findRepeatedSubstring(String str){
     	int length = str.length();
        if(length <= 3){
            return;
