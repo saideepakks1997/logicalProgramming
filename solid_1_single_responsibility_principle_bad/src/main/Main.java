@@ -1,10 +1,11 @@
 package main;
-import order.*;
 
 import java.util.Scanner;
 
-import customer.*;
-import foodDeliveryApp.*;
+import customer.Customer;
+import foodDeliveryApp.DeliveryApp;
+import order.Order;
+
 public class Main {
 	static Scanner sc = new Scanner(System.in);
 	public static void main(String[] args)
@@ -12,12 +13,10 @@ public class Main {
         Customer customer = new Customer("Mohan","Chennai");
 
         
-        Order order = new Order("Pizza",3,customer);
+        Order order = new Order("Briyani",3,customer);
   
         order.acceptOrder();
-  
-        BillCalculation billCalculation = new BillCalculation(order);
-        billCalculation.calculateBill();
+        order.calculateBill();
         
         askOption(order);
         
@@ -37,14 +36,13 @@ public class Main {
 				System.out.println("-----------------------------------");
 				int opt = sc.nextInt();
 			switch(opt) {
-				case 1:CookingInstructions ci = new CookingInstructions(order);
-					ci.cookingInstructions();
+				case 1:order.cookingInstructions();
 					break;
-				case 2:DeliveryInstructions di = new DeliveryInstructions(order);
-					di.addDeliveryInstructions();
+				case 2: DeliveryApp da = new DeliveryApp(order);
+					da.addDeliveryInstructions();
 					break;
-				case 3:CancelOrder co = new CancelOrder();
-					co.cancelOrder();
+				case 3:order.setOrderId(-1);
+					System.out.println(order.getItemName()+" has been cancelled successfully");
 					loop = false;
 					break;
 				case 4: loop = false;

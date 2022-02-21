@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>solid_2_open_for_extension_closed_for_modification_good</name>
+	<name>solid_5_dependency_inversion_priciple_bad</name>
 	<comment></comment>
 	<projects>
 	</projects>

@@ -9,12 +9,20 @@ public class BillCalculation {
   
     public void calculateBill()
     {
-        int totalAmt = 300 *  this.order.quantity;
-        this.order.totalBillAmt = totalAmt;
+        int totalAmt = 300 *  this.order.getQuantity();
+        this.order.setTotalBillAmt(totalAmt);
         System.out.println("Order Summary \n"
-		+ this.order.itemName+ " ordered\n"
-		+ "Nos "+this.order.quantity
-		+"Amount :-"+this.order.totalBillAmt
+		+ this.order.getItemName()+ " ordered\n"
+		+ "Nos "+this.order.getQuantity()
+		+"Amount :-"+this.order.getTotalBillAmt()
         		);
+    }
+    
+    public Order getOrder() {
+    	return this.order;
+    }
+    
+    public void setOrder(Order order) {
+    	this.order = order;
     }
 }

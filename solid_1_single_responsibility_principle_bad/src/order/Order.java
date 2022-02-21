@@ -1,8 +1,12 @@
 package order;
+
+import java.util.Scanner;
+
 import customer.Customer;
+
 public class Order {
-	
-	
+
+	static Scanner sc = new Scanner(System.in);
 	private Customer customer;
 	private int orderId;
 	private String itemName;
@@ -22,7 +26,28 @@ public class Order {
         System.out.println("Order has been accepted \n");
 //        		
     }
+    
+    public void calculateBill()
+    {
+        int totalAmt = 300 *  this.getQuantity();
+        this.setTotalBillAmt(totalAmt);
+        System.out.println("Order Summary \n"
+		+ this.getItemName()+ " ordered\n"
+		+ "Nos "+this.getQuantity()
+		+"Amount :-"+this.getTotalBillAmt()
+        		);
+    }
+    
+    public void cancelOrder() {
+		System.out.println(this.getOrderId()+"."+this.getItemName()+""
+				+ " has been cancelled successfully");
+	}
 
+    public void cookingInstructions() {
+		System.out.println("Enter the cooking instructions");
+		String instruction = sc.nextLine();
+		this.setCookingInstructions(instruction);
+	}
 //getter and setter methods
 	public Customer getCustomer() {
 		return customer;
