@@ -11,15 +11,23 @@ import java.util.ArrayList;
 
 public class JustifyText {
 	 public static void main(String args[]) {
-		 String words[] = {"This", "is", "an", "example", "of", "text", "justification."};
-		 int L = 16;
+//		 String words[] = {"This", "is", "an", "example", "of", "text", "justification."};
+		 String words[] = {"a","b","c","d","test","wonderfully","exceptionally","e","f"};
+		 int L = 12;
 //		 String words [] = {"Hi","I","am","developer"};
 		 int left = 0;
 		 ArrayList<String> list = new ArrayList<>();
 		 
 		 while(left < words.length) {
 			 int right = findRight(left,words,L);
-			 String str = textJustification(left,right,words,L);
+			 String str = "";
+			 try {
+				 str = textJustification(left,right,words,L);
+			 }
+			 catch(NegativeArraySizeException exception) {
+				 System.out.println("Exception handled");
+				 exception.printStackTrace();
+			 }
 			 list.add(str);
 			 left = right + 1;
 		 }
@@ -50,9 +58,9 @@ public class JustifyText {
 		
 		boolean isLastLine = (right == words.length-1)?true:false;
 		//no of spaces by default for eg if 3 words present then numsSpace = 2
-		int numSpaces = right - left;
+		int numSpaces = right - left;//2
 		//total number of spaces to be filled
-		int totalSpace = L - wordsLength(left,right,words);
+		int totalSpace = L - wordsLength(left,right,words);//8
 		
 		//evenly distributed space
 		String space = isLastLine ? " ":addSpace(totalSpace/numSpaces);

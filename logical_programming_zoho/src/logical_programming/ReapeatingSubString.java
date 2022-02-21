@@ -5,7 +5,9 @@ import java.util.*;
 
 class ReapeatingSubString {
 	 public static void main(String[] args) {
-		 String str = "However Everyday is a day";
+//		 String str = "However Everyday is a day";
+//		 String str = "Howeverhowever";
+		 String str = "how it is however working how however";//[how, how,ever]
 //		 String str = "my name my n";
 //		 String str = "i love my country india";
 //		 String str = "china china";
@@ -22,26 +24,17 @@ class ReapeatingSubString {
     public static void solve(String str){
     	int length = str.length();
        if(length <= 3){
-           return ;
+           return;
        }
        HashSet<String> hset = new HashSet<>();
        int ptr  = 0;//ptr
        while(ptr<length-2){
-           if(str.charAt(ptr)!= ' ' && str.charAt(ptr+1) != ' '){ //to eliminate space
                int x = ptr+2;
                //inner loop for checking
-               while(x<length && str.charAt(ptr)!= ' ' && str.charAt(ptr+1) != ' '){
+               while(x<length) {
                   int wordLen =2;
                   String tmp = "";
                   while(x+wordLen-1 < str.length()){
-                	  if(
-            			str.charAt(ptr+wordLen-1) == ' '
-            			||
-            			str.charAt(x+wordLen-1) == ' '
-            			  ) 
-                	  {
-                		  break;
-                	  }
                 	  String str1 = str.substring(ptr,ptr+wordLen);
                 	  String str2 = str.substring(x,x+wordLen);
                       if(str1.equals(str2)) {
@@ -52,16 +45,17 @@ class ReapeatingSubString {
                     	  break;      
                   }
                   if(tmp.length()>1){
-                	  ptr = ptr+wordLen-1;
+//                	  ptr = ptr+wordLen-1;
                       hset.add(tmp);
                   }
                    x++;
                }
-           }
+//           }
            ptr++;
        }
        if(!hset.isEmpty()) {
-    	  System.out.println(hset);  
+    	   for(String s:hset)
+    		   System.out.println(s);
        }
        else
     	   System.out.println("none");
