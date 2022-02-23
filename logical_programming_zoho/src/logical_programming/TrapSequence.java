@@ -21,7 +21,6 @@ public class TrapSequence {
 			}
 		}
 		else {
-			System.out.println("yo man");
 			for(int i=n2; i<=n1;i++) {
 				int val = findTrap(i,i);
 				if(val != -1)

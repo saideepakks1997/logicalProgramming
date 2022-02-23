@@ -10,6 +10,7 @@ public class RepeatingSubString2 {
 //		int a[] = {0,0,0,0,0,0,0};
 		int start = 0,end = 0,maxLength = 0;
 		int zeros = 0,ones = 0;
+		
 		for(int i=0; i<a.length; i++) {
 			zeros = 0;
 			ones=0;
