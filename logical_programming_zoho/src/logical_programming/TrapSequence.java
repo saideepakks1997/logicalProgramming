@@ -13,21 +13,16 @@ public class TrapSequence {
 		y = sc.nextInt();
 		
 		ArrayList<Integer> list = new ArrayList<>();
-		if(n1 <= n2) {
-			for(int i=n1; i<=n2;i++) {
-				int val = findTrap(i,i);
-				if(val != -1)
-					list.add(val);
-			}
-		}
-		else {
-			for(int i=n2; i<=n1;i++) {
-				int val = findTrap(i,i);
-				if(val != -1)
-					list.add(val);
-			}
-		}
 		
+		int start=0 ,end =0;
+		start = (n1<=n2)?n1:n2;
+		end = (n1 > n2)? n1:n2;
+			
+		for(int i=start; i<=end;i++) {
+			int val = findTrap(i,i);
+			if(val != -1)
+				list.add(val);
+		}
 		System.out.println(list);
 	}
 

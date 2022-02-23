@@ -8,26 +8,23 @@
 package logical_programming;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class JustifyText {
+	
 	 public static void main(String args[]) {
 //		 String words[] = {"This", "is", "an", "example", "of", "text", "justification."};
 		 String words[] = {"a","b","c","d","test","wonderfully","exceptionally","e","f"};
+		 ArrayList<String> listWords = new ArrayList<>(Arrays.asList(words));
 		 int L = 12;
 //		 String words [] = {"Hi","I","am","developer"};
 		 int left = 0;
 		 ArrayList<String> list = new ArrayList<>();
 		 
-		 while(left < words.length) {
-			 int right = findRight(left,words,L);
+		 while(left < listWords.size()) {
+			 int right = findRight(left,listWords,L);
 			 String str = "";
-			 try {
-				 str = textJustification(left,right,words,L);
-			 }
-			 catch(NegativeArraySizeException exception) {
-				 System.out.println("Exception handled");
-				 exception.printStackTrace();
-			 }
+				 str = textJustification(left,right,listWords,L);
 			 list.add(str);
 			 left = right + 1;
 		 }
@@ -37,30 +34,42 @@ public class JustifyText {
 	 }
 	 
 	//Find how many words can be inserted in a row
-	private static int findRight(int left, String[] words, int L) {
+	private static int findRight(int left, ArrayList<String> listWords, int L) {
 		int right = left;
-		int sum = words[right++].length();
+		int sum = listWords.get(right++).length();
 		
 		while(
-				right < words.length 
+				right < listWords.size()
 				&& 
-				sum + 1 + words[right].length() <= L
+				sum + 1 + listWords.get(right).length() <= L
 				) {
-			sum += 1 + words[right++].length();
+			sum += 1 + listWords.get(right++).length();
 			
 		}
 		return right-1;
 	}
-	private static String textJustification(int left, int right, String[] words, int L) {
+	private static String textJustification(int left, int right, ArrayList<String> listWords, int L) {
 		//if only one word in row
-		if(right - left == 0)
-			return padResultWithSpace(words[left],L);
-		
-		boolean isLastLine = (right == words.length-1)?true:false;
+		if(right - left == 0) {
+			
+			try{
+				return padResultWithSpace(listWords.get(left),L);
+			}
+			catch (Exception e) {
+				System.out.println("Got exception for text "+listWords.get(left)+" and handled\n");
+				String str = padResultWithSpace(
+						listWords.get(left)
+						.substring(0,L), L);
+				listWords.add(left+1, listWords.get(left).substring(L));
+				return str;
+			}
+		}
+			
+		boolean isLastLine = (right == listWords.size()-1)?true:false;
 		//no of spaces by default for eg if 3 words present then numsSpace = 2
 		int numSpaces = right - left;//2
 		//total number of spaces to be filled
-		int totalSpace = L - wordsLength(left,right,words);//8
+		int totalSpace = L - wordsLength(left,right,listWords);//8
 		
 		//evenly distributed space
 		String space = isLastLine ? " ":addSpace(totalSpace/numSpaces);
@@ -69,17 +78,17 @@ public class JustifyText {
 		
 		StringBuilder result = new StringBuilder();
 		for(int i=left; i<=right; i++) {
-			result.append(words[i])
+			result.append(listWords.get(i))
 				  .append(space)
 				  .append(remainder-- > 0 ? " " : "");
 		}
 		return padResultWithSpace(result.toString().trim(), L);
 	}
 
-	private static int wordsLength(int left, int right, String[] words) {
+	private static int wordsLength(int left, int right, ArrayList<String> listWords) {
 		int length = 0;
 		for(int i=left; i<=right ; i++)
-			length += words[i].length();
+			length += listWords.get(i).length();
 		return length;
 	}
 
