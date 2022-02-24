@@ -60,7 +60,7 @@ public class JustifyText {
 				String str = padResultWithSpace(
 						listWords.get(left)
 						.substring(0,L), L);
-				listWords.add(left+1, listWords.get(left).substring(L));
+				listWords.add(left+1, "-"+listWords.get(left).substring(L));
 				return str;
 			}
 		}
