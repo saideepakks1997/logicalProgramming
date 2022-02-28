@@ -10,7 +10,7 @@ public interface AcceptMoney {
 	public static boolean acceptMoney(Card card,ISwipe swipe) {
 		System.out.println("Enter amount");
 		double amount = sc.nextDouble();
-		double cashBackPerc = card.getBank().getCashBackPerc();
+		double cashBackPerc = card.getAccount().getBank().getCashBackPerc();
 		if(ValidatePin.validatePin(card)) {
 			boolean isAmountupdated = swipe.getTypeOfTransaction().updateMoneyInAccount(card,amount,cashBackPerc);
 			if(isAmountupdated) {

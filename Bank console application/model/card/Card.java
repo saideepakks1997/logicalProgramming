@@ -4,7 +4,6 @@ package card;
 import account.*;
 import bank.*;
 public abstract class Card {
-	protected Bank bank;
 	protected long cardNo;
 	protected int cvv;
 	protected String expiryDate;
@@ -18,9 +17,5 @@ public abstract class Card {
 	public int getPin() {
 		return this.atmPin;
 	}
-	public abstract Bank getBank();
-
-	public void setBank(Bank bank) {
-		this.bank = bank;
-	}
+	
 }

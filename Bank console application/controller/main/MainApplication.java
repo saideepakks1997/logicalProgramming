@@ -36,7 +36,7 @@ public class MainApplication {
 					+ "5->Exit");
 			int opt = sc.nextInt();
 			switch (opt) {
-			case 1: atm.displayBalance(card);
+			case 1: DisplayBalance.displayBalance(card);
 				break;
 			case 2: WithDrawMoney.withDrawMoney(card,atm);
 				break;

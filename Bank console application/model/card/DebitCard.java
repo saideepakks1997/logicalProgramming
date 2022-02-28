@@ -31,10 +31,4 @@ public class DebitCard extends Card{
 		this.accountInfo = account;
 		
 	}
-
-	@Override
-	public Bank getBank() {
-		return this.bank;
-	}
-	
 }

@@ -18,8 +18,6 @@ public abstract class Bank {
 	private HashMap<Integer,Account> accounts = new HashMap<>();
 //	private List<IAccount> currentAcc = new ArrayList<>();
 	
-
-	
 	public Account createAccount(Bank bank) {
 		System.out.println("Select \n"
 				+ "1->Savings Account\n"
@@ -30,11 +28,7 @@ public abstract class Bank {
 		long accNo = this.getNewAccountNumber();
 		if(opt == 1) {
 			account = new SavingAccount(accNo, customer, bank);
-//			account
 			System.out.println("Account -> "+account.getBank());
-		}
-		else {
-//			account = new 
 		}
 		return account;
 	}
@@ -65,8 +59,6 @@ public abstract class Bank {
 			System.out.println("Debit card has been created your atm pin is "+pin);
 		}
 		card.setAccount(account);
-		card.setBank(this);
-		System.out.println("Bank ->"+card.getBank().getCashBackPerc());
 //		
 		return card;
 	}

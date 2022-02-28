@@ -16,6 +16,5 @@ public interface DepositMoney {
 			else
 				System.out.println("Server issue");
 		}
-		
 	}
 }

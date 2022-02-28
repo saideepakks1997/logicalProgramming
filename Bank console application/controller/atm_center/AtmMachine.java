@@ -7,21 +7,15 @@ import card.Card;
 import type_of_transaction.*;
 
 public class AtmMachine implements IAtmMachine{
+	String address ;
 	double levyPercBelow100 = 2;
 	double levyPercAbove100 = 4;
 	ITypeOfTransaction transaction;
 	static Scanner sc = new Scanner(System.in);
+	
 	public AtmMachine() {
 		this.transaction = new CashWithDraw();
-	}
-	//display balance is sub class specific because display balace
-	//is valid only for debit card not credit card
-	@Override
-	public void displayBalance(Card card) {
-		if(ValidatePin.validatePin(card)) {
-			System.out.println(card.getAccount().getBalance());
-			return;
-		}
+		this.address = "Tambaram";
 	}
 
 	@Override

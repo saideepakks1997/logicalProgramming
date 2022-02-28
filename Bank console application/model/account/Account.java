@@ -12,7 +12,7 @@ public class Account {
 	private double bankBalance = 300;
 	
 	public void updateBankBalance(double amount) {
-		this.bankBalance = amount;
+		this.setBankBalance(amount);
 	}
 	public double getMinimumBalance() {
 		return this.minimumBalance;
@@ -42,5 +42,11 @@ public class Account {
 	}
 	public  Customer getCustomer() {
 		return this.customerInfo;
+	}
+	public double getBankBalance() {
+		return bankBalance;
+	}
+	public void setBankBalance(double bankBalance) {
+		this.bankBalance = bankBalance;
 	}
 }

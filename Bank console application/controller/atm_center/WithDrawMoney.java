@@ -15,13 +15,11 @@ public interface WithDrawMoney {
 			if(isValidAmount) {
 				double levyPerc = atm.calculateLevyPerc(amount);
 				boolean isAmountupdated = atm.getTypeOfTransaction().updateMoneyInAccount(card,amount,levyPerc);
-				if(isAmountupdated) {
+				if(isAmountupdated)
 					atm.getTypeOfTransaction().displayScreen(card,amount,levyPerc);
-				}
 			}
-			else {
+			else 
 				System.out.println("Please enter the amount multiple of 5");
-			}
 		}
 	}
 }

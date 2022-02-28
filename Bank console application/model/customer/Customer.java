@@ -15,8 +15,8 @@ public class Customer {
 	private String address;
 	private long phnNo;
 	
-	public Account accont;
-	public Card debitCard;
+	private Account accont;
+	private Card debitCard;
 	
 	
 	public String getName() {
@@ -48,6 +48,18 @@ public class Customer {
 	}
 	public void setPhnNo(long phnNo) {
 		this.phnNo = phnNo;
+	}
+	public Account getAccont() {
+		return accont;
+	}
+	public void setAccont(Account accont) {
+		this.accont = accont;
+	}
+	public Card getDebitCard() {
+		return debitCard;
+	}
+	public void setDebitCard(Card debitCard) {
+		this.debitCard = debitCard;
 	}
 	
 }
