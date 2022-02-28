@@ -19,16 +19,13 @@ public abstract class Bank {
 //	private List<IAccount> currentAcc = new ArrayList<>();
 	
 	public Account createAccount(Bank bank) {
-		System.out.println("Select \n"
-				+ "1->Savings Account\n"
-				+ "2->Current Account");
+		System.out.println("1->create Saving account \n");
 		int opt = sc.nextInt();
 		Account account = null;
 		Customer customer = GetCustomerDetails.getCustomerDetails();
 		long accNo = this.getNewAccountNumber();
 		if(opt == 1) {
 			account = new SavingAccount(accNo, customer, bank);
-			System.out.println("Account -> "+account.getBank());
 		}
 		return account;
 	}
@@ -49,9 +46,7 @@ public abstract class Bank {
 		long cardNo = this.getCardNumSeries();
 		int cvv = random.nextInt(900)+100;
 		int pin = random.nextInt(9000)+1000;
-		System.out.println("Select option\n"
-				+ "1->Debit card\n"
-				+ "2->Credit card");
+		System.out.println("1->create Debit card\n");
 		int opt = sc.nextInt();
 		Card card = null;
 		if(opt == 1) {

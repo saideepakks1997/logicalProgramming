@@ -12,7 +12,7 @@ public class CashWithDraw implements ITypeOfTransaction{
 		
 		System.out.println("Amount :-"+amount);
 		System.out.println("Charges :- "+charges);
-		System.out.println("Available balance :- "+card.getAccount().getBalance());
+		System.out.println("Available balance :- "+card.getAccount().getBankBalance());
 		
 		System.out.println("-----------------------------------------");
 		
@@ -22,8 +22,8 @@ public class CashWithDraw implements ITypeOfTransaction{
 		Account account = card.getAccount();
 		double totalAmount = amount + CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, levyPerc);
 		
-		if(account.getBalance() - totalAmount >= account.getMinimumBalance()) {
-			account.updateBankBalance(account.getBalance() - totalAmount);
+		if(account.getBankBalance() - totalAmount >= account.getMinimumBalance()) {
+			account.updateBankBalance(account.getBankBalance() - totalAmount);
 			return true;
 		}
 		else {

@@ -7,7 +7,6 @@ public class Account {
 	private long accountNo;
 	private Bank bank;
 	private Customer customerInfo;
-	private double balance;
 	private double minimumBalance = 100;
 	private double bankBalance = 300;
 	
@@ -36,9 +35,6 @@ public class Account {
 	}
 	public void setCustomerInfo(Customer customerInfo) {
 		this.customerInfo = customerInfo;
-	}
-	public double getBalance() {
-		return this.balance;
 	}
 	public  Customer getCustomer() {
 		return this.customerInfo;

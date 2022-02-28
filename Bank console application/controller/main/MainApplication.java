@@ -16,7 +16,6 @@ import swipe.SwipeMachine;
 public class MainApplication {
 	static IAtmMachine atm =  new AtmMachine();
 	static IDepositeMachine depositeMachine = new DepositeMachine();
-//	static Card debitCard = new DebitCard(111111111l, 234, "HIMAN");
 	static ISwipe swipe = new SwipeMachine();
 	
 	public static void main(String[] args) {

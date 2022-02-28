@@ -12,7 +12,7 @@ public class CashDeposit implements ITypeOfTransaction{
 		System.out.println("-----------------------------------------");
 		
 		System.out.println("Amount :-"+amount);
-		System.out.println("Available balance :- "+card.getAccount().getBalance());
+		System.out.println("Available balance :- "+card.getAccount().getBankBalance());
 		
 		System.out.println("-----------------------------------------");
 	}
@@ -20,7 +20,7 @@ public class CashDeposit implements ITypeOfTransaction{
 	@Override
 	public boolean updateMoneyInAccount(Card card, double amount,double perc) {
 		Account account = card.getAccount();
-		double totalAmount = account.getBalance() + amount;
+		double totalAmount = account.getBankBalance() + amount;
 		account.updateBankBalance(totalAmount);
 		return true;
 		
