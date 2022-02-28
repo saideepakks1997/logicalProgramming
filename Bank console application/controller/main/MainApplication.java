@@ -7,8 +7,7 @@ import atm_center.*;
 //import atm_machine.IAtmMachine;
 import bank.*;
 import card.Card;
-import card.DebitCard;
-import customer.*;
+import card.CreateCard;
 import swipe.AcceptMoney;
 import swipe.ISwipe;
 import swipe.SwipeMachine;
@@ -21,8 +20,8 @@ public class MainApplication {
 	public static void main(String[] args) {
 		
 		Bank hdfcBank = new HdfcBank();
-		Account account = hdfcBank.createAccount(hdfcBank);
-		Card card = hdfcBank.createCard(account);
+		Account account = CreateAccount.createAccount(hdfcBank);
+		Card card = CreateCard.createCard(account);
 
 		Scanner sc = new Scanner(System.in);
 		boolean loop = true;

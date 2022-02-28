@@ -30,5 +30,4 @@ public class SwipeTransaction implements ITypeOfTransaction{
 			return false;
 		}		
 	}
-
 }
