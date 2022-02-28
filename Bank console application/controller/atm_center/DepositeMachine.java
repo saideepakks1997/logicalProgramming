@@ -17,13 +17,18 @@ public class DepositeMachine implements IDepositeMachine{
 		System.out.println("Enter the amount ");
 		double amount = sc.nextDouble();
 		if(ValidatePin.validatePin(card)) {
-			boolean isAmountupdated = this.transaction.updateMoneyInAccount(card, amount);
+			boolean isAmountupdated = this.transaction.updateMoneyInAccount(card, amount,0);
 			if(isAmountupdated)
-				this.transaction.displayScreen(card, amount);
+				this.transaction.displayScreen(card, amount,0);
 			else
 				System.out.println("Server issue");
 		}
 		
 	}
+	@Override
+	public ITypeOfTransaction getTypeOfTransaction() {
+		return this.transaction;
+	}
+	
 	
 }

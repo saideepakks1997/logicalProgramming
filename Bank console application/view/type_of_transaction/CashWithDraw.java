@@ -1,18 +1,14 @@
 package type_of_transaction;
 
-import account.CalculateLevyAndCashbackAmount;
-import account.IAccount;
+import account.*;
 import card.Card;
 
 public class CashWithDraw implements ITypeOfTransaction{
-
-	
-
 	@Override
-	public void displayScreen(Card card, double amount) {
+	public void displayScreen(Card card, double amount,double levyPerc) {
 		System.out.println("-----------------------------------------");
-		double perc = card.getAccount().getLevyPerc(amount);
-		double charges = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, perc);
+//		double perc = card.getAccount().getLevyPerc(amount);
+		double charges = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, levyPerc);
 		
 		System.out.println("Amount :-"+amount);
 		System.out.println("Charges :- "+charges);
@@ -21,12 +17,10 @@ public class CashWithDraw implements ITypeOfTransaction{
 		System.out.println("-----------------------------------------");
 		
 	}
-
 	@Override
-	public boolean updateMoneyInAccount(Card card, double amount) {
-		IAccount account = card.getAccount();
-		double perc = account.getLevyPerc(amount);
-		double totalAmount = amount + CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, perc);
+	public boolean updateMoneyInAccount(Card card, double amount,double levyPerc) {
+		Account account = card.getAccount();
+		double totalAmount = amount + CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, levyPerc);
 		
 		if(account.getBalance() - totalAmount >= account.getMinimumBalance()) {
 			account.updateBankBalance(account.getBalance() - totalAmount);
@@ -36,7 +30,5 @@ public class CashWithDraw implements ITypeOfTransaction{
 			System.out.println("Insufficient funds");
 			return false;
 		}
-		
 	}
-	
 }

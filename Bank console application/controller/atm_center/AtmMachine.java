@@ -7,6 +7,8 @@ import card.Card;
 import type_of_transaction.*;
 
 public class AtmMachine implements IAtmMachine{
+	double levyPercBelow100 = 2;
+	double levyPercAbove100 = 4;
 	ITypeOfTransaction transaction;
 	static Scanner sc = new Scanner(System.in);
 	public AtmMachine() {
@@ -23,25 +25,22 @@ public class AtmMachine implements IAtmMachine{
 	}
 
 	@Override
-	public void withDrawMoney(Card card) {
-		if(ValidatePin.validatePin(card)) {
-			System.out.println("Enter the amount multiples of 5");
-			double amount = sc.nextDouble();
-			//checks multiple of 5
-			boolean isValidAmount = ValidateAmount.validateAmount(amount);
-			if(isValidAmount) {
-				boolean isAmountupdated = this.transaction.updateMoneyInAccount(card,amount);
-				if(isAmountupdated) {
-					this.transaction.displayScreen(card,amount);
-				}
-					
-			}
-			else {
-				System.out.println("Please enter the amount multiple of 5");
-			}
-		}
+	public double getLevyPerc(double amount) {
+		if(amount <= 100)
+			return this.levyPercBelow100;
+		else 
+			return this.levyPercAbove100;
 	}
 	
-	
+	public double calculateLevyPerc(double amount) {
+		if(amount <= 100)
+			return levyPercBelow100;
+		else
+			return levyPercAbove100;
+	}
+	@Override
+	public ITypeOfTransaction getTypeOfTransaction() {
+		return this.transaction;
+	}
 
 }

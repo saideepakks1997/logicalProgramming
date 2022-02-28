@@ -1,7 +1,8 @@
 package card;
 
-import account.IAccount;
+import account.*;
 import account.SavingAccount;
+import bank.Bank;
 
 public class DebitCard extends Card{
 	
@@ -13,21 +14,27 @@ public class DebitCard extends Card{
 				+ "3->Expiry date:-"+expiryDate;
 	}
 	
-	public DebitCard(long cardNo,int cvv,String expiryDate) {
+	public DebitCard(long cardNo,int cvv,String expiryDate,int atmPin) {
 		this.cardNo = cardNo;
 		this.cvv = cvv;
 		this.expiryDate = expiryDate;
+		this.atmPin = atmPin;
 	}
 
 	@Override
-	public IAccount getAccount() {
+	public Account getAccount() {
 		return this.accountInfo;
 	}
 
 	@Override
-	public void setAccount(IAccount account) {
+	public void setAccount(Account account) {
 		this.accountInfo = account;
 		
+	}
+
+	@Override
+	public Bank getBank() {
+		return this.bank;
 	}
 	
 }

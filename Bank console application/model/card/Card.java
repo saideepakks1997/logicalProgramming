@@ -1,22 +1,26 @@
 package card;
 //It can be debit card or credit card
 
-import account.IAccount;
+import account.*;
 import bank.*;
 public abstract class Card {
 	protected Bank bank;
 	protected long cardNo;
 	protected int cvv;
 	protected String expiryDate;
-	protected IAccount accountInfo;
-	protected int atmPin = 1234;
+	protected Account accountInfo;
+	protected int atmPin ;
 	public abstract String getDetails();
 	
-	public abstract IAccount getAccount();
-	public abstract void setAccount(IAccount account);
+	public abstract Account getAccount();
+	public abstract void setAccount(Account account);
 	//get atm pin
 	public int getPin() {
 		return this.atmPin;
 	}
-	
+	public abstract Bank getBank();
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
 }
