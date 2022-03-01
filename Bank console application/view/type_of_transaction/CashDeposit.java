@@ -2,13 +2,19 @@ package type_of_transaction;
 
 import account.*;
 //import account.CalculateLevyAndCashbackAmount;
-import card.Card;
+import card.*;
 
-public class CashDeposit implements ITypeOfTransaction{
-
-
+public class CashDeposit extends ITypeOfTransaction{
+	private static ITypeOfTransaction transcation = new CashDeposit();
+	private CashDeposit() {
+	
+	}
+	public static ITypeOfTransaction getTransactionType() {
+		return transcation;
+	}
+	
 	@Override
-	public void displayScreen(Card card, double amount,double perc) {
+	public void displayScreen(ICard card, double amount,double perc) {
 		System.out.println("-----------------------------------------");
 		
 		System.out.println("Amount :-"+amount);
@@ -16,14 +22,12 @@ public class CashDeposit implements ITypeOfTransaction{
 		
 		System.out.println("-----------------------------------------");
 	}
-
 	@Override
-	public boolean updateMoneyInAccount(Card card, double amount,double perc) {
-		Account account = card.getAccount();
+	public boolean updateMoneyInAccount(ICard card, double amount,double perc) {
+		IAccount account = card.getAccount();
 		double totalAmount = account.getBankBalance() + amount;
-		account.updateBankBalance(totalAmount);
+		account.setBankBalance(totalAmount);
 		return true;
 		
 	}
-
 }

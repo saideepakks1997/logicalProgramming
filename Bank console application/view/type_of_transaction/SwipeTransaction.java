@@ -1,12 +1,20 @@
 package type_of_transaction;
 
 import account.*;
-import card.Card;
+import bank.Bank;
+import bank.CalculateLevyAndCashbackAmount;
+import card.*;
 
-public class SwipeTransaction implements ITypeOfTransaction{
-
+public class SwipeTransaction extends ITypeOfTransaction{
+	private static ITypeOfTransaction transcation = new SwipeTransaction();
+	private SwipeTransaction() {
+	
+	}
+	public static ITypeOfTransaction getTransactionType() {
+		return transcation;
+	}
 	@Override
-	public void displayScreen(Card card, double amount,double cashBackPerc) {
+	public void displayScreen(ICard card, double amount,double cashBackPerc) {
 		System.out.println("-----------------------------------------");
 		double cashBack = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, cashBackPerc);
 		
@@ -18,11 +26,12 @@ public class SwipeTransaction implements ITypeOfTransaction{
 	}
 
 	@Override
-	public boolean updateMoneyInAccount(Card card, double amount,double cashBackPerc) {
-		Account account = card.getAccount();
+	public boolean updateMoneyInAccount(ICard card, double amount,double cashBackPerc) {
+		Bank bank = Bank.getBank();
+		IAccount account = card.getAccount();
 		double cashbackAmount = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, cashBackPerc);
-		if(account.getBankBalance() - amount >= account.getMinimumBalance()) {
-			account.updateBankBalance((account.getBankBalance() - amount )+ cashbackAmount);
+		if(account.getBankBalance() - amount >= bank.getMinimumBalance()) {
+			account.setBankBalance((account.getBankBalance() - amount )+ cashbackAmount);
 			return true;
 		}
 		else {

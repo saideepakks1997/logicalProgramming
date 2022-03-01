@@ -1,9 +1,8 @@
 package type_of_transaction;
 
-import card.Card;
+import card.*;
 
-public interface ITypeOfTransaction {
-	public void displayScreen(Card card,double amount,double perc);
-	
-	public boolean updateMoneyInAccount(Card card,double amount,double perc);
-}
+public abstract class ITypeOfTransaction {
+	public abstract void displayScreen(ICard card,double amount,double perc);
+	public abstract boolean updateMoneyInAccount(ICard card,double amount,double perc);
+	}

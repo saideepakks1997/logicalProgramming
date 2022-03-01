@@ -1,8 +1,8 @@
 package swipe;
 
-import card.Card;
+import card.*;
 import type_of_transaction.ITypeOfTransaction;
 
 public interface ISwipe {
-	public ITypeOfTransaction getTypeOfTransaction();
+	public boolean acceptMoney(ICard card);
 }

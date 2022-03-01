@@ -1,4 +1,4 @@
-package account;
+package bank;
 
 public interface CalculateLevyAndCashbackAmount {
 	public static double calculateLevyAndCashbackAmount (double amount,double perc) {

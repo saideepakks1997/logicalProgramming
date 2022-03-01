@@ -1,18 +1,16 @@
 package card;
 
 import account.*;
-import account.SavingAccount;
 import bank.Bank;
 
-public class DebitCard extends Card{
+public class DebitCard implements ICard{
+	private long cardNo;
+	private int cvv;
+	private String expiryDate;
+	private IAccount accountInfo;
+	private int atmPin ;
+	private DebitCardType cardType;
 	
-	
-	@Override
-	public String getDetails() {
-		return "1->Card No:- "+cardNo+"\n"
-				+ "2->cvv:- "+cvv+"\n"
-				+ "3->Expiry date:-"+expiryDate;
-	}
 	
 	public DebitCard(long cardNo,int cvv,String expiryDate,int atmPin) {
 		this.cardNo = cardNo;
@@ -20,15 +18,32 @@ public class DebitCard extends Card{
 		this.expiryDate = expiryDate;
 		this.atmPin = atmPin;
 	}
-
 	@Override
-	public Account getAccount() {
-		return this.accountInfo;
+	public void setAccount(IAccount account) {
+		this.accountInfo = account;
+	}
+//	pin validation
+	public boolean validatePin(int pin) {
+		return this.atmPin == pin;
 	}
 
 	@Override
-	public void setAccount(Account account) {
-		this.accountInfo = account;
+	public void setPin(int pin) {
+		this.atmPin = pin;
+	}
+	@Override
+	public void setCardNo(long cardNo) {
+		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void setCvv(int cvv) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public IAccount getAccount() {
+		// TODO Auto-generated method stub
+		return this.accountInfo;
 	}
 }

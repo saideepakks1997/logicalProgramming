@@ -1,17 +1,33 @@
 package swipe;
 
+import java.util.Scanner;
+
+import bank.ValidatePin;
+import card.*;
 import type_of_transaction.*;
 
 public class SwipeMachine implements ISwipe{
-	ITypeOfTransaction transaction;
+	ITypeOfTransaction transaction = null;
+	static Scanner sc = new Scanner(System.in);
 	
-	public SwipeMachine() {
-		this.transaction = new SwipeTransaction();
-	}
-	
+
 	@Override
-	public ITypeOfTransaction getTypeOfTransaction() {
-		// TODO Auto-generated method stub
-		return this.transaction;
+	public boolean acceptMoney(ICard card) {
+		transaction = SwipeTransaction.getTransactionType();
+		System.out.println("Enter amount");
+		double amount = sc.nextDouble();
+		double cashBackPerc = 1;
+		if(ValidatePin.validatePin(card)) {
+			boolean isAmountupdated = transaction.updateMoneyInAccount(card,amount,cashBackPerc);
+			if(isAmountupdated) {
+				transaction.displayScreen(card,amount,cashBackPerc);
+				return true;
+			}
+			else {
+				System.out.println("Insufficient funds");
+				return false;
+			}
+		}
+	return false;
 	}
 }

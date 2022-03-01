@@ -9,14 +9,30 @@ import card.*;
 import main.MainApplication;
 
 public class Customer {
+	
+	private long cust_id;
 	private String name;
 	private String dob;
-	private long adharCardNo;
+	private String gender;
+	//adharcard,pan card,lisence etc.
+	private String proof;
+	private String proofNO;
 	private String address;
 	private long phnNo;
+	private String emailId;
+	private String nationality;
+	//private sector,public sector,government sector,self employed
+	//others etc.
+	private String occupation;
 	
-	private Account accont;
-	private Card debitCard;
+	private String religion;
+	private String category;
+	private String education;
+	
+	//An customer can have multiple accounts of same branch or 
+		//different branch but cust_id remains the same
+	private List<IAccount> accont = new ArrayList<>();
+	private List<ICard> cards = new ArrayList<ICard>();
 	
 	
 	public String getName() {
@@ -31,12 +47,12 @@ public class Customer {
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
-	public long getAdharCardNo() {
-		return adharCardNo;
-	}
-	public void setAdharCardNo(long adharCardNo) {
-		this.adharCardNo = adharCardNo;
-	}
+//	public long getAdharCardNo() {
+//		return proff;
+//	}
+//	public void setAdharCardNo(long adharCardNo) {
+//		this.adharCardNo = adharCardNo;
+//	}
 	public String getAddress() {
 		return address;
 	}
@@ -49,17 +65,25 @@ public class Customer {
 	public void setPhnNo(long phnNo) {
 		this.phnNo = phnNo;
 	}
-	public Account getAccont() {
-		return accont;
+	public IAccount getAccont() {
+		return this.accont.get(0);
 	}
-	public void setAccont(Account accont) {
-		this.accont = accont;
+	public void setAccont(IAccount accont) {
+		this.accont.add(accont);
 	}
-	public Card getDebitCard() {
-		return debitCard;
+	public ICard getDebitCard() {
+		return null;
 	}
-	public void setDebitCard(Card debitCard) {
-		this.debitCard = debitCard;
+	public void setDebitCard(ICard debitCard) {
+		this.cards.add(debitCard);
 	}
-	
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+	public long getCust_id() {
+		return cust_id;
+	}
 }
