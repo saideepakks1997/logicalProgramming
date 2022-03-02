@@ -18,11 +18,11 @@ public class SavingAccount implements IAccount{
 	private boolean isNomineeRegistered;
 	private Long nomineeRegistrationNo;
 	private Nominee nominee;
-	private double rateOfIntrest = 2.5;
 	//single or joint account
 	private ModeOfOperation mode;
 	//instant alert through messege and through mail
 	private boolean isInstantAlertAvailable;
+	//an account can have multiple debit cards
 	private List<ICard> cards = new ArrayList<>();
 	
 	public SavingAccount(long accNo, Customer customerInfo) {
@@ -73,13 +73,6 @@ public class SavingAccount implements IAccount{
 	}
 	public void setDateOfOpening(Date dateOfOpening) {
 		this.dateOfOpening = this.dateOfOpening == null ? dateOfOpening : this.dateOfOpening;
-	}
-	//rate of intrest
-	public double getRateOfIntrest() {
-		return rateOfIntrest;
-	}
-	public void setRateOfIntrest(double rateOfIntrest) {
-		this.rateOfIntrest = rateOfIntrest;
 	}
 
 	public Nominee getNominee() {

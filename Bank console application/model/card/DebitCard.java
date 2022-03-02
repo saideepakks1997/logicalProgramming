@@ -4,7 +4,7 @@ import account.*;
 import bank.Bank;
 
 public class DebitCard implements ICard{
-	private long cardNo;
+	private Long cardNo;
 	private int cvv;
 	private String expiryDate;
 	private IAccount accountInfo;
@@ -17,33 +17,24 @@ public class DebitCard implements ICard{
 		this.cvv = cvv;
 		this.expiryDate = expiryDate;
 		this.atmPin = atmPin;
+		this.cardType = DebitCardType.MasterCardDebitCard;
 	}
-	@Override
-	public void setAccount(IAccount account) {
-		this.accountInfo = account;
-	}
+	
 //	pin validation
 	public boolean validatePin(int pin) {
 		return this.atmPin == pin;
 	}
-
 	@Override
 	public void setPin(int pin) {
 		this.atmPin = pin;
 	}
 	@Override
-	public void setCardNo(long cardNo) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void setCvv(int cvv) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
 	public IAccount getAccount() {
-		// TODO Auto-generated method stub
 		return this.accountInfo;
+	}
+
+	@Override
+	public void setAccount(IAccount account) {
+		this.accountInfo = (this.accountInfo == null) ? account:this.accountInfo;
 	}
 }

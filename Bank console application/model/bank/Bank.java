@@ -36,7 +36,8 @@ public class Bank {
 	//social welfare of the state for eg gives loan for less intrest 
 	//Commercial bank main motto is business etc.
 	private BankType type;
-	
+	private double rateOfIntrestForSavingAccount = 2.5;
+
 	private List<Customer> customers = new ArrayList<Customer>();
 	private List<IAccount> accounts = new ArrayList<IAccount>();
 	
@@ -197,6 +198,12 @@ public class Bank {
 	}
 	public void setType(BankType type) {
 		this.type = type;
+	}
+	public double getRateOfIntrest() {
+		return rateOfIntrestForSavingAccount;
+	}
+	public void setRateOfIntrest(double rateOfIntrest) {
+		this.rateOfIntrestForSavingAccount = rateOfIntrest;
 	}
 	
 }
