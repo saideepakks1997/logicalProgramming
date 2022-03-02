@@ -1,16 +1,19 @@
 package account;
 
+import atm.DisplayUnsuccessTransaction;
 import bank.Bank;
 import card.ICard;
 
 public class AmountTransaction {
+	
 	public boolean checkTransactionPossible(double totalAmount,ICard card) {
+		DisplayUnsuccessTransaction displayError = DisplayUnsuccessTransaction.getDisplayObj();
 		Bank bank = Bank.getBank();
 		IAccount account = card.getAccount();
 		if(account.getBankBalance() - totalAmount >= bank.getMinimumBalance()) {
 			return true;
 		}
-		System.out.println("Insufficient funds");
+		displayError.unsuccessTrasaction();
 		return false;
 	}
 	

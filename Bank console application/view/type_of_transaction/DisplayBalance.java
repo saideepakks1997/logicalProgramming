@@ -4,6 +4,12 @@ import card.*;
 
 public class DisplayBalance {
 	private static DisplayBalance displayBalance = new DisplayBalance();
+	public static DisplayBalance getDisplayBalance() {
+		return displayBalance;
+	}
+	private DisplayBalance(){
+		
+	}
 	public void displayBalance(ICard card) {
 		System.out.println("-------------------------");
 		double balance = card.getAccount().getBankBalance();
@@ -11,10 +17,6 @@ public class DisplayBalance {
 		System.out.println("-------------------------");
 		return;
 	}
-	private DisplayBalance(){
-		
-	}
-	public static DisplayBalance getDisplayBalance() {
-		return displayBalance;
-	}
+	
+	
 }

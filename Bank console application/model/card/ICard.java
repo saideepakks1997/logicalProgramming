@@ -2,7 +2,6 @@ package card;
 //It can be debit card or credit card
 
 import account.*;
-import bank.*;
 public interface ICard {
 	public IAccount getAccount();
 	//get atm pin

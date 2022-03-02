@@ -2,27 +2,19 @@ package main;
 
 import java.util.Scanner;
 
-import account.*;
-import account.CreateAccount;
 import atm_center.AtmMachine;
-import bank.Bank;
 import card.*;
-import card.CreateCard;
 import swipe.ISwipe;
 import swipe.SwipeMachine;
+import user_input_for_account_card_creation.AccountCardCreation;
 
 public class MainApplication {
 	static AtmMachine atm_machine =  new AtmMachine();
 	static ISwipe swipe = new SwipeMachine();
 	
 	public static void main(String[] args) {
-		Bank hdfcBank = Bank.getBank();
-		CreateAccount createAccount = new CreateAccount();
-		CreateCard createCard = new CreateCard();
-		
-		IAccount account = createAccount.createAccount();
-		ICard card = createCard.createCard(account);
-
+		AccountCardCreation acc = new AccountCardCreation();
+		ICard card = acc.getAccountCreationType();
 		Scanner sc = new Scanner(System.in);
 		boolean loop = true;
 		while(loop) {

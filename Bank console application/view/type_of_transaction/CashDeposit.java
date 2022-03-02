@@ -1,7 +1,5 @@
 package type_of_transaction;
 
-import account.*;
-//import account.CalculateLevyAndCashbackAmount;
 import card.*;
 
 public class CashDeposit extends ITypeOfTransaction{

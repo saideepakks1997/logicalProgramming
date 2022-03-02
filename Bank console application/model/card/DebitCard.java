@@ -1,7 +1,6 @@
 package card;
 
 import account.*;
-import bank.Bank;
 
 public class DebitCard implements ICard{
 	private Long cardNo;

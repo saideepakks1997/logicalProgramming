@@ -2,7 +2,6 @@ package account;
 
 import java.util.*;
 
-import bank.Bank;
 import card.*;
 import customer.Customer;
 import customer.Nominee;

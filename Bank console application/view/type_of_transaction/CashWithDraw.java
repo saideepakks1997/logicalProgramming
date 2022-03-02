@@ -1,7 +1,5 @@
 package type_of_transaction;
 
-import account.*;
-import bank.Bank;
 import bank.CalculateLevyAndCashbackAmount;
 import card.*;
 

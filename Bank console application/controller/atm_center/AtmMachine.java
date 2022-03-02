@@ -1,21 +1,28 @@
 package atm_center;
 
-import java.util.Scanner;
 
-import account.*;
+import account.AmountTransaction;
 import account.IAccount;
+import atm.DisplayUnsuccessTransaction;
+import atm.GetAmount;
+import atm.GetUserPin;
 import bank.Bank;
 import bank.CalculateLevyAndCashbackAmount;
-import bank.ValidatePin;
-import card.*;
-import type_of_transaction.*;
+import card.ICard;
+import type_of_transaction.CashDeposit;
+import type_of_transaction.CashWithDraw;
+import type_of_transaction.DisplayBalance;
+import type_of_transaction.ITypeOfTransaction;
 
 public class AtmMachine implements IAtmMachine{
 	String address ;
+	GetAmount getAmount = GetAmount.getAmountObj();
+	DisplayUnsuccessTransaction displayError
+		= DisplayUnsuccessTransaction.getDisplayObj();
+	GetUserPin getUserPin = GetUserPin.getUserPin();
+
 	ITypeOfTransaction transactionType = null;
-	static Scanner sc = new Scanner(System.in);
-	static AmountTransaction amountTransaction = new AmountTransaction();
-	
+	AmountTransaction amountTransaction = new AmountTransaction();
 	public AtmMachine() {
 		this.address = "Tambaram";
 	}
@@ -24,9 +31,9 @@ public class AtmMachine implements IAtmMachine{
 	public void withdrawMoney(ICard card) {
 		Bank bank = Bank.getBank();
 		transactionType = CashWithDraw.getTransactionType();//for displaying
-		if(ValidatePin.validatePin(card)) {
-			System.out.println("Enter the amount multiples of 5");
-			double amount = sc.nextDouble();
+		int pin = getUserPin.getPin();
+		if(card.validatePin(pin)) {
+			double amount = getAmount.getAmount();
 			//checks multiple of 5
 			boolean isValidAmount = this.validateAmount(amount);
 			if(isValidAmount) {
@@ -45,17 +52,23 @@ public class AtmMachine implements IAtmMachine{
 				}
 			}
 			else 
-				System.out.println("Please enter the amount multiple of 5");
+				displayError.unsuccessTrasaction();
+		}
+		else {
+			displayError.wrongPin();
 		}
 	}
 	
 	//Display money
 	public void displayBalance(ICard card) {
-		if(ValidatePin.validatePin(card)) {
+		int pin = getUserPin.getPin();
+		if(card.validatePin(pin)) {
 			//singleton object
 			DisplayBalance disBalance = DisplayBalance.getDisplayBalance();
 			disBalance.displayBalance(card);
 		}
+		else
+			displayError.wrongPin();
 	}
 	
 	//deposite money
@@ -63,13 +76,15 @@ public class AtmMachine implements IAtmMachine{
 		transactionType = CashDeposit.getTransactionType();
 		IAccount account = card.getAccount();
 		double bankBalance = account.getBankBalance();
-		System.out.println("Enter the amount ");
-		double amount = sc.nextDouble();
-		if(ValidatePin.validatePin(card)) {
+		double amount = getAmount.getAmount();
+		int pin = getUserPin.getPin();
+		if(card.validatePin(pin)) {
 			double amountAfterTransaction = bankBalance + amount;
 			amountTransaction.updateBankBalance(card, amountAfterTransaction);
 			transactionType.displayScreen(card, amount,0);
 		}
+		else
+			displayError.wrongPin();
 	}
 	
 	//Validate amount(i.e) check multiples of 5

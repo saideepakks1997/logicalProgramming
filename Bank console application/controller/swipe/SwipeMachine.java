@@ -1,28 +1,34 @@
 package swipe;
 
-import java.util.Scanner;
 
 import account.AmountTransaction;
+import atm.DisplayUnsuccessTransaction;
+import atm.GetAmount;
+import atm.GetUserPin;
 import bank.Bank;
 import bank.CalculateLevyAndCashbackAmount;
-import bank.ValidatePin;
 import card.*;
 import type_of_transaction.*;
 
 public class SwipeMachine implements ISwipe{
+	
+	GetAmount getAmount = GetAmount.getAmountObj();
+	DisplayUnsuccessTransaction displayError
+		= DisplayUnsuccessTransaction.getDisplayObj(); 
+	GetUserPin getUserPin = GetUserPin.getUserPin();
+	
 	ITypeOfTransaction transactionType = null;
-	static Scanner sc = new Scanner(System.in);
-	static AmountTransaction amountTransaction = new AmountTransaction();
+	AmountTransaction amountTransaction = new AmountTransaction();
 
 
 	@Override
 	public boolean acceptMoney(ICard card) {
 		Bank bank = Bank.getBank();
 		transactionType = SwipeTransaction.getTransactionType();
-		System.out.println("Enter amount");
-		double amount = sc.nextDouble();
+		double amount = getAmount.getAmount();
 		double cashBackPerc = bank.getCashBackPerc();
-		if(ValidatePin.validatePin(card)) {
+		int pin = getUserPin.getPin();
+		if(card.validatePin(pin)) {
 			double bankBalance = card.getAccount().getBankBalance();
 			double cashBack = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, cashBackPerc);
 			
@@ -35,10 +41,12 @@ public class SwipeMachine implements ISwipe{
 				return true;
 			}
 			else {
-				System.out.println("Insufficient funds");
+				displayError.insufficientFunds();
 				return false;
 			}
 		}
+		else
+			displayError.wrongPin();
 	return false;
 	}
 }

@@ -3,7 +3,6 @@ package customer;
 import java.util.*;
 
 import account.*;
-import bank.*;
 import card.*;
 
 import main.MainApplication;
