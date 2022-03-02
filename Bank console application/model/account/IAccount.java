@@ -5,13 +5,13 @@ import java.util.*;
 import bank.Bank;
 import card.*;
 import customer.Customer;
+import customer.Nominee;
 //it  should be indepentent
 public interface  IAccount {
 	
 	public Long getAccountNo();
 	public void setAccountNo(Long accountNo);
 	
-	public Customer getCustomerInfo();
 	public void setCustomerInfo(Customer customerInfo);
 	
 	public Date getDateOfOpening();
@@ -23,11 +23,7 @@ public interface  IAccount {
 	public boolean isNomineeRegistered();
 	public void setNomineeRegistered(boolean isNomineeRegistered);
 	
-	public Nominee getNominee();
 	public void setNominee(Nominee nominee);
-	 
-	public ModeOfOperation getMode();
-	public void setMode(ModeOfOperation mode);
 		
 	public void setCards(ICard cards);
 	
@@ -37,8 +33,5 @@ public interface  IAccount {
 	
 	public Long getNomineeRegistrationNo();
 	public void setNomineeRegistrationNo(Long nomineeRegistrationNo);
-	
-	
-	
 	
 }

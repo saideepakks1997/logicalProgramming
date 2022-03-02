@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import bank.*;
-import card.*;
+import card.ICard;
 import customer.Customer;
+import customer.Nominee;
 
-public class SavingAccount implements IAccount{
+public class JointlySavingAccount implements IAccount,IJointAccount {
 	private Long accountNo;
-	private Customer customerInfo;
+	
 	private Date dateOfOpening;
 	private double bankBalance = 300;
 	//If x person dies the money in the bank will transfer
@@ -24,8 +24,12 @@ public class SavingAccount implements IAccount{
 	private boolean isInstantAlertAvailable;
 	//an account can have multiple debit cards
 	private List<ICard> cards = new ArrayList<>();
+	//joint account can have more than one nominees
+	private List<Nominee> nominees = new ArrayList<>();
+	//joint account can have more than 2 Cutomers for same account
+	private List<Customer> customers = new ArrayList<>();
 	
-	public SavingAccount(long accNo, Customer customerInfo) {
+	public JointlySavingAccount(long accNo, Customer customerInfo) {
 		this.setAccountNo(accNo);
 		this.setCustomerInfo(customerInfo);
 		}
@@ -43,13 +47,7 @@ public class SavingAccount implements IAccount{
 	public void setAccountNo(Long accountNo) {
 		this.accountNo = this.accountNo == null ? accountNo:this.accountNo;
 	}
-	//customerInfo
-	public Customer getCustomerInfo() {
-		return customerInfo;
-	}
-	public void setCustomerInfo(Customer customerInfo) {
-		this.customerInfo = customerInfo;
-	}
+	
 	//add cards
 	public void setCards(ICard card) {
 		this.cards.add(card);
@@ -97,5 +95,20 @@ public class SavingAccount implements IAccount{
 
 	public void setInstantAlertAvailable(boolean isInstantAlertAvailable) {
 		this.isInstantAlertAvailable = isInstantAlertAvailable;
+	}
+	@Override
+	public List<Nominee> getNominees() {
+		return this.nominees;
+	}
+	@Override
+	public List<Customer> getCustomers() {
+		return this.customers;
+	}
+	public void setNominees(Nominee nominee) {
+		this.nominees.add(nominee);
+	}
+	@Override
+	public void setCustomerInfo(Customer customer) {
+		this.customers.add(customer);
 	}
 }

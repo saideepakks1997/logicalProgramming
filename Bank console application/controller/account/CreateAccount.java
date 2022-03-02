@@ -15,7 +15,7 @@ public class CreateAccount {
 		Customer customer = createCustomer();
 		long accNo = bank.getAccountNoSeries();
 		if(opt == 1) {
-			account = new SavingAccount(accNo, customer);
+			account = new SingleSavingAccount(accNo, customer);
 		}
 		bank.setAccounts(account);
 		bank.setCustomers(customer);
