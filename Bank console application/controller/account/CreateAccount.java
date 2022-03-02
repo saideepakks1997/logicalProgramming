@@ -29,10 +29,7 @@ public class CreateAccount {
 		
 		System.out.println("Enter date of birth");
 		String dob = sc.next();
-		
-		System.out.println("Enter adhar card number");
-		long adharCardNo = sc.nextLong();
-		
+				
 		System.out.println("Enter address");
 		String address = sc.nextLine();
 		sc.nextLine();
@@ -43,10 +40,8 @@ public class CreateAccount {
 		customer.setName(name);
 		customer.setDob(dob);
 		customer.setAddress(address);
-//		customer.setAdharCardNo(adharCardNo);
 		customer.setPhnNo(phnNo);
 		
-//		this.customers.add(customer);
 		
 		return customer;
 	}

@@ -25,19 +25,4 @@ public class CashWithDraw extends ITypeOfTransaction{
 		System.out.println("-----------------------------------------");
 		
 	}
-	@Override
-	public boolean updateMoneyInAccount(ICard card, double amount,double levyPerc) {
-		IAccount account = card.getAccount();
-		Bank bank = Bank.getBank();
-		double totalAmount = amount + CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, levyPerc);
-		
-		if(account.getBankBalance() - totalAmount >= bank.getMinimumBalance()) {
-			account.setBankBalance(account.getBankBalance() - totalAmount);
-			return true;
-		}
-		else {
-			System.out.println("Insufficient funds");
-			return false;
-		}
-	}
 }

@@ -32,7 +32,6 @@ public class DebitCard implements ICard{
 	public IAccount getAccount() {
 		return this.accountInfo;
 	}
-
 	@Override
 	public void setAccount(IAccount account) {
 		this.accountInfo = (this.accountInfo == null) ? account:this.accountInfo;

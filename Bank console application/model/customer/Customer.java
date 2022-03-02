@@ -13,7 +13,7 @@ public class Customer {
 	private long cust_id;
 	private String name;
 	private String dob;
-	private String gender;
+	private Gender gender;
 	//adharcard,pan card,lisence etc.
 	private String proof;
 	private String proofNO;
@@ -25,13 +25,9 @@ public class Customer {
 	//others etc.
 	private String occupation;
 	
-	private String religion;
-	private String category;
-	private String education;
-	
 	//An customer can have multiple accounts of same branch or 
 		//different branch but cust_id remains the same
-	private List<IAccount> accont = new ArrayList<>();
+	private List<IAccount> accounts = new ArrayList<>();
 	private List<ICard> cards = new ArrayList<ICard>();
 	
 	
@@ -47,12 +43,6 @@ public class Customer {
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
-//	public long getAdharCardNo() {
-//		return proff;
-//	}
-//	public void setAdharCardNo(long adharCardNo) {
-//		this.adharCardNo = adharCardNo;
-//	}
 	public String getAddress() {
 		return address;
 	}
@@ -66,10 +56,10 @@ public class Customer {
 		this.phnNo = phnNo;
 	}
 	public IAccount getAccont() {
-		return this.accont.get(0);
+		return this.accounts.get(0);
 	}
 	public void setAccont(IAccount accont) {
-		this.accont.add(accont);
+		this.accounts.add(accont);
 	}
 	public ICard getDebitCard() {
 		return null;
@@ -85,5 +75,23 @@ public class Customer {
 	}
 	public long getCust_id() {
 		return cust_id;
+	}
+	public String getProof() {
+		return proof;
+	}
+	public void setProof(String proof) {
+		this.proof = proof;
+	}
+	public String getProofNO() {
+		return proofNO;
+	}
+	public void setProofNO(String proofNO) {
+		this.proofNO = proofNO;
+	}
+	public String getNationality() {
+		return nationality;
+	}
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
 	}
 }

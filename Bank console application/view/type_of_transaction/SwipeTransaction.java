@@ -24,19 +24,4 @@ public class SwipeTransaction extends ITypeOfTransaction{
 		
 		System.out.println("-----------------------------------------");
 	}
-
-	@Override
-	public boolean updateMoneyInAccount(ICard card, double amount,double cashBackPerc) {
-		Bank bank = Bank.getBank();
-		IAccount account = card.getAccount();
-		double cashbackAmount = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, cashBackPerc);
-		if(account.getBankBalance() - amount >= bank.getMinimumBalance()) {
-			account.setBankBalance((account.getBankBalance() - amount )+ cashbackAmount);
-			return true;
-		}
-		else {
-			System.out.println("Insufficient funds");
-			return false;
-		}		
-	}
 }

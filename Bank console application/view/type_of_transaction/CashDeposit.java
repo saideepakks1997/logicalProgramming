@@ -22,12 +22,4 @@ public class CashDeposit extends ITypeOfTransaction{
 		
 		System.out.println("-----------------------------------------");
 	}
-	@Override
-	public boolean updateMoneyInAccount(ICard card, double amount,double perc) {
-		IAccount account = card.getAccount();
-		double totalAmount = account.getBankBalance() + amount;
-		account.setBankBalance(totalAmount);
-		return true;
-		
-	}
 }

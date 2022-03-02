@@ -175,14 +175,13 @@ public class Bank {
 	public void setAdCode(Long adCode) {
 		this.adCode = (this.adCode == null) ? adCode : this.adCode;
 	}
-	public double getLevyPercBelow100() {
-		return levyPercBelow100;
-	}
 	public void setLevyPercBelow100(double levyPercBelow100) {
 		this.levyPercBelow100 = levyPercBelow100;
 	}
-	public double getLevyPercAbove100() {
-		return levyPercAbove100;
+	public double getLevyPerc(double amount) {
+		if(amount <= 100)
+			return this.levyPercBelow100;
+		return this.levyPercAbove100;
 	}
 	public void setLevyPercAbove100(double levyPercAbove100) {
 		this.levyPercAbove100 = levyPercAbove100;
