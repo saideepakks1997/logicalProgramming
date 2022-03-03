@@ -2,37 +2,36 @@ package card;
 
 import account.*;
 
-public class DebitCard implements ICard{
-	private Long cardNo;
+public class DebitCard extends Card{
 	private int cvv;
-	private String expiryDate;
-	private IAccount accountInfo;
 	private int atmPin ;
-	private DebitCardType cardType;
+//	private DebitCardType cardType;
 	
 	
 	public DebitCard(long cardNo,int cvv,String expiryDate,int atmPin) {
 		this.cardNo = cardNo;
-		this.cvv = cvv;
+		this.setCvv(cvv);
 		this.expiryDate = expiryDate;
 		this.atmPin = atmPin;
-		this.cardType = DebitCardType.MasterCardDebitCard;
+//		this.cardType = DebitCardType.MasterCardDebitCard;
 	}
 	
 //	pin validation
 	public boolean validatePin(int pin) {
 		return this.atmPin == pin;
 	}
-	@Override
+	
 	public void setPin(int pin) {
 		this.atmPin = pin;
 	}
-	@Override
-	public IAccount getAccount() {
-		return this.accountInfo;
+	
+	public SavingsAccount getAccount() {
+		return (SavingsAccount) this.accountInfo;
 	}
-	@Override
-	public void setAccount(IAccount account) {
+	
+	public void setAccount(Account account) {
 		this.accountInfo = (this.accountInfo == null) ? account:this.accountInfo;
 	}
+
+	
 }

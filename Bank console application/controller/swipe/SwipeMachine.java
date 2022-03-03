@@ -1,44 +1,43 @@
 package swipe;
 
 
-import account.AmountTransaction;
-import atm.DisplayUnsuccessTransaction;
-import atm.GetAmount;
-import atm.GetUserPin;
+import account.AccountOperations;
 import bank.Bank;
-import bank.CalculateLevyAndCashbackAmount;
-import card.*;
-import type_of_transaction.*;
+import card.Card;
+import display.DisplayErrorMessege;
+import display.DisplaySuccessMessege;
+import user_inputs.GetUserInputs;
 
 public class SwipeMachine implements ISwipe{
+	Bank bank = null;
+	AccountOperations accOperations = null;
+	public SwipeMachine(Bank bank) {
+		this.bank = bank;
+		accOperations = new AccountOperations(this.bank);
+	}
+	 
 	
-	GetAmount getAmount = GetAmount.getAmountObj();
-	DisplayUnsuccessTransaction displayError
-		= DisplayUnsuccessTransaction.getDisplayObj(); 
-	GetUserPin getUserPin = GetUserPin.getUserPin();
+	DisplayErrorMessege displayError = new DisplayErrorMessege(); 
+	DisplaySuccessMessege displaySuccess = new DisplaySuccessMessege();
+	GetUserInputs input = new GetUserInputs();
 	
-	ITypeOfTransaction transactionType = null;
-	AmountTransaction amountTransaction = new AmountTransaction();
-	CalculateLevyAndCashbackAmount calculatelevyCashback 
-			= CalculateLevyAndCashbackAmount.getLevyCashbackAmount();
+	
 
 	@Override
-	public boolean acceptMoney(ICard card) {
-		Bank bank = Bank.getBank();
-		transactionType = SwipeTransaction.getTransactionType();
-		double amount = getAmount.getAmount();
+	public boolean acceptMoney(Card card) {
+		double amount = input.getAmount();
 		double cashBackPerc = bank.getCashBackPerc();
-		int pin = getUserPin.getPin();
+		int pin = input.getPin();
 		if(card.validatePin(pin)) {
 			double bankBalance = card.getAccount().getBankBalance();
-			double cashBack = calculatelevyCashback.calculateLevyAndCashbackAmount(amount, cashBackPerc);
+			double cashBack = accOperations.calculateLevyAndCashbackAmount(amount, cashBackPerc);
 			
-			boolean isTransactionPossible = amountTransaction.checkTransactionPossible(amount, card);
+			boolean isTransactionPossible = accOperations.checkTransactionPossible(amount, card);
 			
-			boolean isTransactionDone = amountTransaction.updateBankBalance(card, (bankBalance + cashBack)-amount);
+			boolean isTransactionDone = accOperations.updateBankBalance(card, (bankBalance + cashBack)-amount);
 
 			if(isTransactionDone) {
-				transactionType.displayScreen(card,amount,cashBackPerc);
+				displaySuccess.displaySwipe(amount,cashBack, card.getAccount().getBankBalance());
 				return true;
 			}
 			else {

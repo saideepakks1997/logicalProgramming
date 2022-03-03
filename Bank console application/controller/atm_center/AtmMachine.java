@@ -1,60 +1,56 @@
 package atm_center;
 
 
-import account.AmountTransaction;
-import account.IAccount;
-import atm.DisplayUnsuccessTransaction;
-import atm.GetAmount;
-import atm.GetUserPin;
+import account.Account;
+import account.AccountOperations;
 import bank.Bank;
-import bank.CalculateLevyAndCashbackAmount;
-import card.ICard;
-import type_of_transaction.CashDeposit;
-import type_of_transaction.CashWithDraw;
-import type_of_transaction.DisplayBalance;
-import type_of_transaction.ITypeOfTransaction;
+import card.Card;
+import user_inputs.*;
+import display.*;
 
 public class AtmMachine implements IAtmMachine{
-	String address ;
-	GetAmount getAmount = GetAmount.getAmountObj();
-	DisplayUnsuccessTransaction displayError
-		= DisplayUnsuccessTransaction.getDisplayObj();
-	GetUserPin getUserPin = GetUserPin.getUserPin();
+	String address;
+	AccountOperations accOperations = null;
+	Bank bank = null;
+	public AtmMachine(Bank bank) {
+		this.bank = bank;
+		accOperations = new AccountOperations(this.bank);
+	}
+	  
+	DisplayErrorMessege displayError = new DisplayErrorMessege();
+	DisplaySuccessMessege displaySuccess = new DisplaySuccessMessege();
+	GetUserInputs input = new GetUserInputs();
+	
 
-	ITypeOfTransaction transactionType = null;
-	CalculateLevyAndCashbackAmount calculatelevyCashback 
-	= CalculateLevyAndCashbackAmount.getLevyCashbackAmount();
-	AmountTransaction amountTransaction = new AmountTransaction();
+	
+//	AmountTransaction amountTransaction = new AmountTransaction();
 	public AtmMachine() {
 		this.address = "Tambaram";
 	}
 	
 	//withdraw money
-	public void withdrawMoney(ICard card) {
-		Bank bank = Bank.getBank();
-		transactionType = CashWithDraw.getTransactionType();//for displaying
-		int pin = getUserPin.getPin();
+	public void withdrawMoney(Card card) {
+		int pin = input.getPin();
 		if(card.validatePin(pin)) {
-			double amount = getAmount.getAmount();
+			double amount = input.getAmount();
 			//checks multiple of 5
 			boolean isValidAmount = this.validateAmount(amount);
 			if(isValidAmount) {
-				IAccount account = card.getAccount();
+				Account account = card.getAccount();
 				
 				double bankBalance = account.getBankBalance();
 				double levyPerc = bank.getLevyPerc(amount);
-				double levyCharges = calculatelevyCashback.calculateLevyAndCashbackAmount(amount, levyPerc);
+				double levyCharges = accOperations.calculateLevyAndCashbackAmount(amount, levyPerc);
 				//checking minimum balance
-				boolean isTransactionPossible = amountTransaction.checkTransactionPossible(amount+levyCharges, card);
+				boolean isTransactionPossible = accOperations.checkTransactionPossible(amount+levyCharges, card);
 				//do transaction
-				boolean isTransactionDone = amountTransaction.updateBankBalance(card, bankBalance - (amount+levyCharges));
-				
+				boolean isTransactionDone = accOperations.updateBankBalance(card, bankBalance - (amount+levyCharges));
 				if(isTransactionDone) {
-					transactionType.displayScreen(card,amount,levyPerc);
+					displaySuccess.diplayWithdraw(amount,levyCharges,account.getBankBalance());
 				}
 			}
 			else 
-				displayError.unsuccessTrasaction();
+				displayError.invalidAmount();
 		}
 		else {
 			displayError.wrongPin();
@@ -62,28 +58,27 @@ public class AtmMachine implements IAtmMachine{
 	}
 	
 	//Display money
-	public void displayBalance(ICard card) {
-		int pin = getUserPin.getPin();
+	public void displayBalance(Card card) {
+		int pin = input.getPin();
 		if(card.validatePin(pin)) {
 			//singleton object
-			DisplayBalance disBalance = DisplayBalance.getDisplayBalance();
-			disBalance.displayBalance(card);
+			displaySuccess.displayBalance(card.getAccount().getBankBalance());
 		}
 		else
 			displayError.wrongPin();
 	}
 	
 	//deposite money
-	public void depositMoney(ICard card) {
-		transactionType = CashDeposit.getTransactionType();
-		IAccount account = card.getAccount();
+	public void depositMoney(Card card) {
+		Account account = card.getAccount();
 		double bankBalance = account.getBankBalance();
-		double amount = getAmount.getAmount();
-		int pin = getUserPin.getPin();
+		double amount = input.getAmount();
+		int pin = input.getPin();
 		if(card.validatePin(pin)) {
 			double amountAfterTransaction = bankBalance + amount;
-			amountTransaction.updateBankBalance(card, amountAfterTransaction);
-			transactionType.displayScreen(card, amount,0);
+			accOperations.updateBankBalance(card, amountAfterTransaction);
+			displaySuccess.displayDeposite(amount,amountAfterTransaction);
+			
 		}
 		else
 			displayError.wrongPin();

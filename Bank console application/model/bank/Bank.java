@@ -5,6 +5,7 @@ import java.util.*;
 //import java.util.Scanner;
 
 import account.*;
+import card.Card;
 //import card.Card;
 import customer.Customer;
 
@@ -33,14 +34,15 @@ public class Bank {
 	//there are different types of bank eg:- co-operative bank is for
 	//social welfare of the state for eg gives loan for less intrest 
 	//Commercial bank main motto is business etc.
-	private BankType type;
+//	private BankType type;
 	private double rateOfIntrestForSavingAccount = 2.5;
 
 	private List<Customer> customers = new ArrayList<Customer>();
-	private List<IAccount> accounts = new ArrayList<IAccount>();
+	private List<Account> accounts = new ArrayList<Account>();
+	private Map<Long,Card> cards = new HashMap();
 	
-	private static Bank bank = new Bank();
-	private Bank() {
+//	private static Bank bank = new Bank();
+	public Bank() {
 		this.name="Hdfc";
 		this.branch = "Poonamalle";
 		this.ifscCode = "hdfcb1235";
@@ -53,9 +55,7 @@ public class Bank {
 		this.website = "www.hdfcbank.co.in";
 		this.customerCare = 180023451256l;
 	}
-	public static Bank getBank() {
-		return bank;
-	}
+	
 	
 	//bank name
 	public String getName() {
@@ -100,11 +100,11 @@ public class Bank {
 	}
 	//account no
 	public long getAccountNoSeries() {
-		return accountNoSeries;
+		return accountNoSeries++;
 	}
 	//card no 
 	public long getCardNumberSeries() {
-		return cardNumberSeries;
+		return cardNumberSeries++;
 	}
 	//bank code
 	public int getBankCode() {
@@ -135,10 +135,10 @@ public class Bank {
 		this.customers.add(customer);
 	}
 	//account
-	public IAccount getAccounts() {
+	public Account getAccounts() {
 		return accounts.get(0);
 	}
-	public void setAccounts(IAccount account) {
+	public void setAccounts(Account account) {
 		this.accounts.add(account);
 	}
 	//min balance
@@ -190,17 +190,24 @@ public class Bank {
 	public void setCashBackPerc(double cashBackPerc) {
 		this.cashBackPerc = cashBackPerc;
 	}
-	public BankType getType() {
-		return type;
-	}
-	public void setType(BankType type) {
-		this.type = type;
-	}
+//	public BankType getType() {
+//		return type;
+//	}
+//	public void setType(BankType type) {
+//		this.type = type;
+//	}
 	public double getRateOfIntrest() {
 		return rateOfIntrestForSavingAccount;
 	}
 	public void setRateOfIntrest(double rateOfIntrest) {
 		this.rateOfIntrestForSavingAccount = rateOfIntrest;
+	}
+	public Card getCards(long cardNo) {
+		System.out.println("I am here in bank");
+		return this.cards.get(cardNo);
+	}
+	public void setCards(Card card) {
+		this.cards.put(card.getCardNo(), card);
 	}
 	
 }

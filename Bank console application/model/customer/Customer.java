@@ -26,9 +26,17 @@ public class Customer {
 	
 	//An customer can have multiple accounts of same branch or 
 		//different branch but cust_id remains the same
-	private List<IAccount> accounts = new ArrayList<>();
-	private List<ICard> cards = new ArrayList<ICard>();
+	private List<Account> accounts = new ArrayList<>();
+	private List<Card> cards = new ArrayList<Card>();
 	
+	public Customer() {}
+	public Customer(String name,String dob,long phnNo,String address) {
+		this.name = name;
+		this.cust_id = getCust_id();
+		this.phnNo = phnNo;
+		this.address = address;
+		this.dob = dob;
+	}
 	
 	public String getName() {
 		return name;
@@ -54,16 +62,16 @@ public class Customer {
 	public void setPhnNo(long phnNo) {
 		this.phnNo = phnNo;
 	}
-	public IAccount getAccont() {
+	public Account getAccont() {
 		return this.accounts.get(0);
 	}
-	public void setAccont(IAccount accont) {
+	public void setAccont(Account accont) {
 		this.accounts.add(accont);
 	}
-	public ICard getDebitCard() {
+	public Card getDebitCard() {
 		return null;
 	}
-	public void setDebitCard(ICard debitCard) {
+	public void setDebitCard(Card debitCard) {
 		this.cards.add(debitCard);
 	}
 	public String getEmailId() {
@@ -73,7 +81,7 @@ public class Customer {
 		this.emailId = emailId;
 	}
 	public long getCust_id() {
-		return cust_id;
+		return cust_id++;
 	}
 	public String getProof() {
 		return proof;

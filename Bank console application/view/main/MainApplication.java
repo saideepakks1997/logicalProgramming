@@ -2,19 +2,34 @@ package main;
 
 import java.util.Scanner;
 
+import account.Account;
+import account.AccountOperations;
 import atm_center.AtmMachine;
+import bank.Bank;
 import card.*;
+import customer.Customer;
 import swipe.ISwipe;
 import swipe.SwipeMachine;
-import user_input_for_account_card_creation.AccountCardCreation;
+import user_inputs.GetUserInputs;
 
 public class MainApplication {
-	static AtmMachine atm_machine =  new AtmMachine();
-	static ISwipe swipe = new SwipeMachine();
+	
 	
 	public static void main(String[] args) {
-		AccountCardCreation acc = new AccountCardCreation();
-		ICard card = acc.getAccountCreationType();
+		
+		Bank bank = new Bank();
+		AtmMachine atm_machine =  new AtmMachine(bank);
+		ISwipe swipe = new SwipeMachine(bank);
+//		GetUserInputs input = new GetUserInputs(bank);
+		AccountOperations accOperations = new AccountOperations(bank);
+		
+		//Ask customer details and create account and card
+		Card card = null;
+		accOperations.askCustomer();
+		
+		//get card through card no
+		card = accOperations.getCard();
+		 
 		Scanner sc = new Scanner(System.in);
 		boolean loop = true;
 		while(loop) {
@@ -43,5 +58,20 @@ public class MainApplication {
 		}
 
 	}
+//	public void askCustomer() {
+//		Scanner sc = new Scanner(System.in);
+//		Customer customer = operations.createCustomer();
+//		System.out.println("select 1-> create savings account");
+//		int opt = sc.nextInt(); 
+//		Account account = null;
+//		if(opt == 1) {
+//			 account = operations.createAccount(customer);
+//		}
+//		System.out.println("Select 1 to create debit card");
+//		opt = sc.nextInt();
+//		Card card = null;
+//		card = operations.createCard(account,customer,opt);
+//	}
+	
 
 }
