@@ -5,6 +5,8 @@ import card.*;
 
 public class SwipeTransaction extends ITypeOfTransaction{
 	private static ITypeOfTransaction transcation = new SwipeTransaction();
+	CalculateLevyAndCashbackAmount calculatelevyCashback 
+	= CalculateLevyAndCashbackAmount.getLevyCashbackAmount();
 	private SwipeTransaction() {
 	
 	}
@@ -14,7 +16,7 @@ public class SwipeTransaction extends ITypeOfTransaction{
 	@Override
 	public void displayScreen(ICard card, double amount,double cashBackPerc) {
 		System.out.println("-----------------------------------------");
-		double cashBack = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, cashBackPerc);
+		double cashBack = calculatelevyCashback.calculateLevyAndCashbackAmount(amount, cashBackPerc);
 		
 		System.out.println("Amount :-"+amount);
 		System.out.println("Cash back :- "+cashBack);

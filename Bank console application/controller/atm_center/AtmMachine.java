@@ -22,6 +22,8 @@ public class AtmMachine implements IAtmMachine{
 	GetUserPin getUserPin = GetUserPin.getUserPin();
 
 	ITypeOfTransaction transactionType = null;
+	CalculateLevyAndCashbackAmount calculatelevyCashback 
+	= CalculateLevyAndCashbackAmount.getLevyCashbackAmount();
 	AmountTransaction amountTransaction = new AmountTransaction();
 	public AtmMachine() {
 		this.address = "Tambaram";
@@ -41,7 +43,7 @@ public class AtmMachine implements IAtmMachine{
 				
 				double bankBalance = account.getBankBalance();
 				double levyPerc = bank.getLevyPerc(amount);
-				double levyCharges = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, levyPerc);
+				double levyCharges = calculatelevyCashback.calculateLevyAndCashbackAmount(amount, levyPerc);
 				//checking minimum balance
 				boolean isTransactionPossible = amountTransaction.checkTransactionPossible(amount+levyCharges, card);
 				//do transaction

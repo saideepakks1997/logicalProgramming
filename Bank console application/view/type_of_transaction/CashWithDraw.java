@@ -5,6 +5,8 @@ import card.*;
 
 public class CashWithDraw extends ITypeOfTransaction{
 	private static ITypeOfTransaction transcation = new CashWithDraw();
+	CalculateLevyAndCashbackAmount calculatelevyCashback 
+	= CalculateLevyAndCashbackAmount.getLevyCashbackAmount();
 	private CashWithDraw() {
 	
 	}
@@ -14,7 +16,7 @@ public class CashWithDraw extends ITypeOfTransaction{
 	@Override
 	public void displayScreen(ICard card, double amount,double levyPerc) {
 		System.out.println("-----------------------------------------");
-		double charges = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, levyPerc);
+		double charges = calculatelevyCashback.calculateLevyAndCashbackAmount(amount, levyPerc);
 		
 		System.out.println("Amount :-"+amount);
 		System.out.println("Charges :- "+charges);

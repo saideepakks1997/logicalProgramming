@@ -19,7 +19,8 @@ public class SwipeMachine implements ISwipe{
 	
 	ITypeOfTransaction transactionType = null;
 	AmountTransaction amountTransaction = new AmountTransaction();
-
+	CalculateLevyAndCashbackAmount calculatelevyCashback 
+			= CalculateLevyAndCashbackAmount.getLevyCashbackAmount();
 
 	@Override
 	public boolean acceptMoney(ICard card) {
@@ -30,7 +31,7 @@ public class SwipeMachine implements ISwipe{
 		int pin = getUserPin.getPin();
 		if(card.validatePin(pin)) {
 			double bankBalance = card.getAccount().getBankBalance();
-			double cashBack = CalculateLevyAndCashbackAmount.calculateLevyAndCashbackAmount(amount, cashBackPerc);
+			double cashBack = calculatelevyCashback.calculateLevyAndCashbackAmount(amount, cashBackPerc);
 			
 			boolean isTransactionPossible = amountTransaction.checkTransactionPossible(amount, card);
 			
