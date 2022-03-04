@@ -5,30 +5,34 @@ import account.*;
 public class Card {
 	protected Long cardNo;
 	private int cvv;
+	private int atmPin;
 	protected String expiryDate;
 	protected Account accountInfo;
-	private int atmPin ;
+	
 //	private DebitCardType cardType;
 	
 	public Account getAccount(){
-		System.out.println(this.cardNo);
-		System.out.println(this.accountInfo.getAccountNo());
 		return this.accountInfo;
 		}
+	public void setAccount(Account account) {
+		this.accountInfo = account;
+	}
 	
-	//get atm pin
+	//validate atm pin
 	public boolean validatePin(int pin){
 		return this.atmPin == pin;
 	}
 	
-	public void setAccount(Account account) {
-		// TODO Auto-generated method stub
-		
-	}
 	public void setCvv(int cvv) {
 		this.cvv = cvv;
 	}
+	public void setPin(int pin) {
+		this.atmPin = pin;
+	}
+	
 	public Long getCardNo() {
 		return this.cardNo;
 	}
+	
+	
 }

@@ -64,6 +64,7 @@ public class Bank {
 	public void setName(String name) {
 		this.name = (this.name == null)? name : this.name;
 	}
+	
 	//branch
 	public String getBranch() {
 		return branch;
@@ -71,16 +72,20 @@ public class Bank {
 	public void setBranch(String branch) {
 		this.branch = (this.branch == null)? branch : this.branch;
 	}
+	
 	public String getIfscCode() {
 		return ifscCode;
 	}
+	
 	public void setIfscCode(String ifscCode) {
 		this.ifscCode = (this.ifscCode == null)? ifscCode : this.ifscCode;
 	}
+	
 	//micr code
 	public long getMicrCode() {
 		return micrCode;
 	}
+	
 	public void setMicrCode(Long micrCode) {
 		this.micrCode = (this.micrCode == null)? micrCode : this.micrCode;
 	}
@@ -203,7 +208,6 @@ public class Bank {
 		this.rateOfIntrestForSavingAccount = rateOfIntrest;
 	}
 	public Card getCards(long cardNo) {
-		System.out.println("I am here in bank");
 		return this.cards.get(cardNo);
 	}
 	public void setCards(Card card) {

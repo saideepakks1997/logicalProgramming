@@ -2,15 +2,8 @@ package user_inputs;
 
 import java.util.Scanner;
 
-import account.Account;
-import account.AccountOperations;
-import bank.Bank;
-import card.Card;
-import customer.Customer;
 
 public class GetUserInputs {
-	
-	
 	Scanner sc = new Scanner(System.in);
 
 	public int getPin() {

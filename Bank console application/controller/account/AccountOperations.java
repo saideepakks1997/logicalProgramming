@@ -1,6 +1,5 @@
 package account;
 
-
 import bank.Bank;
 import card.Card;
 import card.DebitCard;

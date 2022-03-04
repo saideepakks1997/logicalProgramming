@@ -21,8 +21,6 @@ public class SwipeMachine implements ISwipe{
 	DisplaySuccessMessege displaySuccess = new DisplaySuccessMessege();
 	GetUserInputs input = new GetUserInputs();
 	
-	
-
 	@Override
 	public boolean acceptMoney(Card card) {
 		double amount = input.getAmount();

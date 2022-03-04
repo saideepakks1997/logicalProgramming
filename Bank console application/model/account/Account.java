@@ -3,10 +3,8 @@ package account;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import card.*;
 import customer.Customer;
-import customer.Nominee;
 
 public class Account{
 	protected Long accountNo;
@@ -25,11 +23,6 @@ public class Account{
 	//an account can have multiple debit cards
 	
 	private List<Card> cards = new ArrayList<>();
-	
-	public Account(long accNo, Customer customerInfo) {
-		this.setAccountNo(accNo);
-		this.setCustomerInfo(customerInfo);
-		}
 	//bank balance
 	public double getBankBalance() {
 		return bankBalance;

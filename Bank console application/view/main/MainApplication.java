@@ -20,10 +20,8 @@ public class MainApplication {
 		Bank bank = new Bank();
 		AtmMachine atm_machine =  new AtmMachine(bank);
 		ISwipe swipe = new SwipeMachine(bank);
-//		GetUserInputs input = new GetUserInputs(bank);
 		AccountOperations accOperations = new AccountOperations(bank);
 		
-		//Ask customer details and create account and card
 		Card card = null;
 		accOperations.askCustomer();
 		
@@ -58,20 +56,4 @@ public class MainApplication {
 		}
 
 	}
-//	public void askCustomer() {
-//		Scanner sc = new Scanner(System.in);
-//		Customer customer = operations.createCustomer();
-//		System.out.println("select 1-> create savings account");
-//		int opt = sc.nextInt(); 
-//		Account account = null;
-//		if(opt == 1) {
-//			 account = operations.createAccount(customer);
-//		}
-//		System.out.println("Select 1 to create debit card");
-//		opt = sc.nextInt();
-//		Card card = null;
-//		card = operations.createCard(account,customer,opt);
-//	}
-	
-
 }

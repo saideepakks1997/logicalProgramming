@@ -1,6 +1,6 @@
 package atm_center;
 
-import card.*;
+import card.Card;
 
 public interface IAtmMachine {
 	public void withdrawMoney(Card card);

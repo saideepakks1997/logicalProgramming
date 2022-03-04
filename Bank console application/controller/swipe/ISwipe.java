@@ -1,6 +1,6 @@
 package swipe;
 
-import card.*;
+import card.Card;
 
 public interface ISwipe {
 	public boolean acceptMoney(Card card);
