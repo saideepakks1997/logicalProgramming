@@ -2,49 +2,31 @@ package swipe;
 
 
 import account.AccountOperations;
+import account.IAccountOperations;
 import bank.Bank;
 import card.Card;
-import display.DisplayErrorMessege;
-import display.DisplaySuccessMessege;
-import user_inputs.GetUserInputs;
+import display.Display;
+import display.IDisplay;
 
 public class SwipeMachine implements ISwipe{
 	Bank bank = null;
-	AccountOperations accOperations = null;
+	IAccountOperations accOperations = null;
+	IDisplay display= new Display();
 	public SwipeMachine(Bank bank) {
 		this.bank = bank;
 		accOperations = new AccountOperations(this.bank);
 	}
-	 
-	
-	DisplayErrorMessege displayError = new DisplayErrorMessege(); 
-	DisplaySuccessMessege displaySuccess = new DisplaySuccessMessege();
-	GetUserInputs input = new GetUserInputs();
-	
 	@Override
-	public boolean acceptMoney(Card card) {
-		double amount = input.getAmount();
+	public void acceptMoney(Card card, double amount) {
 		double cashBackPerc = bank.getCashBackPerc();
-		int pin = input.getPin();
-		if(card.validatePin(pin)) {
 			double bankBalance = card.getAccount().getBankBalance();
 			double cashBack = accOperations.calculateLevyAndCashbackAmount(amount, cashBackPerc);
 			
 			boolean isTransactionPossible = accOperations.checkTransactionPossible(amount, card);
 			
-			boolean isTransactionDone = accOperations.updateBankBalance(card, (bankBalance + cashBack)-amount);
-
-			if(isTransactionDone) {
-				displaySuccess.displaySwipe(amount,cashBack, card.getAccount().getBankBalance());
-				return true;
-			}
-			else {
-				displayError.insufficientFunds();
-				return false;
+			if(isTransactionPossible) {
+				accOperations.updateBankBalance(card, (bankBalance + cashBack)-amount);
+				display.displaySwipeSuccess(amount,cashBack, card.getAccount().getBankBalance());
 			}
 		}
-		else
-			displayError.wrongPin();
-	return false;
-	}
 }

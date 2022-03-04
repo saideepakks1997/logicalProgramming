@@ -3,5 +3,5 @@ package swipe;
 import card.Card;
 
 public interface ISwipe {
-	public boolean acceptMoney(Card card);
+	public void acceptMoney(Card card, double amount);
 }

@@ -9,8 +9,6 @@ public class Card {
 	protected String expiryDate;
 	protected Account accountInfo;
 	
-//	private DebitCardType cardType;
-	
 	public Account getAccount(){
 		return this.accountInfo;
 		}
@@ -26,6 +24,7 @@ public class Card {
 	public void setCvv(int cvv) {
 		this.cvv = cvv;
 	}
+	
 	public void setPin(int pin) {
 		this.atmPin = pin;
 	}
@@ -33,6 +32,4 @@ public class Card {
 	public Long getCardNo() {
 		return this.cardNo;
 	}
-	
-	
 }

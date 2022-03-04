@@ -5,12 +5,10 @@ import card.Card;
 import card.DebitCard;
 import customer.Customer;
 import display.*;
-import user_inputs.GetUserInputs;
 
-public class AccountOperations {
+public class AccountOperations implements IAccountOperations{
 	Bank bank = null;
-	GetUserInputs inputs = new GetUserInputs();
-	DisplayErrorMessege displayError = new DisplayErrorMessege();
+	Display display = new Display();
 	public AccountOperations(Bank bank) {
 		this.bank = bank;
 	}
@@ -19,20 +17,16 @@ public class AccountOperations {
 		if(account.getBankBalance() - totalAmount >= bank.getMinimumBalance()) {
 			return true;
 		}
-		displayError.insufficientFunds();
+		display.displayError("Insufficient funds");
 		return false;
 	}
 	
-	public boolean updateBankBalance(Card card,double totalAmount) {
+	public void updateBankBalance(Card card,double totalAmount) {
 		card.getAccount().setBankBalance(totalAmount);
-		return true;
 	}
 	
-	public Customer createCustomer() {
-		String name = inputs.getName();
-		String dob = inputs.getDob();
-		long phnNo = inputs.getPhoneNo();
-		String address  = inputs.getAdrress(); 
+	
+	public Customer createCustomer(String name,String dob,long phnNo,String address) {
 		return new Customer(name, dob, phnNo, address);
 	}
 	
@@ -60,28 +54,14 @@ public class AccountOperations {
 		bank.setCards(card);
 		return card;
 	}
-	
-	
-	
 	public double calculateLevyAndCashbackAmount (double amount,double perc) {
 		double money = amount * (perc/100);
 		return money;
 	}
-
-	public Card getCard() {
-		long cardNo = inputs.getCardNo();
-		Card card = bank.getCards(cardNo);
-		return card;
+	public Card getCard(long cardNo) {
+		return bank.getCards(cardNo);
 	}
-	public void askCustomer() {
-		Customer customer = this.createCustomer();
-		int opt = inputs.getAccountOption(); 
-		Account account = null;
-		if(opt == 1) {
-			 account = this.createAccount(customer);
-		}
-		opt = inputs.getCardOption();
-		Card card = null;
-		card = this.createCard(account,customer,opt);
+	public boolean validatePin(Card card, int pin) {
+		return card.validatePin(pin);
 	}
 }

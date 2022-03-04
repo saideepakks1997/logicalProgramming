@@ -31,17 +31,12 @@ public class Bank {
 	private String website;
 	//code is used in foreign trade(authorized dealer code)provided by RBI
 	private Long adCode;
-	//there are different types of bank eg:- co-operative bank is for
-	//social welfare of the state for eg gives loan for less intrest 
-	//Commercial bank main motto is business etc.
-//	private BankType type;
 	private double rateOfIntrestForSavingAccount = 2.5;
 
 	private List<Customer> customers = new ArrayList<Customer>();
 	private List<Account> accounts = new ArrayList<Account>();
 	private Map<Long,Card> cards = new HashMap();
 	
-//	private static Bank bank = new Bank();
 	public Bank() {
 		this.name="Hdfc";
 		this.branch = "Poonamalle";

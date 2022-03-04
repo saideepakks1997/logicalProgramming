@@ -15,5 +15,4 @@ public class SavingsAccount extends Account{
 	public void setType(SavingsAccountType type) {
 		this.type = type;
 	}
-	
 }

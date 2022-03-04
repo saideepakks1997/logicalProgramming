@@ -5,8 +5,6 @@ import java.util.*;
 import account.*;
 import card.*;
 
-import main.MainApplication;
-
 public class Customer {
 	
 	private long cust_id;

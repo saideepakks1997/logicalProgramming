@@ -12,16 +12,6 @@ public class Account{
 	protected Date dateOfOpening;
 	protected double bankBalance = 300;
 	
-	//If x person dies the money in the bank will transfer
-	//to the nominee registered 
-//	private boolean isNomineeRegistered;
-//	private Long nomineeRegistrationNo;
-//	private Nominee nominee;
-	//single or joint account
-	//instant alert through messege and through mail
-//	private boolean isInstantAlertAvailable;
-	//an account can have multiple debit cards
-	
 	private List<Card> cards = new ArrayList<>();
 	//bank balance
 	public double getBankBalance() {
