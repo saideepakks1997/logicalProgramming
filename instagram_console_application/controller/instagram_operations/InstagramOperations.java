@@ -1,6 +1,8 @@
 package instagram_operations;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import display.Display;
@@ -14,33 +16,94 @@ public class InstagramOperations implements IInstagramOperations{
 	public InstagramOperations(Instagram instagram) {
 		this.instagram = instagram;
 	}
+
+	@Override
+	public boolean checkIfUserNameIsCorrect(String user_name) {
+		return instagram.getUsers().containsKey(user_name);
+	}
+	
+	@Override
+	public boolean checkIfPasswordIsValid(String password) {
+		int lowerCaseCount = 0;
+		int upperCaseCount = 0;
+		int specialCharacterCount = 0;
+		int numCount = 0;
+		
+		int len = password.length();
+		List<String> errors = new ArrayList<>();
+		if(!(len >= instagram.getPasswordMinLen() && len <= instagram.getPasswordMaxLen()))
+			errors.add("password length should be between 8 and 12");
+		if(password.contains(" "))
+			errors.add("password should not contain spaces");
+		
+		for(int i=0; i<len; i++) {
+			char a = password.charAt(i);
+			if(upperCaseCount == 0 && a >= 65 && a <= 90)
+				upperCaseCount++;
+			if(lowerCaseCount == 0 && a >= 97 && a <= 122)
+				lowerCaseCount++;
+			if(numCount == 0 && a >= 48 && a <= 57)
+				numCount++;
+			
+			if(
+				specialCharacterCount == 0 
+					&& 
+			   (
+				  (a >= 33 && a <= 47)
+					||
+				  (a >= 58 && a <= 64)
+			   )
+			   )
+					specialCharacterCount++;
+			
+			if(lowerCaseCount > 0 && upperCaseCount > 0 && numCount > 0 && specialCharacterCount > 0)
+				break;
+			}
+			if(lowerCaseCount == 0)
+				errors.add("password should contain atleast one lowercase letter");
+			if(upperCaseCount == 0)
+				errors.add("password should contain atleast one uppercase letter");
+			if(specialCharacterCount == 0)
+				errors.add("password should contain atleast one special character letter");
+			if(numCount == 0)
+			errors.add("password should contain atleast one numeber");
+		
+			for(String error: errors)
+				display.displayError(error);
+			
+		return errors.size() == 0;
+	}
+	
 //	Register user
 	@Override
-	public void registerUser(String name, String user_name, String password) {
-		if(!isUserNamePicked(user_name)) {
+	public User registerUser(String name, String user_name, String password) {
+		if(!checkIfUserNameIsCorrect(user_name)) {
 			User user = new User(name, user_name, password);
 			instagram.setUser(user);
-			display.displaySuccess(name+" you registered successfully");;
+			display.displaySuccess(name+" you registered successfully");
+			return user;
 		}
-		else
+		else {
 			display.displayError("User name already exists");
+			return null;
+		}
+			
 			
 	}
 	
-	public boolean isUserNamePicked(String user_name) {
-		return this.instagram.getUsers().containsKey(user_name);
-	}
 //	login the user
 	@Override
 	public User loginUser(String user_name, String password) {
+//		User user = instagram.getUsers().
 		User user = instagram.getValidUser(user_name, password);
+		
 		if(user == null) {
-			display.displayError("User name or password invalid");
+			display.displayError("password invalid");
 			return null;
 		}
 		return user;
 	}
-	
+//	check if user searched is followed or unfollowed.
 	@Override
 	public String checkFollowOrUnfollowStatus(User user, String user_name) {
 		User profile = instagram.getUsers().get(user_name);
@@ -58,6 +121,7 @@ public class InstagramOperations implements IInstagramOperations{
 			display.displayError(user_name+" not found");
 		return null;
 	}
+//	Changing follow status
 	@Override
 	public void changeFollowStatus(String status,User user,String searching_user_name) {
 		User searchedUser = instagram.getUsers().get(searching_user_name);
@@ -66,26 +130,26 @@ public class InstagramOperations implements IInstagramOperations{
 		if(status == "FOLLOW") {
 			user.setFollowing(searching_user_name);
 			searchedUser.setFollower(user.getUser_name());
+			
 			addAllPostsToNewFollwer(user,searching_user_name);
 			display.displaySuccess("Followed Successfully");
 		}
 		else {
-			user.getFollowing().remove(searching_user_name);
-			searchedUser.getFollowers().remove(searchedUser.getName());
-			removeAllPostsToUnfollower(user,searching_user_name);
+			user.getFollowing().remove(searching_user_name);//virat,sachin
+			searchedUser.getFollowers().remove(user.getName());//virat followers sai
+			removeAllPostsToUnfollower(user,searchedUser);
 			display.displaySuccess("Unfollowed Successfully");
 		}
 	}
-//	if sai  unfollows deepak . deepak posts should not be viewed in sai feeds
-	private void removeAllPostsToUnfollower(User user, String searching_user_name) {
-		Set<Integer> allPostsOfUser = user.getSelfPosts();
-		User follower = instagram.getUsers().get(searching_user_name);
-		for(Integer post: allPostsOfUser) {
-			follower.getFeedPosts().remove(post);
+//	if sai  unfollows virat . virat posts should not be viewed in sai feeds
+	private void removeAllPostsToUnfollower(User user, User searchedUser) {
+		Set<Integer> allPostsOfUnFollowedUser = searchedUser.getSelfPosts();
+		//removing post 
+		for(Integer post: allPostsOfUnFollowedUser) {
+			user.getFeedPosts().remove(post);
 		}
-		
 	}
-//	if Sai newly follows deepak all deepak posts should be viewed by sai 
+//	if Sai newly follows virat all virat posts should be viewed by sai 
 	private void addAllPostsToNewFollwer(User user, String searching_user_name) {
 		Set<Integer> selfPosts = instagram.getUsers().get(searching_user_name).getSelfPosts();
 		for(Integer selfPost:selfPosts) {
@@ -117,15 +181,22 @@ public class InstagramOperations implements IInstagramOperations{
 	@Override
 	public void viewPosts(User user) {
 		int i=0;
-		Set<Integer> postsId = user.getFeedPosts();
+		Set<Integer> postIds = user.getFeedPosts();
 		Post post = null;
-		for(Integer postId: postsId) {
+		//No posts for display
+		if(postIds.size() == 0) {
+			display.displayError("No Posts available");
+			return;
+		}
+		
+		for(Integer postId: postIds) {
 			post = instagram.getPosts().get(postId);
-			
-			display.displayPost(post.getContent(),post.getPostCreatedTime());
+			display.displayPost(post.getPost_owner(),post.getContent(),post.getPostCreatedTime());
 			i++;
-			if(i == 10)
+			if(i == instagram.getMaxPostInFeeds())
 				break;
 		}
 	}
+	
+	
 }

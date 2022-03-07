@@ -8,6 +8,9 @@ import user.User;
 public class Instagram {
 	private int postId = 0;
 	private int maxPostInFeeds = 10; 
+	private int passwordMinLen = 8;
+	private int passwordMaxLen = 15;
+	
 	//user_name and user
 	private Map<String,User> users = new HashMap<String, User>();
 	//postId and post
@@ -44,5 +47,17 @@ public class Instagram {
 	}
 	public void setMaxPostInFeeds(int maxPosts) {
 		this.maxPostInFeeds = maxPosts;
+	}
+	public int getPasswordMinLen() {
+		return passwordMinLen;
+	}
+	public void setPasswordMinLen(int passwordMinLen) {
+		this.passwordMinLen = passwordMinLen;
+	}
+	public int getPasswordMaxLen() {
+		return passwordMaxLen;
+	}
+	public void setPasswordMaxLen(int passwordMaxLen) {
+		this.passwordMaxLen = passwordMaxLen;
 	}
 }

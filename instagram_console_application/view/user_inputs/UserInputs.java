@@ -20,7 +20,7 @@ public class UserInputs {
 		this.instagram = instagram;
 		this.operations = new InstagramOperations(this.instagram);
 	}
-	
+	//landing page 
 	public void landingPage() {
 		boolean loop = true;
 		while(loop) {
@@ -43,32 +43,70 @@ public class UserInputs {
 	}
 //	Get input for registration of user
 	private void resgistrationInputs() {
+		boolean loop = true;
 		sc.nextLine();
 		System.out.println("Enter your name");
 		String name = sc.nextLine();
+		String user_name = null;
 		
-		System.out.println("Enter user name ");
-		String user_name = sc.next();
+		while(loop) {
+			System.out.println("Enter user name ");
+			user_name = sc.next();
+			boolean isUserTaken = operations.checkIfUserNameIsCorrect(user_name);
+			if(isUserTaken)
+				display.displayError(user_name+" already taken please try different name");
+			else 
+				loop = false;
+		}
+		loop = true; 
+		sc.nextLine();
+		String password = null ;
+		while(loop) {
+			System.out.println("Enter password to set ");
+			 password = sc.nextLine();
+			boolean isValidPassword = operations.checkIfPasswordIsValid(password);
+			if(isValidPassword)
+				loop = false;
+			}
 		
-		System.out.println("Enter password to set ");
-		String password = sc.next();
+		User user = operations.registerUser(name, user_name, password);
 		
-		operations.registerUser(name, user_name, password);
+			operations.loginUser(user.getUser_name(), password);
+		askOptions(user);
 	}
 //	Get user name and password for login
 	private void loginInputs() {
-		System.out.println("Enter user name");
-		String user_name = sc.next();
-		
-		System.out.println("Enter password ");
-		String password = sc.next();
-		
-		User user = operations.loginUser(user_name, password);
-		
-		if(user != null)
-			askOptions(user);
+		boolean loop = true;
+		String user_name = null;
+		boolean isUserAvailable = true;
+		while(loop) {
+			System.out.println("Enter user name");
+			user_name = sc.next();
+			isUserAvailable = operations.checkIfUserNameIsCorrect(user_name);
+			if(!isUserAvailable) {
+				display.displayError(user_name+" NOT EXISTS");
+				loop = true;
+			}
+			else
+				loop = false;
+		}
+		loop = true;
+		while(loop) {
+			System.out.println("Enter password ");
+			String password = sc.next();
+			
+			User user = operations.loginUser(user_name, password);
+			if(user == null)
+				loop = true;
+			else {
+				loop = false;
+				askOptions(user);
+			}
+		}
 	}
-
+		
+	
+	
 	private void askOptions(User user) {
 		boolean loop = true;
 		while(loop) {
@@ -93,7 +131,7 @@ public class UserInputs {
 			}
 		}
 	}
-
+// 	post content
 	private void postContent(User user) {
 		System.out.println("Enter the content you need to post");
 		sc.nextLine();
@@ -102,7 +140,7 @@ public class UserInputs {
 		operations.createPost(user, content, time);
 		
 	}
-
+//	follow  or unfollow user
 	private void followOrUnfollow(User user) {
 		System.out.println("Enter user name");
 		String searching_user_name = sc.next();
@@ -113,17 +151,16 @@ public class UserInputs {
 			 System.out.println("press 1->YES\n"
 			 		+ "2->NO");
 			 int opt = sc.nextInt();
-			 operations.changeFollowStatus(status,user,searching_user_name);
+			 if(opt == 1)
+				 operations.changeFollowStatus(status,user,searching_user_name);
 		 }
 		 else
 			 display.displayError(searching_user_name +" not found ");
 	}
-
+// For testing purpose
 	public void createUsers() {
 		operations.registerUser("Sai Deepak", "sai", "sai");
 		operations.registerUser("Sachin Tendulkar", "sachin", "sachin");
 		operations.registerUser("Virat Kholi", "virat", "virat");
-		
 	}
-		
 }
