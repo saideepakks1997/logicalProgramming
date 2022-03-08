@@ -1,5 +1,6 @@
 package instagram;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import post.Post;
@@ -15,7 +16,8 @@ public class Instagram {
 	private Map<String,User> users = new HashMap<String, User>();
 	//postId and post
 	private Map<Integer, Post> posts = new HashMap<Integer, Post>();
-	
+    private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");  
+
 	public Map<String,User> getUsers() {
 		return users;
 	}
@@ -59,5 +61,11 @@ public class Instagram {
 	}
 	public void setPasswordMaxLen(int passwordMaxLen) {
 		this.passwordMaxLen = passwordMaxLen;
+	}
+	public DateTimeFormatter getFormat() {
+		return format;
+	}
+	public void setFormat(DateTimeFormatter format) {
+		this.format = format;
 	}
 }

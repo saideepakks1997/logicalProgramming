@@ -68,8 +68,8 @@ public class InstagramOperations implements IInstagramOperations{
 			if(numCount == 0)
 			errors.add("password should contain atleast one numeber");
 		
-			for(String error: errors)
-				display.displayError(error);
+			if(errors.size() != 0) 
+				display.displayPasswordError(errors);
 			
 		return errors.size() == 0;
 	}
@@ -191,7 +191,8 @@ public class InstagramOperations implements IInstagramOperations{
 		
 		for(Integer postId: postIds) {
 			post = instagram.getPosts().get(postId);
-			display.displayPost(post.getPost_owner(),post.getContent(),post.getPostCreatedTime());
+			String time = post.getPostCreatedTime().format(instagram.getFormat());
+			display.displayPost(post.getPost_owner(),post.getContent(),time);
 			i++;
 			if(i == instagram.getMaxPostInFeeds())
 				break;
