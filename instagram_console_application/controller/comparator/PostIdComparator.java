@@ -2,7 +2,7 @@ package comparator;
 
 import java.util.Comparator;
 
-public class PostsComparator implements Comparator<Integer>{
+public class PostIdComparator implements Comparator<Integer>{
 
 	@Override
 	public int compare(Integer o1, Integer o2) {

@@ -4,28 +4,28 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import post.Post;
-import user.User;
+import user.InstaUser;
 
 public class Instagram {
-	private int postId = 0;
+	private int postId = 1;
 	private int maxPostInFeeds = 10; 
 	private int passwordMinLen = 8;
 	private int passwordMaxLen = 15;
 	
 	//user_name and user
-	private Map<String,User> users = new HashMap<String, User>();
+	private Map<String,InstaUser> users = new HashMap<String, InstaUser>();
 	//postId and post
 	private Map<Integer, Post> posts = new HashMap<Integer, Post>();
     private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");  
 
-	public Map<String,User> getUsers() {
+	public Map<String,InstaUser> getUsers() {
 		return users;
 	}
-	public void setUser(User user) {
+	public void setUser(InstaUser user) {
 		this.users.put(user.getUser_name(), user);
 	}
 //	Check if credentials are correct
-	public User getValidUser(String user_name, String password) {
+	public InstaUser getValidUser(String user_name, String password) {
 	//	if no user found on the user_name isValid returns null
 		Boolean isValid = this.users.get(user_name).validatePassword(password);
 		if(isValid != null && isValid == true)
@@ -33,7 +33,7 @@ public class Instagram {
 		return null;
 	}
 	public int getPostId() {
-		return postId;
+		return postId++;
 	}
 	public void setPostId(int postId) {
 		this.postId = postId;
