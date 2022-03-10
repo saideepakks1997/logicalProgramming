@@ -1,11 +1,14 @@
 package user;
 
+import java.util.Date;
+
 public class User {
 	protected String name;
 	protected String website;
 	protected String email;
-	protected String phNo;
+	protected Long phNo;
 	protected Gender gender;
+	protected Date dob;
 	
 	public String getName() {
 		return name;
@@ -25,16 +28,22 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPhNo() {
+	public Long getPhNo() {
 		return phNo;
 	}
-	public void setPhNo(String phNo) {
-		this.phNo = phNo;
+	public void setPhNo(Long l) {
+		this.phNo = l;
 	}
 	public Gender getGender() {
 		return gender;
 	}
 	public void setGender(Gender gender) {
 		this.gender = gender;
+	}
+	public Date getDob() {
+		return dob;
+	}
+	public void setDob(Date dob) {
+		this.dob = dob;
 	}
 }

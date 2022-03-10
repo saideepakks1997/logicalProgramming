@@ -3,6 +3,8 @@ package post;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import user.InstaUser;
+
 public class Post {
 	private int postId;
 	private String post_owner;
@@ -11,8 +13,11 @@ public class Post {
 	private LocalDateTime postCreatedTime;
 	private String location;
 	
-	public Post(int postId,String post_owner, String content, LocalDateTime postCreatedTime) {
-		this.postId = postId;
+	private Set<String> likes = new TreeSet<>();
+	private List<Comment> comments = new ArrayList<Comment>();
+	private Set<String> tags = new TreeSet<>();
+	
+	public Post(String post_owner, String content, LocalDateTime postCreatedTime) {
 		this.post_owner = post_owner;
 		this.content = content;
 		this.postCreatedTime = postCreatedTime;
@@ -57,6 +62,39 @@ public class Post {
 		this.postId = postId;
 	}
 	
-//	private Set<String> likes = new HashSet<String>();
 	
+	public String toString() {
+		String str = "Posted by -->"+this.getPost_owner()+"\n"
+				+ "Content -->"+this.getContent()+"\n"
+				+ "Created Time -->"+this.getPostCreatedTime()+"\n"
+				+ "Likes -->"+this.getLikes().size()+"\n"
+				+ "Comments --> "+this.getComments().size()+"\n"
+				+ "tags -->"+this.getTags();
+		return str;
+	}
+//	private Set<String> likes = new HashSet<String>();
+
+	public Set<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<String> tags) {
+		this.tags = tags;
+	}
+
+	public Set<String> getLikes() {
+		return likes;
+	}
+
+	public void setLike(String likedUser) {
+		this.likes.add(likedUser);
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Comment comment) {
+		this.comments.add(comment);
+	}
 }

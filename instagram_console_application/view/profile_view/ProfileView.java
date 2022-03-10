@@ -1,134 +1,174 @@
 package profile_view;
 
-import java.time.LocalDateTime;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
+import common_operations.CommonOperations;
+import common_operations.ICommonOperations;
+import common_view.CommonView;
 import instagram.Instagram;
-import post.Post;
 import profile_operations.IProfileOperations;
 import profile_operations.ProfileOperations;
 import user.InstaUser;
 
 public class ProfileView {
-	Instagram instagram = null;
 	Scanner sc = new Scanner(System.in);
+	
+	CommonView display = new CommonView();
+	
+	ICommonOperations commonOperations = null;
 	IProfileOperations operations = null;
-	InstaUser user = null;
+	
 	public ProfileView(Instagram instagram) {
-		this.instagram = instagram;
+		this.commonOperations = new CommonOperations(instagram);
 		this.operations = new ProfileOperations(instagram);
 	}
 	
-	public void askOptions(InstaUser user) {
-		this.user = user;
+	public void askProfileOptions(InstaUser profile_owner) {
+		
+		mapProfileOwnerToOperationsObj(profile_owner);
 		boolean loop = true;
 		while(loop) {
-			System.out.println("Select option\n"
-					+ "1-> Post content\n"
-					+ "2-> Follow or UnFollow\n"
-					+ "3-> View Posts\n"
-					+ "4-> Log out");
-			int opt = sc.nextInt();
-			switch (opt) {
-			case 1: postContent();
+			System.out.println("Select option \n"
+					+ "1->View Your profile \n"
+					+ "2->Edit Your Profile\n"
+					+ "3->Follow or Unfollow Profile\n"
+					+ "9->Previous menu");
+			int opt = display.getOption();
+			switch(opt) {
+			case 1:viewProfile(); 
 				break;
-			case 2: followOrUnfollow();
+			case 2: editProfile();
 				break;
-			case 3: postsView(); 
+			case 3: followOrUnfollowProfile();
 				break;
-			case 4: displayMessege("Logging out");
+			case 9: display.displayMessege("Back to previous menu");
 				loop = false;
 				break;
 			default: System.out.println("Enter correct option");
 				break;
 			}
 		}
-	}
-		private void postsView() {
-			Set<Post> posts = operations.getPosts(user);
-			if(posts == null)
-				displayMessege("No posts found");
-			else
-				displayPosts(posts);
-		}
-
-		private void displayPosts(Set<Post> posts) {
-			for(Post post:posts) {
-				System.out.println("-------------------------");
-				System.out.println("Post id --->"+post.getPostId());
-				System.out.println("Posted by --->"+post.getPost_owner());
-				System.out.println(post.getContent());
-				System.out.println("Created on "+post.getPostCreatedTime());
-				System.out.println("-------------------------");
-			}
 				
-			
-		}
+	}
 
-	// 	post content
-	private void postContent() {
-		System.out.println("Enter the content you need to post");
-		sc.nextLine();
-		String content = sc.nextLine();
-		LocalDateTime time = LocalDateTime.now();
-		operations.createPost(user, content, time);
-		displayMessege("Post Created successfully");
+	private void mapProfileOwnerToOperationsObj(InstaUser profile_owner) {
+		this.operations.setProfileOwner(profile_owner);
+		this.commonOperations.setProfileOwner(profile_owner);
 	}
 	
-     private void displayMessege(String messege) {
-    	 System.out.println("--------------------");
- 		 System.out.println(messege);
- 		 System.out.println("--------------------");
+	private void viewProfile() {
+		InstaUser profile_owner = operations.getMyProfile();
+		display.displayMessege(profile_owner);
 	}
-
-	//	follow  or unfollow user
-	private void followOrUnfollow() {
+	
+	
+	private void editProfile() {
+		boolean loop = true;
+		while(loop) {
+			display.displayMessege(operations.getProfileFields());
+			System.out.println("Select to update or add field");
+			int opt = display.getOption();
+//			
+			switch(opt) {
+				case 1: System.out.println("Enter name to update");
+					String name = sc.nextLine();
+					operations.setField(name,"name");
+					break;
+				case 2: System.out.println("Enter user_name to update");
+					String user_name = sc.next();
+					operations.setField(user_name, "user_name");
+					break; 
+				case 3: System.out.println("Enter bio to update or add");
+					sc.skip("((?<!\\R)\\s)*");
+					String bio = sc.nextLine();
+					operations.setField(bio, "bio");
+					break;
+				case 4: System.out.println("Enter date of birth to update or add");
+					break;
+				case 5: System.out.println("Enter email to update or add");
+					String email = sc.next();
+					operations.setField(email, "email");
+					break;
+				case 6: System.out.println("Enter phone no to update or add");
+					try {
+						Long phNo = sc.nextLong();
+						operations.setField(phNo, "phNo");
+					}	
+					catch (InputMismatchException e) {
+						display.displayMessege("Enter correct input phone number expected");
+						sc = new Scanner(System.in);
+					}
+					break;
+				case 7: System.out.println("Enter website to update or add");
+					String website = sc.next();
+					operations.setField(website, "website");
+					break;
+				case 8: System.out.println("Going Back to previous menu");
+					loop = false;
+					break;
+				default: System.out.println("Enter the correct option");
+					break;
+			}
+		}
+	}
+	
+	
+	private void followOrUnfollowProfile() {
 		System.out.println("Enter user name");
 		String searching_user_name = sc.next();
 		//get all the users of the entered text
-		List<String> listOfUsers = operations.getSearchedUsers(searching_user_name);
+		List<String> listOfUsers = commonOperations.getSearchedUsers(searching_user_name);
 		searching_user_name = getUserFromList(listOfUsers);
 		
 		if(searching_user_name != null) {
-			String status = operations.checkFollowOrUnfollowStatus(user, searching_user_name);
-			displayMessege(status);
+			String status = operations.checkFollowOrUnfollowStatus( searching_user_name);
+			display.displayMessege(status);
 			System.out.println("press 1->YES\n"
 			 		+ "2->NO");
 			int opt = sc.nextInt();
 			 if(opt == 1) {
-				 String messege = operations.changeFollowStatus(user,searching_user_name);
-				 displayMessege(messege);
+				 String messege = operations.changeFollowStatus(searching_user_name);
+				 display.displayMessege(messege);
 				}
 		}
-		 	
+		
 	}
 	
-	
-	
 	private String getUserFromList(List<String> listOfUsers) {
+		String result_user = null;
+		boolean loop = true;
 		if(listOfUsers.size() == 0) {
-			displayMessege("No users found");
+			display.displayMessege("No users found");
 			return null;
 		}
 		else {
-			System.out.println("Select user to follow or unfollow\n"
-					+ "Press -1 for not selecting");
-			int i=1;
-			for(String user:listOfUsers)
-				System.out.println((i++)+"."+user);
-			int opt = sc.nextInt();
-			if(opt == -1) {
-				displayMessege("Not selected any user");
-				return null;
+			while(loop) {
+				loop = false;
+				System.out.println("Select user to follow or unfollow\n"
+						+ "Press (-1) for not selecting");
+				int i=1;
+				for(String user:listOfUsers)
+					System.out.println((i++)+"."+user);
+				int opt = sc.nextInt();
+				if(opt == -1) {
+					display.displayMessege("Not selected any user");
+					return null;
+				}
+				else {
+					try {
+						 result_user = listOfUsers.get(opt-1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						loop = true;
+						display.displayMessege("Enter correct user option");
+					}
+				}
 			}
-			else
-				return listOfUsers.get(opt-1);
 		}
+		return result_user;
 	}
-
-	public void displayProfileStatus(String user_name, String status) {
-		System.out.println("You are "+status+" "+user_name);
-	}
+	
+	
 }

@@ -1,22 +1,27 @@
 package instagram;
 
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import post.Post;
 import user.InstaUser;
 
 public class Instagram {
-	private int postId = 1;
 	private int maxPostInFeeds = 10; 
 	private int passwordMinLen = 8;
 	private int passwordMaxLen = 15;
 	
+	
+	
+	public Instagram() {
+		InstaUser u1 = new InstaUser("Sai Deepak", "sai", "sai");
+		this.setUser(u1);
+		InstaUser u2 = new InstaUser("Sachin Tendulkar", "sachin", "sachin");
+		this.setUser(u2);
+		InstaUser u3 = new InstaUser("Virat Kholi", "virat", "virat");
+		this.setUser(u3);
+	}
+	
 	//user_name and user
 	private Map<String,InstaUser> users = new HashMap<String, InstaUser>();
-	//postId and post
-	private Map<Integer, Post> posts = new HashMap<Integer, Post>();
-    private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");  
+
 
 	public Map<String,InstaUser> getUsers() {
 		return users;
@@ -32,18 +37,7 @@ public class Instagram {
 			return this.users.get(user_name);
 		return null;
 	}
-	public int getPostId() {
-		return postId++;
-	}
-	public void setPostId(int postId) {
-		this.postId = postId;
-	}
-	public Map<Integer, Post> getPosts() {
-		return posts;
-	}
-	public void setPost(Post post) {
-		this.posts.put(post.getPostId(), post);
-	}
+
 	public int getMaxPostInFeeds() {
 		return maxPostInFeeds;
 	}
@@ -61,11 +55,5 @@ public class Instagram {
 	}
 	public void setPasswordMaxLen(int passwordMaxLen) {
 		this.passwordMaxLen = passwordMaxLen;
-	}
-	public DateTimeFormatter getFormat() {
-		return format;
-	}
-	public void setFormat(DateTimeFormatter format) {
-		this.format = format;
 	}
 }

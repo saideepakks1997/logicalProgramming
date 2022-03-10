@@ -12,11 +12,12 @@ public class LoginRegistrationOperations implements ILoginRefistrationOperations
 	public  LoginRegistrationOperations(Instagram instagram) {
 		this.instagram = instagram;
 	}
+	//Before registration user_name is unique
 	@Override
 	public boolean checkIfUserNameIsCorrect(String user_name) {
 		return instagram.getUsers().containsKey(user_name);
 	}
-	
+//	check if password follows all the standards
 	@Override
 	public List<String> checkIfPasswordIsValid(String password) {
 		int lowerCaseCount = 0;
@@ -73,10 +74,12 @@ public class LoginRegistrationOperations implements ILoginRefistrationOperations
 			instagram.setUser(user);
 			return user;
 		}
+	
 //	login the user
 	@Override
 	public InstaUser loginUser(String user_name, String password) {
 		InstaUser user = instagram.getValidUser(user_name, password);
 		return user;
 	}
+	
 }

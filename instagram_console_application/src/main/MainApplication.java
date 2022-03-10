@@ -11,7 +11,6 @@ public class MainApplication {
 //		inputs.createUsers();
 //		inputs.landingPage();
 		MainView mainView = new MainView(instagram);
-		mainView.createUsers();
 		mainView.landingPage();
 	}
 }
