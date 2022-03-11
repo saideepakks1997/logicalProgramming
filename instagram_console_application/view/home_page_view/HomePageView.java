@@ -17,7 +17,7 @@ import user.InstaUser;
 public class HomePageView {
 	Scanner sc = new Scanner(System.in);
 	
-	CommonView display = new CommonView();
+	CommonView commonView = new CommonView();
 	
 	ProfileView profile = null;
 	PostView post = null;
@@ -31,17 +31,17 @@ public class HomePageView {
 		boolean loop = true;
 		int opt = 0;
 		while(loop) {
-			display.displayMessege("Select option\n"
+			commonView.displayMessege("Select option\n"
 					+ "1-> Posts menu(view posts,create post all post activities)\n"
 					+ "2-> profile menu(view profile,edit profile ,follow profile)\n"
 					+ "5-> Log out");
-			opt = display.getOption();
+			opt = commonView.getOption();
 			switch (opt) {
 			case 1: goToPosts(user);
 				break;
 			case 2: goToProfile(user); 
 				break;
-			case 5: display.displayMessege("Logging out");
+			case 5: commonView.displayMessege("Logging out");
 				loop = false;
 				break;
 			default: System.out.println("Enter correct option");

@@ -16,7 +16,7 @@ import user.InstaUser;
 public class ProfileView {
 	Scanner sc = new Scanner(System.in);
 	
-	CommonView display = new CommonView();
+	CommonView commonView = new CommonView();
 	
 	ICommonOperations commonOperations = null;
 	IProfileOperations operations = null;
@@ -36,7 +36,7 @@ public class ProfileView {
 					+ "2->Edit Your Profile\n"
 					+ "3->Follow or Unfollow Profile\n"
 					+ "9->Previous menu");
-			int opt = display.getOption();
+			int opt = commonView.getOption();
 			switch(opt) {
 			case 1:viewProfile(); 
 				break;
@@ -44,7 +44,7 @@ public class ProfileView {
 				break;
 			case 3: followOrUnfollowProfile();
 				break;
-			case 9: display.displayMessege("Back to previous menu");
+			case 9: commonView.displayMessege("Back to previous menu");
 				loop = false;
 				break;
 			default: System.out.println("Enter correct option");
@@ -61,16 +61,16 @@ public class ProfileView {
 	
 	private void viewProfile() {
 		InstaUser profile_owner = operations.getMyProfile();
-		display.displayMessege(profile_owner);
+		commonView.displayMessege(profile_owner);
 	}
 	
 	
 	private void editProfile() {
 		boolean loop = true;
 		while(loop) {
-			display.displayMessege(operations.getProfileFields());
+			commonView.displayMessege(operations.getProfileFields());
 			System.out.println("Select to update or add field");
-			int opt = display.getOption();
+			int opt = commonView.getOption();
 //			
 			switch(opt) {
 				case 1: System.out.println("Enter name to update");
@@ -98,7 +98,7 @@ public class ProfileView {
 						operations.setField(phNo, "phNo");
 					}	
 					catch (InputMismatchException e) {
-						display.displayMessege("Enter correct input phone number expected");
+						commonView.displayMessege("Enter correct input phone number expected");
 						sc = new Scanner(System.in);
 					}
 					break;
@@ -125,11 +125,11 @@ public class ProfileView {
 			LocalDate date = commonOperations.getValidDate(dob);
 			if(date != null) {
 				String status = operations.setField(date, "dob");
-				display.displayMessege(status);
+				commonView.displayMessege(status);
 			}
 			else {
 				loop = true;
-				display.displayMessege("Please enter correct date");
+				commonView.displayMessege("Please enter correct date");
 			}
 		}
 		
@@ -144,13 +144,13 @@ public class ProfileView {
 		
 		if(searching_user_name != null) {
 			String status = operations.checkFollowOrUnfollowStatus( searching_user_name);
-			display.displayMessege(status);
+			commonView.displayMessege(status);
 			System.out.println("press 1->YES\n"
 			 		+ "2->NO");
 			int opt = sc.nextInt();
 			 if(opt == 1) {
 				 String messege = operations.changeFollowStatus(searching_user_name);
-				 display.displayMessege(messege);
+				 commonView.displayMessege(messege);
 				}
 		}
 		
@@ -160,7 +160,7 @@ public class ProfileView {
 		String result_user = null;
 		boolean loop = true;
 		if(listOfUsers.size() == 0) {
-			display.displayMessege("No users found");
+			commonView.displayMessege("No users found");
 			return null;
 		}
 		else {
@@ -173,7 +173,7 @@ public class ProfileView {
 					System.out.println((i++)+"."+user);
 				int opt = sc.nextInt();
 				if(opt == -1) {
-					display.displayMessege("Not selected any user");
+					commonView.displayMessege("Not selected any user");
 					return null;
 				}
 				else {
@@ -182,7 +182,7 @@ public class ProfileView {
 					}
 					catch (IndexOutOfBoundsException e) {
 						loop = true;
-						display.displayMessege("Enter correct user option");
+						commonView.displayMessege("Enter correct user option");
 					}
 				}
 			}

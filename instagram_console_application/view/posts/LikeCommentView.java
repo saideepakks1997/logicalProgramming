@@ -14,7 +14,7 @@ import post_operations.LikeCommentOperations;
 import user.InstaUser;
 
 public class LikeCommentView {
-	CommonView display = new CommonView();
+	CommonView commonView = new CommonView();
 	ILikeCommentOperation operations = null;
 	
 	Scanner sc = new Scanner(System.in);
@@ -28,14 +28,14 @@ public class LikeCommentView {
 		boolean loop = true;
 		while(loop) {
 			
-			display.displayMessege("Enter option \n"
+			commonView.displayMessege("Enter option \n"
 					+ "1->like post\n"
 					+ "2->Comment post\n"
 					+ "3->view who are all liked\n"
 					+ "4->View comments\n"
 					+ "5->View current post\n"
 					+ "9->Back to previous menu");
-			int opt = display.getOption();
+			int opt = commonView.getOption();
 			switch (opt) {
 			case 1: likePost();
 				break;
@@ -48,20 +48,20 @@ public class LikeCommentView {
 			case 5: viewCurrentPost(post);
 				break;
 			case 9: loop = false;
-				display.displayMessege("Back to previuos menu");
+			commonView.displayMessege("Back to previuos menu");
 				break;
 			default:
 				break;
 			}
 //			if(opt != 3) {
-				display.displayMessege(post);
+//			commonView.displayMessege(post);
 //			}
 		}
 		
 	}
 	
 	private void viewCurrentPost(Post post) {
-		display.displayMessege(post);
+		commonView.displayMessege(post);
 	}
 
 	private void mapPostProfileOwnerToOperations(Post post, InstaUser profile_owner) {
@@ -70,16 +70,16 @@ public class LikeCommentView {
 
 	private void likePost() {
 		String status = operations.getPostLikeStatus();
-		display.displayMessege("Post is "+status+"\n"
+		commonView.displayMessege("Post is "+status+"\n"
 				+ "press 1->Yes\n"
 				+ "2->No");
-		int opt = display.getOption();
+		int opt = commonView.getOption();
 		if(opt == 1) {
 			String result = operations.addOrRemoveLike();
-			display.displayMessege(result);
+			commonView.displayMessege(result);
 		}
 		else {
-			display.displayMessege("Left as it is");
+			commonView.displayMessege("Left as it is");
 		}
 		
 	}
@@ -88,11 +88,11 @@ public class LikeCommentView {
 		if(comments.size() > 0) {
 			System.out.println("List of liked users");
 			for(Comment comment :comments) {
-					display.displayMessege(comment);
+				commonView.displayMessege(comment);
 				}
 		}
 		else
-			display.displayMessege("No one commented");
+			commonView.displayMessege("No one commented");
 	}
 
 	private void viewLikedUsers() {
@@ -110,7 +110,7 @@ public class LikeCommentView {
 		sc.skip("((?<!\\R)\\s)*");
 		String content = sc.nextLine();
 		String status = operations.addComment(content,time);
-		display.displayMessege(status);
+		commonView.displayMessege(status);
 	}
 	
 }

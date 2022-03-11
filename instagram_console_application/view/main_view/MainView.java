@@ -17,7 +17,7 @@ public class MainView {
 	
 	HomePageView profile = null;
 	
-	CommonView display = new CommonView();
+	CommonView commonView = new CommonView();
 	
 	public MainView(Instagram instagram) {
 		this.operations = new LoginRegistrationOperations(instagram);
@@ -31,7 +31,7 @@ public class MainView {
 			System.out.println("1->Register user\n"
 					+ "2->Login user\n"
 					+ "3->Exit");
-			opt = display.getOption();
+			opt = commonView.getOption();
 			switch(opt) {
 				case 1:resgistrationInputs();
 					break;
@@ -57,7 +57,7 @@ public class MainView {
 			user_name = sc.next();
 			boolean isUserTaken = operations.checkIfUserNameIsCorrect(user_name);
 			if(isUserTaken)
-				display.displayMessege(user_name+" already taken please try different name");
+				commonView.displayMessege(user_name+" already taken please try different name");
 			else 
 				loop = false;
 		}
@@ -82,10 +82,10 @@ public class MainView {
 			}
 				
 			else
-				display.displayPasswordError(passwordErrors);
+				commonView.displayPasswordError(passwordErrors);
 			}
 		InstaUser user = operations.registerUser(name, user_name, password);
-		display.displayMessege(user_name+ " registered successfully");
+		commonView.displayMessege(user_name+ " registered successfully");
 		profile.askOptions(user);
 	}
 	
@@ -98,7 +98,7 @@ public class MainView {
 			user_name = sc.next();
 			isUserAvailable = operations.checkIfUserNameIsCorrect(user_name);
 			if(!isUserAvailable) {
-				display.displayMessege(user_name+" NOT EXISTS");
+				commonView.displayMessege(user_name+" NOT EXISTS");
 				loop = true;
 			}
 			else
@@ -112,7 +112,7 @@ public class MainView {
 			InstaUser user = operations.loginUser(user_name, password);
 				if(user == null) {
 					loop = true;
-					display.displayMessege("password invalid");
+					commonView.displayMessege("password invalid");
 				}
 				else {
 					loop = false;
