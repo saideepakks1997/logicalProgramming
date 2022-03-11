@@ -1,14 +1,20 @@
 package account;
 
+import java.time.LocalDate;
+
 import bank.Bank;
 import card.Card;
 import card.DebitCard;
+import common_view.*;
 import customer.Customer;
-import display.*;
 
 public class AccountOperations implements IAccountOperations{
 	Bank bank = null;
-	Display display = new Display();
+	
+	Customer customer = null;
+	Account account = null;
+	
+	CommonView display = new CommonView();
 	public AccountOperations(Bank bank) {
 		this.bank = bank;
 	}
@@ -17,7 +23,6 @@ public class AccountOperations implements IAccountOperations{
 		if(account.getBankBalance() - totalAmount >= bank.getMinimumBalance()) {
 			return true;
 		}
-		display.displayError("Insufficient funds");
 		return false;
 	}
 	
@@ -26,25 +31,27 @@ public class AccountOperations implements IAccountOperations{
 	}
 	
 	
-	public Customer createCustomer(String name,String dob,long phnNo,String address) {
-		return new Customer(name, dob, phnNo, address);
+	public String createCustomer(String name,LocalDate dob,long phnNo,String address) {
+		this.customer = new Customer(name, dob, phnNo, address);
+		return "Customer Created Successfully";
 	}
 	
-	public  Account createAccount(Customer customer) {
-		Account account = null;
+	public  String createSavingsAccount() {
 		long accNo = bank.getAccountNoSeries();
-		account = new SavingsAccount(accNo, customer);
+		Account account = new SavingsAccount(accNo, customer);	
+		this.account = account;
+		
 		bank.setAccounts(account);
 		bank.setCustomers(customer);
 		customer.setAccont(account);
-		return account;
+		
+		return "Account created Successfully";
 		}
 	
-	public  Card createCard(Account account,Customer customer,int opt) {
+	public  String createCard(int opt,int pin) {
 		Card card = null;
 		long cardNo = bank.getCardNumberSeries();
 		int cvv = 555;
-		int pin = 1234;
 		
 		if(opt == 1)
 			card  = new DebitCard(cardNo, cvv, "09/26", pin);
@@ -52,7 +59,7 @@ public class AccountOperations implements IAccountOperations{
 		card.setAccount(account);
 		customer.setDebitCard(card);
 		bank.setCards(card);
-		return card;
+		return "Card has been created succuessfully your card no is "+card.getCardNo();
 	}
 	public double calculateLevyAndCashbackAmount (double amount,double perc) {
 		double money = amount * (perc/100);

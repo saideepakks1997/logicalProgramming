@@ -3,7 +3,7 @@ package atm_center;
 import card.Card;
 
 public interface IAtmMachine {
-	public void withdrawMoney(Card card,double amount);
-	public void displayBalance(Card card);
-	public void depositMoney(Card card,double amount);
+	public String withdrawMoney(Card card,double amount);
+	public String getBalance(Card card);
+	public String depositMoney(Card card,double amount);
 }

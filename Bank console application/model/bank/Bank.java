@@ -34,7 +34,8 @@ public class Bank {
 	private double rateOfIntrestForSavingAccount = 2.5;
 
 	private List<Customer> customers = new ArrayList<Customer>();
-	private List<Account> accounts = new ArrayList<Account>();
+//	private List<Account> accounts = new ArrayList<Account>();
+	private Map<Long, Account> accounts = new HashMap();
 	private Map<Long,Card> cards = new HashMap();
 	
 	public Bank() {
@@ -139,7 +140,7 @@ public class Bank {
 		return accounts.get(0);
 	}
 	public void setAccounts(Account account) {
-		this.accounts.add(account);
+		this.accounts.put(account.getAccountNo(), account);
 	}
 	//min balance
 	public double getMinimumBalance() {
@@ -190,12 +191,7 @@ public class Bank {
 	public void setCashBackPerc(double cashBackPerc) {
 		this.cashBackPerc = cashBackPerc;
 	}
-//	public BankType getType() {
-//		return type;
-//	}
-//	public void setType(BankType type) {
-//		this.type = type;
-//	}
+
 	public double getRateOfIntrest() {
 		return rateOfIntrestForSavingAccount;
 	}

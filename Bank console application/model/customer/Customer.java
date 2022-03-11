@@ -1,5 +1,6 @@
 package customer;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import account.*;
@@ -9,7 +10,7 @@ public class Customer {
 	
 	private long cust_id;
 	private String name;
-	private String dob;
+	private LocalDate dob;
 	private Gender gender;
 	//adharcard,pan card,lisence etc.
 	private String proof;
@@ -28,7 +29,7 @@ public class Customer {
 	private List<Card> cards = new ArrayList<Card>();
 	
 	public Customer() {}
-	public Customer(String name,String dob,long phnNo,String address) {
+	public Customer(String name,LocalDate dob,long phnNo,String address) {
 		this.name = name;
 		this.cust_id = getCust_id();
 		this.phnNo = phnNo;
@@ -42,10 +43,10 @@ public class Customer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDob() {
+	public LocalDate getDob() {
 		return dob;
 	}
-	public void setDob(String dob) {
+	public void setDob(LocalDate dob) {
 		this.dob = dob;
 	}
 	public String getAddress() {
