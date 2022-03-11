@@ -38,7 +38,7 @@ public class PostView {
 		while(loop) {
 			System.out.println("Enter option to select \n"
 			+ "1->Create post\n"
-			+ "2->View posts\n"
+			+ "2->View feed posts\n"
 			+ "3->View My posts\n"
 			+ "4->Delete post\n"
 			+ "5->Remove tag in post\n"
@@ -137,6 +137,8 @@ public class PostView {
 			System.out.println("Post no :-"+(i++));
 			display.displayMessege(post);
 		}
+		if(myPosts.size() == 0)
+			display.displayMessege("No Posts Found");
 	}
 	
 	private void createOperationsObj(InstaUser profile_owner) {

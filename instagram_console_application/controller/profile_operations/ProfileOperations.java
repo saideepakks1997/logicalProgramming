@@ -1,5 +1,6 @@
 package profile_operations;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +128,7 @@ public class ProfileOperations implements IProfileOperations{
 	}
 
 	@Override
-	public void setField(Object updateField, String fieldName) {
+	public String setField(Object updateField, String fieldName) {
 		switch(fieldName) {
 			case "name": this.profile_owner.setName((String)updateField);
 				break;
@@ -135,7 +136,7 @@ public class ProfileOperations implements IProfileOperations{
 				break;
 			case "bio": this.profile_owner.setBio((String)updateField);
 				break;
-			case "dob": 
+			case "dob": this.profile_owner.setDob((LocalDate)updateField);
 				break;
 			case "email": this.profile_owner.setEmail((String)updateField);
 				break;
@@ -144,7 +145,7 @@ public class ProfileOperations implements IProfileOperations{
 			case "website": this.profile_owner.setWebsite((String)updateField);
 				break;
 		}
-		
+		return fieldName+" updated successfully";
 	}
 
 	@Override

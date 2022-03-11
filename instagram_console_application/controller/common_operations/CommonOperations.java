@@ -1,5 +1,7 @@
 package common_operations;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -38,5 +40,16 @@ public class CommonOperations implements ICommonOperations{
 	@Override
 	public void setProfileOwner(InstaUser profile_owner) {
 		this.profile_owner = profile_owner;
+	}
+	@Override
+	public LocalDate getValidDate(String dob) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		try {
+			LocalDate time = LocalDate.parse(dob, formatter);
+			return time;
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 }

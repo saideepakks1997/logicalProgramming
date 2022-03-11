@@ -32,8 +32,8 @@ public class HomePageView {
 		int opt = 0;
 		while(loop) {
 			display.displayMessege("Select option\n"
-					+ "1-> Posts menu(view posts,create post )\n"
-					+ "2-> Go to profile (view profile,edit profile ,follow profile)\n"
+					+ "1-> Posts menu(view posts,create post all post activities)\n"
+					+ "2-> profile menu(view profile,edit profile ,follow profile)\n"
 					+ "5-> Log out");
 			opt = display.getOption();
 			switch (opt) {

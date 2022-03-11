@@ -15,5 +15,5 @@ public interface IProfileOperations {
 //	public List<String> getSearchedUsers(String searching_user_name);
 	public InstaUser getMyProfile();
 	public String getProfileFields();
-	public void setField(Object updateField, String fieldName);
+	public String setField(Object updateField, String fieldName);
 }

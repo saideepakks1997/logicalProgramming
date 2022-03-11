@@ -1,5 +1,6 @@
 package profile_view;
 
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -85,7 +86,7 @@ public class ProfileView {
 					String bio = sc.nextLine();
 					operations.setField(bio, "bio");
 					break;
-				case 4: System.out.println("Enter date of birth to update or add");
+				case 4: setDOB(); 
 					break;
 				case 5: System.out.println("Enter email to update or add");
 					String email = sc.next();
@@ -115,6 +116,25 @@ public class ProfileView {
 	}
 	
 	
+	private void setDOB() {
+		boolean loop = true;
+		while(loop) {
+			loop = false;
+			System.out.println("Enter date of birth to update or add format(yyyy-MM-dd)");
+			String dob = sc.next();
+			LocalDate date = commonOperations.getValidDate(dob);
+			if(date != null) {
+				String status = operations.setField(date, "dob");
+				display.displayMessege(status);
+			}
+			else {
+				loop = true;
+				display.displayMessege("Please enter correct date");
+			}
+		}
+		
+	}
+
 	private void followOrUnfollowProfile() {
 		System.out.println("Enter user name");
 		String searching_user_name = sc.next();

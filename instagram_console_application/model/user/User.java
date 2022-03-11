@@ -1,6 +1,6 @@
 package user;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class User {
 	protected String name;
@@ -8,7 +8,7 @@ public class User {
 	protected String email;
 	protected Long phNo;
 	protected Gender gender;
-	protected Date dob;
+	protected LocalDate dob;
 	
 	public String getName() {
 		return name;
@@ -40,10 +40,10 @@ public class User {
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
-	public Date getDob() {
+	public LocalDate getDob() {
 		return dob;
 	}
-	public void setDob(Date dob) {
+	public void setDob(LocalDate dob) {
 		this.dob = dob;
 	}
 }
