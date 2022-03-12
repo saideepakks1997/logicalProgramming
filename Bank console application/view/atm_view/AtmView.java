@@ -86,6 +86,7 @@ public class AtmView {
 			catch (Exception e) {
 				loop = true;
 				commonView.displayMessege("Expected card number (Only enter number)");
+				sc = new Scanner(System.in);
 				}
 		}
 		return card;
@@ -121,6 +122,7 @@ public class AtmView {
 			catch(Exception e) {
 				commonView.displayMessege("Please Enter numbers only");
 				loop = true;
+				sc = new Scanner(System.in);
 			}
 		}
 		return isValidPin;
@@ -141,6 +143,7 @@ public class AtmView {
 				catch(Exception e) {
 					commonView.displayMessege("Enter valid input");
 					loop= true;
+					sc = new Scanner(System.in);
 				}
 			}
 		}

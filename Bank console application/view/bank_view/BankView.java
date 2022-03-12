@@ -82,6 +82,7 @@ public class BankView {
 			catch(Exception e) {
 				loop = true;
 				commonView.displayMessege("Phone number expected please enter phone number");
+				sc = new Scanner(System.in);
 			}
 		}
 		String status  = operations.createCustomer(name, dob, phnNo, address);
