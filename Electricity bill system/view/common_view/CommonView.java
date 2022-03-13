@@ -1,11 +1,7 @@
 package common_view;
 
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-
-import post.Post;
 
 public class CommonView {
 	Scanner sc  = new Scanner(System.in);
@@ -15,24 +11,6 @@ public class CommonView {
 		System.out.println("-----------------------");
 	}
 	
-	public void displayPasswordError(List<String> errors) {
-		System.out.println("-------------------------");
-		for(String error:errors)
-			System.out.println(error);
-		
-		System.out.println("-------------------------");
-	}
-	
-	public void displayPosts(Post post,int postId) {
-		System.out.println("-------------------------");
-		System.out.println("Post id "+postId);
-		System.out.println(post);
-		System.out.println("-------------------------");
-	}
-	public void displayProfileStatus(String user_name, String status) {
-		System.out.println("You are "+status+" "+user_name);
-	}
-
 	public int getOption() {
 		boolean loop = true;
 		int opt = 0;
@@ -51,5 +29,34 @@ public class CommonView {
 		}
 		
 		return opt;
+	}
+	public String getString() {
+		sc.skip("((?<!\\R)\\s)*");
+		String value = sc.nextLine();
+		return value;
+	}
+	public long getLong() {
+		boolean loop = true;
+		long val = 0;
+		while(loop) {
+			loop = false;
+			try {
+				val = sc.nextLong();
+			
+			}
+			catch(InputMismatchException exception){
+				displayMessege("Wrong input enter correct input(i.e) number");
+				System.out.println("Re enter the number");
+				loop = true;
+				sc = new Scanner(System.in);
+			}
+		}
+		return val;
+	}
+	
+	public long getConnectionNo() {
+		System.out.println("Enter connection number");
+		long connNo = getLong();
+		return connNo;
 	}
 }
