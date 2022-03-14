@@ -8,7 +8,7 @@ import consumer_view.ConsumerView;
 import eb.ElectricityBoard;
 
 public class MainView {
-	CommonView commonView = new CommonView();
+	CommonView commonView = null;
 	AdminView adminView = null;
 	ConsumerView consumerView = null;
 	
@@ -16,6 +16,7 @@ public class MainView {
 	public MainView(ElectricityBoard eb) {
 		this.adminView = new AdminView(eb);
 		this.consumerView = new ConsumerView(eb);
+		this.commonView = new CommonView(eb);
 		this.operations = new CommonOperations(eb);
 	}
 	public void askOptions(){

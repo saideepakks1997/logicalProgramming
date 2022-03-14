@@ -1,9 +1,12 @@
 package connection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import bill.Bill;
+import bill.Payment;
 import consumer.Consumer;
 
 public class Connection {
@@ -13,7 +16,9 @@ public class Connection {
 	private Consumer consumer;
 	
 	private Map<Long, Bill> bills = new HashMap<>();
-
+	private List<Payment> pendingPayments = new ArrayList<>();
+	
+	
 	public Connection(long serviceNo, TypeOfConnection connectionType) {
 		this.setServiceNo(serviceNo);
 		this.setConnectionType(connectionType);
@@ -48,8 +53,8 @@ public class Connection {
 		return bills;
 	}
 
-	public void setBills(Map<Long, Bill> bills) {
-		this.bills = bills;
+	public void setBills(Bill bill) {
+		this.bills.put(bill.getBillNo(), bill);
 	}
 
 	public Consumer getConsumer() {
@@ -58,6 +63,14 @@ public class Connection {
 
 	public void setConsumer(Consumer consumer) {
 		this.consumer = consumer;
+	}
+
+	public List<Payment> getPendingPayments() {
+		return pendingPayments;
+	}
+
+	public void setPendingPayments(Payment payment) {
+		this.pendingPayments.add(payment);
 	}
 	
 }

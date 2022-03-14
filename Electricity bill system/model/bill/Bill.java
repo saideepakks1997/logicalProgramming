@@ -1,13 +1,18 @@
 package bill;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Bill {
 	private long billNo;
-	private double payableAmount;
-	private LocalDate dueDate;
-	private int unitsConsumed;
-	private LocalDate paymentDate;
+	private Payment payment;
+	private LocalDateTime paymentDate;
+	
+	public Bill(long billNo, Payment payment) {
+		this.setBillNo(billNo);
+		this.setPayment(payment);
+		this.setPaymentDate(LocalDateTime.now());
+	}
 	
 	public long getBillNo() {
 		return billNo;
@@ -15,28 +20,17 @@ public class Bill {
 	public void setBillNo(long billNo) {
 		this.billNo = billNo;
 	}
-	public double getPayableAmount() {
-		return payableAmount;
+	public Payment getPayment() {
+		return this.payment;
 	}
-	public void setPayableAmount(double payableAmount) {
-		this.payableAmount = payableAmount;
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
-	public LocalDate getDueDate() {
-		return dueDate;
-	}
-	public void setDueDate(LocalDate dueDate) {
-		this.dueDate = dueDate;
-	}
-	public int getUnitsConsumed() {
-		return unitsConsumed;
-	}
-	public void setUnitsConsumed(int unitsConsumed) {
-		this.unitsConsumed = unitsConsumed;
-	}
-	public LocalDate getPaymentDate() {
+	
+	public LocalDateTime getPaymentDate() {
 		return paymentDate;
 	}
-	public void setPaymentDate(LocalDate paymentDate) {
+	public void setPaymentDate(LocalDateTime paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 }

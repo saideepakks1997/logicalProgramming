@@ -11,6 +11,7 @@ import consumer.Consumer;
 public class ElectricityBoard {
 	private long billNoSeries = 11111111l;
 	private long connNoSeries = 22222l;
+	//user_name and Consumer
 	private Map<String, Consumer> consumers = new HashMap<String, Consumer>();
 	private Map<String, Admin> admins = new HashMap<String, Admin>();
 	
@@ -20,7 +21,7 @@ public class ElectricityBoard {
 		Admin admin1 = new Admin("admin1", "admin1");
 		admins.put(admin1.getUser_name(),admin1);
 		
-		Connection conn1 = new Connection(getConnNoSeries(), TypeOfConnection.domestic);
+		Connection conn1 = new Connection(getConnNoSeries(), TypeOfConnection.Domestic);
 		Connection conn2 = new Connection(getConnNoSeries(), TypeOfConnection.ltCommercial);
 		
 		this.connections.put(conn1.getServiceNo(), conn1);
@@ -31,8 +32,8 @@ public class ElectricityBoard {
 		return consumers;
 	}
 
-	public void setConsumers(Map<String, Consumer> consumers) {
-		this.consumers = consumers;
+	public void setConsumers(Consumer consumer) {
+		this.consumers.put(consumer.getUser_name(), consumer);
 	}
 	
 	public Map<String, Admin> getAdmins() {
@@ -47,8 +48,8 @@ public class ElectricityBoard {
 		return connections;
 	}
 
-	public void setConnections(Map<Long,Connection> connections) {
-		this.connections = connections;
+	public void setConnections(Connection conn) {
+		this.connections.put(conn.getServiceNo(), conn);
 	}
 
 	public long getBillNoSeries() {
