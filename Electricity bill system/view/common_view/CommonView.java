@@ -7,8 +7,8 @@ import java.util.Scanner;
 import bill.Payment;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
+import connection.Connection;
 import connection.TypeOfConnection;
-import consumer.Consumer;
 import eb.ElectricityBoard;
 
 public class CommonView {
@@ -25,7 +25,7 @@ public class CommonView {
 		System.out.println("-----------------------");
 	}
 	
-	public int getOption() {
+	public int getInt() {
 		boolean loop = true;
 		int opt = 0;
 		while(loop) {
@@ -129,8 +129,6 @@ public class CommonView {
 			else
 				displayPasswordError(passwordErrors);
 			}
-//		Consumer consumer = new Consumer(name, email, phoNo, user_name, password);
-		commonOperations.addConsumer(name, email, phoNo, user_name, password);
 		return user_name;
 		
 	}
@@ -144,7 +142,7 @@ public class CommonView {
 			for(TypeOfConnection ctype: connTypes) {
 				System.out.println((i++)+"."+ctype);
 			}
-			int opt = getOption();
+			int opt = getInt();
 			if(opt > connTypes.size()) {
 				displayMessege("Please enter valid option");
 			}
@@ -155,5 +153,93 @@ public class CommonView {
 		
 		}
 		return null;
+	}
+	
+	public long getConnectionNo() {
+		boolean loop = true;
+		long connNo = 0;
+		while(loop) {
+			loop = false;
+			System.out.println("Enter connection number");
+			connNo = getLong();
+			boolean isValid = commonOperations.isServiceNoValid(connNo);
+			if(!isValid) {
+				displayMessege("Enter valid service number");
+				loop = true;
+			}
+		}
+		return connNo;
+	}
+	
+	public void payBill() {
+		boolean loop = true;
+		long connNo = getConnectionNo();
+		while(loop) {
+			String display = commonOperations.getAllPedingPayments(connNo);
+			if(display != null) {
+				System.out.println("Enter option to accept the payment");
+				displayMessege(display);
+				int opt = getInt();
+				String status = commonOperations.acceptPayment(opt, connNo);
+				displayMessege(status);
+				System.out.println("Still you want pay bills\n"
+						+ "1-> Yes\n"
+						+ "Press any no for No");
+				int no = getInt();
+				if(no != 1) {
+					loop = false;
+					displayMessege("Going back to previous menu");
+				}
+					
+			}
+			else {
+				displayMessege("No pending payments");
+				loop = false;
+			}
+			
+		}
+	}
+
+	public void displayConnections(List<Connection> consumerConns) {
+		System.out.println("-------------------------------------------");
+		int i=1;
+		System.out.printf("%3s %10s %15s %20s","Sno","ServiceNo","ConnectionType","Address\n");
+		
+		for(Connection con: consumerConns) {
+			System.out.printf("%3d %10d %15s %20s",(i++),con.getServiceNo(),con.getConnectionType(),con.getConnAddress());
+			System.out.println();
+		}
+		System.out.println("-------------------------------------------");
+	}
+	
+	public void viewAndPayAllPendingPayments(long serviceNo) {
+		boolean loop = true;
+		while(loop) {
+			String display = commonOperations.getAllPedingPayments(serviceNo);
+			if(display != null) {
+				System.out.println("Enter option to accept the payment \n"
+						+ "enter (-1) to exit without paying");
+				displayMessege(display);
+				int opt = getInt();
+				if(opt == -1) {
+					displayMessege("No transaction has been done");
+					return;
+				}
+				String status = commonOperations.acceptPayment(opt, serviceNo);
+				displayMessege(status);
+				System.out.println("Still you want pay bills\n"
+						+ "1-> Yes\n"
+						+ "Press any no for No");
+				int no = getInt();
+				if(no != 1) {
+					loop = false;
+					displayMessege("Going back to previous menu");
+				}
+			}
+			else {
+				displayMessege("No pending payments");
+				loop = false;
+			}
+		}
 	}
 }

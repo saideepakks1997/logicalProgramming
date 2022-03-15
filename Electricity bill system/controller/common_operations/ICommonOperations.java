@@ -2,6 +2,7 @@ package common_operations;
 
 import java.util.List;
 
+import bill.Bill;
 import bill.Payment;
 import connection.TypeOfConnection;
 
@@ -24,6 +25,10 @@ public interface ICommonOperations {
 
 	List<String> checkIfPasswordIsValid(String password);
 
-	public void addConsumer(String name, String email, long phoNo, String user_name, String password);
+	public boolean isValidCustomerNo(int customerNo);
+
+	public List<Bill> getBills(long serviceNo);
+
+//	public void addConsumer(String name, String email, long phoNo, String user_name, String password);
 
 }

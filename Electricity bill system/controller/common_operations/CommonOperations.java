@@ -95,7 +95,7 @@ public class CommonOperations implements ICommonOperations{
 
 	@Override
 	public boolean checkIfUserNameIsCorrect(String user_name) {
-		boolean isValid = this.eb.getConsumers().containsKey(user_name);
+		boolean isValid = this.eb.getConsumerUserName().containsKey(user_name);
 		return isValid;
 	}
 	
@@ -150,9 +150,23 @@ public class CommonOperations implements ICommonOperations{
 	}
 
 	@Override
-	public void addConsumer(String name, String email, long phoNo, String user_name, String password) {
-		Consumer consumer = new Consumer(name, email, phoNo, user_name, password);
-		this.eb.setConsumers(consumer);
+	public boolean isValidCustomerNo(int customerNo) {
 		
+		return this.eb.getConsumers().containsKey(customerNo);
 	}
+
+	@Override
+	public List<Bill> getBills(long serviceNo) {
+		List<Bill> bills = this.eb.getConnections().get(serviceNo).getBills();
+		return bills;
+	}
+
+	
+
+//	@Override
+//	public void addConsumer(String name, String email, long phoNo, String user_name, String password) {
+//		Consumer consumer = new Consumer(name, email, phoNo, user_name, password);
+//		this.eb.setConsumers(consumer);
+//		
+//	}
 }

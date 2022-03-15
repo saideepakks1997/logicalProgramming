@@ -5,6 +5,8 @@ import java.util.Map;
 
 import bill.Payment;
 import connection.TypeOfConnection;
+import eb.ChangeOfConnectionRequest;
+import eb.NewConnectionRequest;
 
 public interface IAdminOperations {
 
@@ -14,6 +16,14 @@ public interface IAdminOperations {
 
 	public String changeConnectionType(TypeOfConnection typeOfConnection, long connNo);
 
-	public String createConnection(String user_name, TypeOfConnection connType);
+	public String createConnectionForNewConsumer(String name,String email,long phoNO,String address,String connAddress, TypeOfConnection connType);
+
+	public String createConnectionForExistingConsumer(int customerNo,String connAddress, TypeOfConnection connType);
+
+	public List<NewConnectionRequest> getNewConnectionRequests();
+
+	public String addNotification(int consumerNo, int i, String status,String reqType);
+
+	public List<ChangeOfConnectionRequest> getConnectionChangeRequests();
 	
 }

@@ -14,14 +14,17 @@ public class Connection {
 	private TypeOfConnection connectionType;
 	private long currentUnit;
 	private Consumer consumer;
+	private String connAddress;
 	
-	private Map<Long, Bill> bills = new HashMap<>();
+//	private Map<Long, Bill> bills = new HashMap<>();
 	private List<Payment> pendingPayments = new ArrayList<>();
+	private List<Bill> bills = new ArrayList<Bill>();
 	
-	
-	public Connection(long serviceNo, TypeOfConnection connectionType) {
+	public Connection(long serviceNo, TypeOfConnection connectionType,String connAddress, Consumer consumer) {
 		this.setServiceNo(serviceNo);
 		this.setConnectionType(connectionType);
+		this.setConnAddress(connAddress);
+		this.setConsumer(consumer);
 	}
 	
 	public long getServiceNo() {
@@ -49,12 +52,12 @@ public class Connection {
 	}
 
 
-	public Map<Long, Bill> getBills() {
+	public List< Bill> getBills() {
 		return bills;
 	}
 
 	public void setBills(Bill bill) {
-		this.bills.put(bill.getBillNo(), bill);
+		this.bills.add(bill);
 	}
 
 	public Consumer getConsumer() {
@@ -71,6 +74,14 @@ public class Connection {
 
 	public void setPendingPayments(Payment payment) {
 		this.pendingPayments.add(payment);
+	}
+
+	public String getConnAddress() {
+		return connAddress;
+	}
+
+	public void setConnAddress(String address) {
+		this.connAddress = address;
 	}
 	
 }

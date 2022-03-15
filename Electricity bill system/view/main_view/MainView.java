@@ -25,17 +25,22 @@ public class MainView {
 		while(loop) {
 			commonView.displayMessege("Enter option \n"
 					+ "1->Admin\n"
-					+ "2->Consumer");
-			int opt = commonView.getOption();
+					+ "2->Consumer\n"
+					+ "9->Log out");
+			int opt = commonView.getInt();
 			switch (opt) {
 			case 1: isValid = login("admin");
 				if(isValid)
 					adminView.adminOptions();
 				break;
-			case 2: isValid = login("consumer");
+			case 2: this.consumerView.askConsumerOptions();
+//				isValid = login("consumer");
 //				consumerView.consumerOptions();
 				break;
-			default:
+			case 9: loop =false;
+				commonView.displayMessege("Logging out");
+				break;
+			default: commonView.displayMessege("Enter correct option");
 				break;
 			}
 		}
@@ -48,7 +53,7 @@ public class MainView {
 		int chances = 0;
 		while(loop) {
 			loop = false;
-			System.out.println("Enter user name");
+			System.out.println("Enter user name for logging in");
 			user_name = commonView.getString();
 			if(!operations.checkUserNameAvailable(user_name, userType)) {
 				if(chances >= 2) {
@@ -76,6 +81,7 @@ public class MainView {
 					commonView.displayMessege("Chances over please try after sometime");
 					return false;
 				}
+				commonView.displayMessege("please enter correct password");
 			}
 			else {
 				loop = false;

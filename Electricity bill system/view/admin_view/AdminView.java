@@ -33,11 +33,11 @@ public class AdminView {
 					+ "1->Set units consumed\n"
 					+ "2->View non payers\n"
 					+ "3->pay bill\n"
-					+ "4->change connection type"
+					+ "4->change connection type\n"
 					+ "4->Accept connection requests\n"
 					+ "5->update or change type of connection\n"
 					+ "9->log out");
-			int opt = commonView.getOption();
+			int opt = commonView.getInt();
 			switch(opt) {
 				case 1: setUnitsConsumed();
 		 			break;
@@ -52,14 +52,13 @@ public class AdminView {
 				case 9: loop = false;
 				commonView.displayMessege("logging out");
 					break;
+				default: commonView.displayMessege("please enter correct option");
+				break;
 			}
 		}
 		
 	}
 	
-	
-	
-
 	private void setUnitsConsumed() {
 		long connNo = getConnectionNo();
 		System.out.println("Enter the reading to set");
@@ -71,46 +70,28 @@ public class AdminView {
 	
 	private void viewNonPayers() {
 		Map<Long, List<Payment>> nonPayers =  operations.getNonPayers();
-		for(Long connNo: nonPayers.keySet()) {
-			String connType = commonOperations.getConnectionType(connNo);
-			commonView.displayNonPayers(connType,connNo, nonPayers.get(connNo));
+		if(nonPayers.size() == 0) {
+			commonView.displayMessege("No pending payments");
+			return;
+		}
+		else {
+			for(Long connNo: nonPayers.keySet()) {
+				String connType = commonOperations.getConnectionType(connNo);
+				commonView.displayNonPayers(connType,connNo, nonPayers.get(connNo));
+			}
 		}
 	}
 
 	private void payBill() {
 		boolean loop = true;
 		long connNo = getConnectionNo();
-		while(loop) {
-			String display = commonOperations.getAllPedingPayments(connNo);
-			if(display != null) {
-				System.out.println("Enter option to accept the payment");
-				commonView.displayMessege(display);
-				int opt = commonView.getOption();
-				String status = commonOperations.acceptPayment(opt, connNo);
-				commonView.displayMessege(status);
-				System.out.println("Still you want pay bills\n"
-						+ "1-> Yes\n"
-						+ "Press any no for No");
-				int no = commonView.getOption();
-				if(no != 1) {
-					loop = false;
-					commonView.displayMessege("Going back to previous menu");
-				}
-					
-			}
-			else {
-				commonView.displayMessege("No pending payments");
-				loop = false;
-			}
-			
-		}
+		commonView.viewAndPayAllPendingPayments(connNo);
 	}
 	
 	private void changeConnectionType() {
 		long connNo = getConnectionNo();
 		String status = commonOperations.getConnectionType(connNo);
 		commonView.displayMessege(status);
-		
 	}
 	
 	private long getConnectionNo() {
@@ -128,7 +109,4 @@ public class AdminView {
 		}
 		return connNo;
 	}
-
-	
-	
 }

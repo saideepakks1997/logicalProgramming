@@ -2,13 +2,17 @@ package admin_view;
 
 import java.util.List;
 
+import org.omg.CORBA.Request;
+
 import admin_operations.AdminOperations;
 import admin_operations.IAdminOperations;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
 import connection.TypeOfConnection;
+import eb.ChangeOfConnectionRequest;
 import eb.ElectricityBoard;
+import eb.NewConnectionRequest;
 
 public class NewOrUpdateConnectionView {
 CommonView commonView = null;
@@ -34,11 +38,11 @@ CommonView commonView = null;
 					+ "3->Create new Connection\n"
 					+ "4->Change connection type\n"
 					+ "9->Back to previous menu");
-			int opt = commonView.getOption();
+			int opt = commonView.getInt();
 			switch (opt) {
-				case 1: 
+				case 1: viewAndApproveNewConnection();
 					break;
-				case 2:
+				case 2: viewAndChangetype();
 					break;
 				case 3: createNewConnection();
 					break;
@@ -51,8 +55,74 @@ CommonView commonView = null;
 					break;
 			}
 		}
-		
-		
+	}
+
+	private void viewAndChangetype() {
+		boolean loop = true;
+		while(loop) {
+			List<ChangeOfConnectionRequest> requests = operations.getConnectionChangeRequests();
+			if(requests.size() == 0) {
+				commonView.displayMessege("No requests available");
+				return;
+			}
+			System.out.println("Select the request number for approval \n"
+					+ "(-1) for not selecting anything");
+			int i=1;
+			for(ChangeOfConnectionRequest request: requests) {
+				System.out.println("Sno :- "+(i++)+"\n"+request);
+			}
+			int opt = commonView.getInt();
+			if(opt == -1) {
+				commonView.displayMessege("No options selected");
+				loop = false;
+			}
+			else if(opt > requests.size() || opt < 0) {
+				commonView.displayMessege("Enter correct option");
+			}
+			else {
+				ChangeOfConnectionRequest req = requests.get(opt-1);
+				int consumerNo = this.eb.getConsumerUserName().get(req.getUser_name()).getConsumerNO();
+				String status = operations.changeConnectionType(req.getConnType(), req.getServiceNo());
+				commonView.displayMessege(status);
+				status = operations.addNotification(consumerNo, opt-1, status, "changetype");
+				commonView.displayMessege(status);
+			}
+		}
+	}
+
+	private void viewAndApproveNewConnection() {
+			boolean loop = true;
+			while(loop) {
+				List<NewConnectionRequest> requests = operations.getNewConnectionRequests();
+				if(requests.size() == 0) {
+					commonView.displayMessege("No requests available");
+					return;
+				}
+				System.out.println("Select the request number for approval \n"
+						+ "(-1) for not selecting anything");
+				int i=1;
+				for(NewConnectionRequest request: requests) {
+					System.out.println("Sno :- "+(i++)+"\n"+request);
+				}
+				int opt = commonView.getInt();
+				if(opt == -1) {
+					commonView.displayMessege("No options selected");
+					loop = false;
+				}
+				else if(opt > requests.size() || opt < 0) {
+					commonView.displayMessege("Enter correct option");
+				}
+				else {
+					NewConnectionRequest req = requests.get(opt-1);
+					int consumerNo = this.eb.getConsumerUserName().get(req.getUser_name()).getConsumerNO();
+					String connAddress = req.getAddress();
+					TypeOfConnection connType = req.getConnType();
+					String status = operations.createConnectionForExistingConsumer(consumerNo,connAddress,connType);
+					commonView.displayMessege(status);
+					status = operations.addNotification(consumerNo, opt-1,status,"newConnection");
+					commonView.displayMessege(status);
+				}
+			}
 	}
 
 	private void changeConnectionType() {
@@ -66,11 +136,12 @@ CommonView commonView = null;
 		}
 
 	private void createNewConnection() {
+
 		boolean loop = true;
 		while(loop) {
 			commonView.displayMessege("1->New Consumer\n"
 					+ "2->Existing Conusmer");
-			int opt = commonView.getOption();
+			int opt = commonView.getInt();
 			switch (opt) {
 			case 1: loop = false;
 				createConnectionForNewConsumer();
@@ -89,17 +160,45 @@ CommonView commonView = null;
 	
 	
 	private void createConnectionForExistingConsumer() {
-		// TODO Auto-generated method stub
-		
+		boolean loop = true;
+		int customerNo = 0;
+		while(loop) {
+			loop = false;
+			System.out.println("Enter customer number");
+			customerNo = commonView.getInt();
+			boolean isValidCustomerId = commonOperations.isValidCustomerNo(customerNo);
+			if(!isValidCustomerId) {
+				loop = true;
+				commonView.displayMessege("Please enter valid consumer no");
+				}
+		}
+		TypeOfConnection connType = commonView.selectTypeOfConnection();
+		System.out.println("Enter the connection address");
+		String connAddress = commonView.getString();
+		String status = operations.createConnectionForExistingConsumer(customerNo,connAddress,connType);
+		commonView.displayMessege(status);
 	}
 
 
 	private void createConnectionForNewConsumer() {
-		String user_name = commonView.registerUser();
-		TypeOfConnection connType = commonView.selectTypeOfConnection();
-		String status = operations.createConnection(user_name, connType);
-		commonView.displayMessege(status);
+		System.out.println("Enter name ");
+		String name = commonView.getString();
 		
+		System.out.println("Enter email id");
+		String emailId = commonView.getString();
+		
+		System.out.println("Enter phone no");
+		long phoNo= commonView.getLong();
+		
+		System.out.println("Enter your address");
+		String address = commonView.getString();
+		
+		System.out.println("Enter connection address");
+		String connAddress = commonView.getString();
+		
+		TypeOfConnection connType = commonView.selectTypeOfConnection();
+		String status = operations.createConnectionForNewConsumer(name,emailId,phoNo,address,connAddress, connType);
+		commonView.displayMessege(status);
 		}
 
 	private long getConnectionNo() {
@@ -111,8 +210,7 @@ CommonView commonView = null;
 			connNo = commonView.getLong();
 			boolean isValid = commonOperations.isServiceNoValid(connNo);
 			if(!isValid) {
-				commonView.displayMessege("Enter valid service number");
-				loop = true;
+				commonView.displayMessege("Enter valid service number");				loop = true;
 			}
 		}
 		return connNo;
