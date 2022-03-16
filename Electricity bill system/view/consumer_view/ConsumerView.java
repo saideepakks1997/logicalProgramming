@@ -103,7 +103,8 @@ public class ConsumerView {
 			}
 			else {
 				loop = false;
-				loginView.askLoggedInOptions(user_name);
+				int consumerNo = commonOperations.getConsumerNoFromUserName(user_name);
+				loginView.askLoggedInOptions(consumerNo);
 			}
 		}
 		
@@ -126,7 +127,8 @@ public class ConsumerView {
 		}
 		String user_name = registerUser(consumerNo);
 		commonView.displayMessege(user_name+" registered successfully");
-		loginView.askLoggedInOptions(user_name);
+		int conNo = commonOperations.getConsumerNoFromUserName(user_name);
+		loginView.askLoggedInOptions(conNo);
 	}
 
 	private String registerUser(int consumerNo) {
@@ -185,6 +187,6 @@ public class ConsumerView {
 		int consumerNo = operations.createConsumer(name,email,phoNo,address);
 		String user_name = registerUser(consumerNo);
 		commonView.displayMessege("Your consumer number is "+consumerNo);
-		loginView.askLoggedInOptions(user_name);
+		loginView.askLoggedInOptions(consumerNo);
 	}
 }

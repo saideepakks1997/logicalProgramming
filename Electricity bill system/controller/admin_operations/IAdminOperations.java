@@ -25,5 +25,7 @@ public interface IAdminOperations {
 	public String addNotification(int consumerNo, int i, String status,String reqType);
 
 	public List<ChangeOfConnectionRequest> getConnectionChangeRequests();
+
+	public String getUserNameFromConsumerNo(int consumerNo);
 	
 }

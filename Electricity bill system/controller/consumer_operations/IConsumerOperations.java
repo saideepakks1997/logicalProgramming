@@ -11,13 +11,13 @@ public interface IConsumerOperations {
 
 	public boolean checkConsumerCredentials(String user_name, String password);
 
-	public List<Connection> getConsumerConnection(String user_name);
+	public List<Connection> getConsumerConnection(int consumerNo);
 
-	public String newConnectionRequest(String user_name, String address, TypeOfConnection conType);
+	public String newConnectionRequest(int consumerNo, String address, TypeOfConnection conType);
 
-	public String changeOfConnectionRequest(String user_name,long serviceNo, TypeOfConnection connType);
+	public String changeOfConnectionRequest(int consumerNo,long serviceNo, TypeOfConnection connType);
 
-	public List<String> getNotification(String user_name);
+	public List<String> getNotification(int  consumerNo);
 
 	public int createConsumer(String name, String email, long phoNo, String address);
 

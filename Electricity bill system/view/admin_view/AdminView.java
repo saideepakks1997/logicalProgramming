@@ -14,6 +14,7 @@ import eb.ElectricityBoard;
 public class AdminView {
 	CommonView commonView = null;
 	NewOrUpdateConnectionView connectionView = null;
+	ConsumerMenuView cmenuView = null;
 	
 	ICommonOperations commonOperations = null;
 	IAdminOperations operations = null;
@@ -21,8 +22,10 @@ public class AdminView {
 	public AdminView(ElectricityBoard eb) {
 		this.commonOperations = new CommonOperations(eb);
 		this.operations = new AdminOperations(eb);
+		
 		this.connectionView = new NewOrUpdateConnectionView(eb);
 		this.commonView = new CommonView(eb);
+		this.cmenuView = new ConsumerMenuView(eb);
 	}
 
 	public void adminOptions() {
@@ -33,6 +36,8 @@ public class AdminView {
 					+ "2->View non payers\n"
 					+ "3->pay bill\n"
 					+ "4->New connection or change type of connection\n"
+					+ "5->View all consumers\n"
+					+ "6->Go to consumer menu\n"
 					+ "9->log out");
 			int opt = commonView.getInt();
 			switch(opt) {
@@ -44,6 +49,10 @@ public class AdminView {
 					break;
 				case 4: connectionView.askOptions();
 					break;
+				case 5: ViewAllConsumers();
+					break;
+				case 6: goToConsumerMenu();
+					break;
 				case 9: loop = false;
 				commonView.displayMessege("logging out");
 					break;
@@ -53,6 +62,9 @@ public class AdminView {
 		}
 		
 	}
+	
+
+	
 	//Set units consumed for the consumer for example first month
 	//  month reading 100 and next month may be 175
 	private void setUnitsConsumed() {
@@ -98,5 +110,35 @@ public class AdminView {
 			}
 		}
 		return connNo;
+	}
+	
+	private void ViewAllConsumers() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void goToConsumerMenu() {
+		boolean loop = true;
+		int chances = 0;
+		while(loop) {
+			loop = false;
+			System.out.println("Enter Conumer number");
+			int consumerNo = commonView.getInt();
+			boolean isValid = commonOperations.isValidCustomerNo(consumerNo);
+			if(!isValid) {
+				if(chances >= 2) {
+					commonView.displayMessege("Maximum chances given going back to previous menu");
+				}
+				commonView.displayMessege("Please enter valid consumer no");
+				loop = true;
+				chances++;
+			}
+			else {
+				
+				cmenuView.askOptions(consumerNo);
+			}
+		}
+		
+		
 	}
 }

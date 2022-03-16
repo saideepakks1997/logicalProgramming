@@ -17,7 +17,8 @@ public class ConsumerLoginView {
 	ICommonOperations commonOperations = null;
 	
 	CommonView commonView = null;
-	String user_name = null;
+//	public String user_name = null;
+	public int consumerNo = 0;
 	
 	public ConsumerLoginView(ElectricityBoard eb) {
 		this.operations = new ConsumerOperations(eb);
@@ -26,8 +27,9 @@ public class ConsumerLoginView {
 		this.commonView = new CommonView(eb);
 	}
 	
-	public void askLoggedInOptions(String user_name) {
-		this.user_name = user_name;
+	public void askLoggedInOptions(int consumerNo) {
+		this.consumerNo = consumerNo;
+//		this.user_name = user_name;
 		boolean loop = true;
 		while(loop) {
 			commonView.displayMessege("Enter option \n"
@@ -65,7 +67,7 @@ public class ConsumerLoginView {
 	}
 
 	private void viewNotifications() {
-		List<String> notifications = operations.getNotification(user_name);
+		List<String> notifications = operations.getNotification(this.consumerNo);
 		if(notifications.size() == 0) {
 			commonView.displayMessege("No notifications to display");
 		}
@@ -81,13 +83,13 @@ public class ConsumerLoginView {
 		
 	}
 
-	private void viewPendingTransactions() {
+	public void viewPendingTransactions() {
 		long serviceNo = selectConnectionNo();
 		String pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
 		commonView.displayMessege(pendingPayments);
 	}
 
-	private void viewAllBills() {
+	public void viewAllBills() {
 		long serviceNo = selectConnectionNo();
 		List<Bill> bills = commonOperations.getBills(serviceNo);
 		if(bills.size() == 0) {
@@ -105,7 +107,7 @@ public class ConsumerLoginView {
 		if(serviceNo != -1) {
 			System.out.println("Select connection type");
 			TypeOfConnection connType = commonView.selectTypeOfConnection();
-			result = operations.changeOfConnectionRequest(this.user_name,serviceNo, connType);
+			result = operations.changeOfConnectionRequest(this.consumerNo,serviceNo, connType);
 			commonView.displayMessege(result);
 		}
 	}
@@ -116,18 +118,18 @@ public class ConsumerLoginView {
 		System.out.println("Select type of connection");
 		TypeOfConnection conType = commonView.selectTypeOfConnection();
 		
-		String result = operations.newConnectionRequest(this.user_name, address, conType);
+		String result = operations.newConnectionRequest(this.consumerNo, address, conType);
 		commonView.displayMessege(result);
 	}
 
-	private void payBill() {
+	public void payBill() {
 		long serviceNo = selectConnectionNo();
 		if(serviceNo != -1)
 			commonView.viewAndPayAllPendingPayments(serviceNo);
 	}
 
-	private void viewConnectionDetails() {
-		List<Connection> consumerConns = operations.getConsumerConnection(this.user_name);
+	public void viewConnectionDetails() {
+		List<Connection> consumerConns = operations.getConsumerConnection(this.consumerNo);
 		commonView.displayConnections(consumerConns);
 	}
 	
@@ -136,7 +138,7 @@ public class ConsumerLoginView {
 		while(loop) {
 			loop = false;
 			
-			List<Connection> conns = operations.getConsumerConnection(this.user_name);
+			List<Connection> conns = operations.getConsumerConnection(this.consumerNo);
 			if(conns.size() == 0) {
 				commonView.displayMessege("No connection found ");
 				return -1;

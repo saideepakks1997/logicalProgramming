@@ -76,8 +76,16 @@ public class AdminOperations implements IAdminOperations{
 
 	@Override
 	public String changeConnectionType(TypeOfConnection connectionType, long connNo) {
-		this.eb.getConnections().get(connNo).setConnectionType(connectionType);
-		return "Connection type "+connectionType+" has been updated for service no "+connNo;
+		TypeOfConnection prevConnType = this.eb.getConnections().get(connNo).getConnectionType();
+		if(prevConnType == connectionType) {
+			return "The connection type is already "+connectionType;
+		}
+		else {
+			this.eb.getConnections().get(connNo).setConnectionType(connectionType);
+			return "Connection type "+connectionType+" has been updated for service no "+connNo;
+		}
+		
+		
 	}
 
 	@Override
@@ -128,6 +136,13 @@ public class AdminOperations implements IAdminOperations{
 	public List<ChangeOfConnectionRequest> getConnectionChangeRequests() {
 		List<ChangeOfConnectionRequest> req = this.eb.getConnChangeRequests();
 		return req;
+	}
+
+	@Override
+	public String getUserNameFromConsumerNo(int consumerNo) {
+		String user_name = this.eb.getConsumers().get(consumerNo).getUser_name();
+		System.out.println("user_name in admine operations "+this.eb.getConsumers().get(consumerNo));
+		return user_name;
 	}
 	
 }

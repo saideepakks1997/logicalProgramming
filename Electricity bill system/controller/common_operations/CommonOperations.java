@@ -161,12 +161,13 @@ public class CommonOperations implements ICommonOperations{
 		return bills;
 	}
 
+	@Override
+	public int getConsumerNoFromUserName(String user_name) {
+		int consumerNo = this.eb.getConsumerUserName().get(user_name).getConsumerNO();
+		return consumerNo;
+	}
+
 	
 
-//	@Override
-//	public void addConsumer(String name, String email, long phoNo, String user_name, String password) {
-//		Consumer consumer = new Consumer(name, email, phoNo, user_name, password);
-//		this.eb.setConsumers(consumer);
-//		
-//	}
+
 }

@@ -3,12 +3,13 @@ package eb;
 import connection.TypeOfConnection;
 
 public class ChangeOfConnectionRequest {
-	private String user_name;
+//	private String user_name;
+	private int consumerNo;
 	private long serviceNo;
 	private TypeOfConnection connType;
 	
-	public ChangeOfConnectionRequest (String user_name,long serviceNo, TypeOfConnection connType) {
-		this.setUser_name(user_name);
+	public ChangeOfConnectionRequest (int consumerNo,long serviceNo, TypeOfConnection connType) {
+		this.setConsumerNo(consumerNo);
 		this.setServiceNo(serviceNo);
 		this.setConnType(connType);
 	}
@@ -29,11 +30,12 @@ public class ChangeOfConnectionRequest {
 		this.connType = connType;
 	}
 
-	public String getUser_name() {
-		return user_name;
+
+	public int getConsumerNo() {
+		return consumerNo;
 	}
 
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setConsumerNo(int consumerNo) {
+		this.consumerNo = consumerNo;
 	}
 }

@@ -29,5 +29,7 @@ public interface ICommonOperations {
 
 	public List<Bill> getBills(long serviceNo);
 
+	public int getConsumerNoFromUserName(String user_name);
+
 
 }
