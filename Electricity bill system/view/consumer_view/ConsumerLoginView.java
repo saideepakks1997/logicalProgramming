@@ -100,14 +100,15 @@ public class ConsumerLoginView {
 	}
 
 	private void requestForChangeOfConnection() {
+		long serviceNo = selectConnectionNo();
+		String result;
+		if(serviceNo != -1) {
 			System.out.println("Select connection type");
 			TypeOfConnection connType = commonView.selectTypeOfConnection();
-			long serviceNo = selectConnectionNo();
-			String result = operations.changeOfConnectionRequest(this.user_name,serviceNo, connType);
+			result = operations.changeOfConnectionRequest(this.user_name,serviceNo, connType);
 			commonView.displayMessege(result);
 		}
-
-	
+	}
 
 	private void requestForNewConnection() {
 		System.out.println("Enter address for the connection");
@@ -121,7 +122,8 @@ public class ConsumerLoginView {
 
 	private void payBill() {
 		long serviceNo = selectConnectionNo();
-		commonView.viewAndPayAllPendingPayments(serviceNo);
+		if(serviceNo != -1)
+			commonView.viewAndPayAllPendingPayments(serviceNo);
 	}
 
 	private void viewConnectionDetails() {
@@ -133,13 +135,14 @@ public class ConsumerLoginView {
 		boolean loop = true;
 		while(loop) {
 			loop = false;
-			System.out.println("Select connection to pay bill\n");
-			int i=1;
+			
 			List<Connection> conns = operations.getConsumerConnection(this.user_name);
 			if(conns.size() == 0) {
 				commonView.displayMessege("No connection found ");
 				return -1;
 			}
+			System.out.println("Select connection to pay bill\n");
+			int i=1;
 			for(Connection conn: conns) {
 				System.out.println((i++)+"."+conn.getServiceNo());
 			}

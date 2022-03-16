@@ -29,13 +29,11 @@ public class MainView {
 					+ "9->Log out");
 			int opt = commonView.getInt();
 			switch (opt) {
-			case 1: isValid = login("admin");
+			case 1: isValid = login();
 				if(isValid)
 					adminView.adminOptions();
 				break;
 			case 2: this.consumerView.askConsumerOptions();
-//				isValid = login("consumer");
-//				consumerView.consumerOptions();
 				break;
 			case 9: loop =false;
 				commonView.displayMessege("Logging out");
@@ -44,10 +42,8 @@ public class MainView {
 				break;
 			}
 		}
-		
-		
 	}
-	private boolean login(String userType) {
+	private boolean login() {
 		boolean loop = true;
 		String user_name = null;
 		int chances = 0;
@@ -55,7 +51,7 @@ public class MainView {
 			loop = false;
 			System.out.println("Enter user name for logging in");
 			user_name = commonView.getString();
-			if(!operations.checkUserNameAvailable(user_name, userType)) {
+			if(!operations.checkUserNameAvailable(user_name, "admin")) {
 				if(chances >= 2) {
 					loop = false;
 					commonView.displayMessege("Chances over please try after sometime");
@@ -74,7 +70,7 @@ public class MainView {
 		while(loop) {
 			System.out.println("Enter password");
 			String password = commonView.getString();
-			boolean isValid = operations.validatePassword(user_name,password, userType);
+			boolean isValid = operations.validatePassword(user_name,password, "admin");
 			if(!isValid) {
 				if(chances >= 2) {
 					loop = false;

@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import bill.Payment;
+import bill_calculation_operations.CommercialBillCalculation;
+import bill_calculation_operations.DomesticBillCalculations;
+import bill_calculation_operations.ICalculateBill;
 import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
@@ -16,7 +19,7 @@ import eb.NewConnectionRequest;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
-	BillCalculation billCalculation = new BillCalculation();
+	ICalculateBill calculateBill = null;
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
@@ -41,9 +44,18 @@ public class AdminOperations implements IAdminOperations{
 	}
 
 	private void setPendingPayment(double readings, Connection conn) {
-		double payableAmount = billCalculation.calculateBill(conn.getConnectionType(), readings);
+		calculateBill = getBillCaulationObj(conn);
+		double payableAmount = calculateBill.calculteBillAmount(readings);
 		Payment payment = new Payment(payableAmount, readings); 
 		conn.setPendingPayments(payment);
+	}
+
+	private ICalculateBill getBillCaulationObj(Connection conn) {
+		if(conn.getConnectionType() == TypeOfConnection.Domestic)
+			return new DomesticBillCalculations();
+		else if(conn.getConnectionType()== TypeOfConnection.ltCommercial)
+			return new CommercialBillCalculation();
+		return null;
 	}
 
 	@Override

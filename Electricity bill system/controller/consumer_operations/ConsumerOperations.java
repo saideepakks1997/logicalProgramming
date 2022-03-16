@@ -55,5 +55,13 @@ public class ConsumerOperations implements IConsumerOperations{
 		List<String> notifications = this.eb.getConsumerUserName().get(user_name).getNotifications();
 		return notifications;
 	}
+	
+	@Override
+	public int createConsumer(String name, String email, long phoNo, String address) {
+		int consumerNo = this.eb.getConsumerNoSeries();
+		Consumer consumer = new Consumer(consumerNo, name, email, phoNo, address);
+		this.eb.setConsumers(consumer);
+		return consumer.getConsumerNO();
+	}
 
 }

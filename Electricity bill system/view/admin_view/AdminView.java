@@ -9,7 +9,6 @@ import bill.Payment;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
-import connection.TypeOfConnection;
 import eb.ElectricityBoard;
 
 public class AdminView {
@@ -33,9 +32,7 @@ public class AdminView {
 					+ "1->Set units consumed\n"
 					+ "2->View non payers\n"
 					+ "3->pay bill\n"
-					+ "4->change connection type\n"
-					+ "4->Accept connection requests\n"
-					+ "5->update or change type of connection\n"
+					+ "4->New connection or change type of connection\n"
 					+ "9->log out");
 			int opt = commonView.getInt();
 			switch(opt) {
@@ -45,20 +42,19 @@ public class AdminView {
 					break;
 				case 3: payBill();
 					break;
-				case 4: changeConnectionType();
-					break;
-				case 5: connectionView.askOptions();
+				case 4: connectionView.askOptions();
 					break;
 				case 9: loop = false;
 				commonView.displayMessege("logging out");
 					break;
 				default: commonView.displayMessege("please enter correct option");
-				break;
+					break;
 			}
 		}
 		
 	}
-	
+	//Set units consumed for the consumer for example first month
+	//  month reading 100 and next month may be 175
 	private void setUnitsConsumed() {
 		long connNo = getConnectionNo();
 		System.out.println("Enter the reading to set");
@@ -67,7 +63,7 @@ public class AdminView {
 		String status = operations.setReading(connNo, readings);
 		commonView.displayMessege(status);
 	}
-	
+	//View all pending payment list
 	private void viewNonPayers() {
 		Map<Long, List<Payment>> nonPayers =  operations.getNonPayers();
 		if(nonPayers.size() == 0) {
@@ -81,17 +77,11 @@ public class AdminView {
 			}
 		}
 	}
-
+	//pay amount
 	private void payBill() {
 		boolean loop = true;
 		long connNo = getConnectionNo();
 		commonView.viewAndPayAllPendingPayments(connNo);
-	}
-	
-	private void changeConnectionType() {
-		long connNo = getConnectionNo();
-		String status = commonOperations.getConnectionType(connNo);
-		commonView.displayMessege(status);
 	}
 	
 	private long getConnectionNo() {

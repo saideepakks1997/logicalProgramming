@@ -5,6 +5,7 @@ import java.util.List;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
+import consumer.Consumer;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
@@ -47,9 +48,23 @@ public class ConsumerView {
 				break;
 			}
 		}
-		
-		
 	}
+	private void consumerRegistration() {
+		commonView.displayMessege("Enter option before registration\n"
+				+ "1->select if you already have connection\n"
+				+ "2->Select if no connection available\n"
+				+ "press any other key for previous menu");
+		int opt = commonView.getInt();
+		switch (opt) {
+		case 1: registerConsumerForExistingConnection();
+			break;
+		case 2: registerConsumerForNewConnection();
+			break;
+		default: commonView.displayMessege("Back to previous menu");
+			break;
+		}
+	}
+	
 
 	private void login() {
 		boolean loop = true;
@@ -94,44 +109,33 @@ public class ConsumerView {
 		
 	}
 
-	private void consumerRegistration() {
-		commonView.displayMessege("Enter option before registration\n"
-				+ "1->Already have connection\n"
-				+ "2->Apply for new connection\n"
-				+ "press any other key for previous menu");
-		int opt = commonView.getInt();
-		switch (opt) {
-		case 1: registrationForExistingConnection();
-			break;
-		case 2:
-			break;
-		default: commonView.displayMessege("Back to previous menu");
-			break;
-		}
-	}
+	
 
-	private void registrationForExistingConnection() {
+	private void registerConsumerForExistingConnection() {
 		boolean loop = true;
 		int consumerNo = 0;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter consumer number");
 			consumerNo = commonView.getInt();
-			boolean isValidConumerNumber = commonOperations.isValidCustomerNo(consumerNo);
-			if(!isValidConumerNumber) {
+			boolean isValidConsumerNumber = commonOperations.isValidCustomerNo(consumerNo);
+			if(!isValidConsumerNumber) {
 				loop = true;
 				commonView.displayMessege("Conumer number does not exists please enter valid consumer number");
 			}
 		}
 		String user_name = registerUser(consumerNo);
+		commonView.displayMessege(user_name+" registered successfully");
+		loginView.askLoggedInOptions(user_name);
 	}
 
 	private String registerUser(int consumerNo) {
+		System.out.println("Enter login details to set");
 		boolean loop = true;
 		String user_name = null; 
 		while(loop) {
 			loop = false;
-			System.out.println("Enter user name ");
+			System.out.println("Enter user name to set");
 			user_name = commonView.getString();
 			boolean isUserTaken = commonOperations.checkIfUserNameIsCorrect(user_name);
 			if(isUserTaken) {
@@ -162,5 +166,25 @@ public class ConsumerView {
 		String result = operations.registerUser(consumerNo,user_name, password);
 		commonView.displayMessege(result);
 		return user_name;
+	}
+	
+	private void registerConsumerForNewConnection() {
+		System.out.println("Start entering details for registration");
+		System.out.println("Enter name ");
+		String name = commonView.getString();
+		
+		System.out.println("Enter email id");
+		String email = commonView.getString();
+		
+		System.out.println("Enter phone no");
+		long phoNo= commonView.getLong();
+		
+		System.out.println("Enter your address");
+		String address = commonView.getString();
+		
+		int consumerNo = operations.createConsumer(name,email,phoNo,address);
+		String user_name = registerUser(consumerNo);
+		commonView.displayMessege("Your consumer number is "+consumerNo);
+		loginView.askLoggedInOptions(user_name);
 	}
 }

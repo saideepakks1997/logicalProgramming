@@ -29,6 +29,5 @@ public interface ICommonOperations {
 
 	public List<Bill> getBills(long serviceNo);
 
-//	public void addConsumer(String name, String email, long phoNo, String user_name, String password);
 
 }

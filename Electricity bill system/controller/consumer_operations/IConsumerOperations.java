@@ -19,4 +19,6 @@ public interface IConsumerOperations {
 
 	public List<String> getNotification(String user_name);
 
+	public int createConsumer(String name, String email, long phoNo, String address);
+
 }
