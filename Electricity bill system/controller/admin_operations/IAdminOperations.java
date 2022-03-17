@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import bill.Payment;
+import connection.Connection;
 import connection.TypeOfConnection;
 import eb.ChangeOfConnectionRequest;
 import eb.NewConnectionRequest;
 
 public interface IAdminOperations {
 
-	public String setReading(long connNo,long readings);
+	public boolean setReading(long connNo,long readings);
 
 	public Map<Long, List<Payment>> getNonPayers();
 

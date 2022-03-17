@@ -25,23 +25,19 @@ public class AdminOperations implements IAdminOperations{
 	}
 	
 	@Override
-	public String setReading(long connNo,long newReadings) {
+	public boolean setReading(long connNo,long newReadings) {
 		Connection conn = this.eb.getConnections().get(connNo);
-		if(conn == null) {
-			return "Please enter correct service no";
-		}
-		else {
-			long pastReadings = conn.getCurrentUnit();
+		long pastReadings = conn.getCurrentUnit();
 			if(pastReadings > newReadings)
-				return "Entered reading is less than past reading please check the readings ";
+				return false;
 			else {
 				double readings = newReadings - pastReadings;
 				conn.setCurrentUnit(newReadings);
 				setPendingPayment(readings, conn);
-				return "Reading has been set to "+newReadings;
+				return true;
 			}
 		}
-	}
+	
 
 	private void setPendingPayment(double readings, Connection conn) {
 		calculateBill = getBillCaulationObj(conn);

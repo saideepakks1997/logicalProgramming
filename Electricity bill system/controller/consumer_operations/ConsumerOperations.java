@@ -8,25 +8,30 @@ import consumer.Consumer;
 import eb.ChangeOfConnectionRequest;
 import eb.ElectricityBoard;
 import eb.NewConnectionRequest;
+import validator_encrypter.Encryption;
 
 public class ConsumerOperations implements IConsumerOperations{
 	ElectricityBoard eb = null;
+	Encryption encrypt = new Encryption();
 	public ConsumerOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
 	@Override
-	public String registerUser(long consumerNo, String user_name, String password) {
+	public boolean registerUser(long consumerNo, String user_name, String password) {
+		password = encrypt.encryptPassword(password);
 		Consumer consumer = this.eb.getConsumers().get(consumerNo);
-		
+		System.out.println("register :- "+password);
 		consumer.setUser_name(user_name);
 		consumer.setPassword(password);
 		
 		this.eb.setConsumerUserName(consumer);
-		return "Registered successfully";
+		return true;
 	}
 	@Override
 	public boolean checkConsumerCredentials(String user_name, String password) {
 		Consumer consumer = this.eb.getConsumerUserName().get(user_name);
+		password = encrypt.encryptPassword(password);
+		System.out.println("Login :- "+password);
 		return consumer.validatePassword(password);
 		
 	}

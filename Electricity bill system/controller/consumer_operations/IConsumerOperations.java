@@ -7,7 +7,7 @@ import connection.TypeOfConnection;
 
 public interface IConsumerOperations {
 
-	public String registerUser(long consumerNo, String user_name, String password);
+	public boolean registerUser(long consumerNo, String user_name, String password);
 
 	public boolean checkConsumerCredentials(String user_name, String password);
 

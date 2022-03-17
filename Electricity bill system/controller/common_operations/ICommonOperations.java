@@ -13,9 +13,9 @@ public interface ICommonOperations {
 
 	public boolean isServiceNoValid(long connNo);
 
-	public String getAllPedingPayments(long connNo);
+	public List<Payment> getAllPedingPayments(long connNo);
 
-	public String acceptPayment(int opt, long connNo);
+	public Bill acceptPayment(int opt, long connNo);
 
 	public String getConnectionType(long connNo);
 
@@ -30,6 +30,8 @@ public interface ICommonOperations {
 	public List<Bill> getBills(long serviceNo);
 
 	public long getConsumerNoFromUserName(String user_name);
+
+	public boolean checkIfValidConnectionNo(long connNo);
 
 
 }

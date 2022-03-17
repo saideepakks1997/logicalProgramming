@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import bill.Bill;
 import bill.Payment;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
@@ -175,13 +176,26 @@ public class CommonView {
 		boolean loop = true;
 		long connNo = getConnectionNo();
 		while(loop) {
-			String display = commonOperations.getAllPedingPayments(connNo);
-			if(display != null) {
+			List<Payment> pendingPayments = commonOperations.getAllPedingPayments(connNo);
+			if(pendingPayments != null) {
+				
 				System.out.println("Enter option to accept the payment");
-				displayMessege(display);
+				System.out.println("----------------------");
+				int i=1;
+				for(Payment payment:pendingPayments) {
+					System.out.println((i++)+"."+payment);
+				}
+				System.out.println("----------------------");
 				int opt = getInt();
-				String status = commonOperations.acceptPayment(opt, connNo);
-				displayMessege(status);
+				
+				Bill bill = commonOperations.acceptPayment(opt, connNo);
+				if(bill != null) {
+					displayBill(bill);
+				}
+				else {
+					displayMessege("Please enter valid option");
+				}
+				
 				System.out.println("Still you want pay bills\n"
 						+ "1-> Yes\n"
 						+ "Press any no for No");
@@ -200,6 +214,17 @@ public class CommonView {
 		}
 	}
 
+	public void displayBill(Bill bill) {
+		System.out.println("------------------");
+		System.out.println("Amount has been paid successfully\n"
+				+ "bill No :- "+bill.getBillNo()+"\n"
+				+ "Paid amount :- "+bill.getPayment().getPayableAmount()+"\n"
+				+ "Units consumed :- "+bill.getPayment().getUnitsConsumed()+"\n"
+				+ "Paid date :- "+bill.getPaymentDate());
+		System.out.println("------------------");
+		
+	}
+
 	public void displayConnections(List<Connection> consumerConns) {
 		System.out.println("-------------------------------------------");
 		int i=1;
@@ -215,18 +240,27 @@ public class CommonView {
 	public void viewAndPayAllPendingPayments(long serviceNo) {
 		boolean loop = true;
 		while(loop) {
-			String display = commonOperations.getAllPedingPayments(serviceNo);
-			if(display != null) {
+			List<Payment> pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
+			if(pendingPayments != null) {
 				System.out.println("Enter option to accept the payment \n"
 						+ "enter (-1) to exit without paying");
-				displayMessege(display);
+				System.out.println("----------------------");
+				int i=1;
+				displayPendingPayment(pendingPayments);
 				int opt = getInt();
+				
 				if(opt == -1) {
 					displayMessege("No transaction has been done");
 					return;
 				}
-				String status = commonOperations.acceptPayment(opt, serviceNo);
-				displayMessege(status);
+				
+				Bill bill = commonOperations.acceptPayment(opt, serviceNo);
+				if(bill != null)
+					displayBill(bill);
+				else {
+					displayMessege("Please enter valid option");
+				}
+				
 				System.out.println("Still you want pay bills\n"
 						+ "1-> Yes\n"
 						+ "Press any no for No");
@@ -241,5 +275,15 @@ public class CommonView {
 				loop = false;
 			}
 		}
+	}
+
+	public void displayPendingPayment(List<Payment> pendingPayments) {
+		int i=1;
+		System.out.println("------------------");
+		for(Payment payment: pendingPayments) {
+			System.out.println((i++)+"."+payment);
+		}
+		System.out.println("------------------");
+		
 	}
 }

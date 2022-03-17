@@ -8,8 +8,10 @@ import common_view.CommonView;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
+import validator_encrypter.Validator;
 
 public class ConsumerView {
+	Validator validate = new Validator();
 	
 	CommonView commonView = null;
 	ConsumerLoginView loginView = null;
@@ -148,8 +150,8 @@ public class ConsumerView {
 		while(loop) {
 			System.out.println("Enter the password to set ");
 			password = commonView.getString();
-			List<String> passwordErrors = commonOperations.checkIfPasswordIsValid(password);
-			if(passwordErrors.size() == 0) {
+			boolean isValidPassword = validate.validatePassword(password);
+			if(!isValidPassword) {
 				System.out.println("Re-enter the password ");
 				String reCheckPassword = commonView.getString();
 				if(password.equals(reCheckPassword)) {
@@ -161,10 +163,13 @@ public class ConsumerView {
 				}
 			}
 			else
-				commonView.displayPasswordError(passwordErrors);
+				commonView.displayMessege("Please enter valid password");
 			}
-		String result = operations.registerUser(consumerNo,user_name, password);
-		commonView.displayMessege(result);
+		boolean isValid = operations.registerUser(consumerNo,user_name, password);
+		if(isValid)
+			commonView.displayMessege("Registered successfully");
+		else
+			commonView.displayMessege("Registered is not successfully done");
 		return user_name;
 	}
 	

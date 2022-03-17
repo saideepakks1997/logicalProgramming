@@ -46,21 +46,21 @@ public class CommonOperations implements ICommonOperations{
 	}
 
 	@Override
-	public String getAllPedingPayments(long connNo) {
-		List<Payment> payments = this.eb.getConnections().get(connNo).getPendingPayments();
-		if(payments.size() == 0) {
+	public List<Payment> getAllPedingPayments(long connNo) {
+		List<Payment> pendingPayments = this.eb.getConnections().get(connNo).getPendingPayments();
+		if(pendingPayments.size() == 0) {
 			return null;
 		}
-		String display = "";
-		int i=1;
-		for(Payment payment: payments) {
-			display += (i++)+"."+payment+"\n";
-		}
-		return display;
+//		String display = "";
+//		int i=1;
+//		for(Payment payment: payments) {
+//			display += (i++)+"."+payment+"\n";
+//		}
+		return pendingPayments;
 	}
 
 	@Override
-	public String acceptPayment(int opt, long connNo) {
+	public Bill acceptPayment(int opt, long connNo) {
 		Connection connection = this.eb.getConnections().get(connNo);
 		List<Payment> pendingPayments = connection.getPendingPayments();
 		try {
@@ -68,14 +68,10 @@ public class CommonOperations implements ICommonOperations{
 			pendingPayments.remove(opt-1);
 			Bill bill = new Bill(this.eb.getBillNoSeries(),payment);
 			connection.setBills(bill);
-			return "Amount has been paid successfully\n"
-					+ "bill No :- "+bill.getBillNo()+"\n"
-					+ "Paid amount :- "+bill.getPayment().getPayableAmount()+"\n"
-					+ "Units consumed :- "+bill.getPayment().getUnitsConsumed()+"\n"
-					+ "Paid date :- "+bill.getPaymentDate();
+			return bill;
 		}
 		catch(Exception e) {
-			return "Please enter valid number";
+			return null;
 		}
 	}
 
@@ -165,6 +161,12 @@ public class CommonOperations implements ICommonOperations{
 	public long getConsumerNoFromUserName(String user_name) {
 		long consumerNo = this.eb.getConsumerUserName().get(user_name).getConsumerNO();
 		return consumerNo;
+	}
+
+	@Override
+	public boolean checkIfValidConnectionNo(long connNo) {
+		// TODO Auto-generated method stub
+		return this.eb.getConnections().containsKey(connNo);
 	}
 
 	

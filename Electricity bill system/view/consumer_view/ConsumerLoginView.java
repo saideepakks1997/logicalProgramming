@@ -3,6 +3,7 @@ package consumer_view;
 import java.util.List;
 
 import bill.Bill;
+import bill.Payment;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
@@ -104,11 +105,12 @@ public class ConsumerLoginView {
 
 	public void viewPendingTransactions() {
 		long serviceNo = selectConnectionNo();
-		String pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
+		List<Payment> pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
 		if(pendingPayments == null) {
 			commonView.displayMessege("No pending amount");
 		}
 		else {
+			commonView.displayPendingPayment(pendingPayments);
 			commonView.displayMessege(pendingPayments);
 		}
 	}

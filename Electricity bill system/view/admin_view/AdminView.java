@@ -9,6 +9,7 @@ import bill.Payment;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
+import connection.Connection;
 import eb.ElectricityBoard;
 
 public class AdminView {
@@ -68,12 +69,29 @@ public class AdminView {
 	//Set units consumed for the consumer for example first month
 	//  month reading 100 and next month may be 175
 	private void setUnitsConsumed() {
-		long connNo = getConnectionNo();
+		boolean loop = true;
+		long connNo = 0;
+		int chances = 0;
+		while(loop) {
+			loop = false;
+			connNo = getConnectionNo();
+			boolean isValidConnNo = commonOperations.checkIfValidConnectionNo(connNo);
+			if(!isValidConnNo) {
+				if(chances >= 2) {
+					commonView.displayMessege("Maximum chances given going back to previous menu");
+				}
+				commonView.displayMessege("Please enter valid connection number");
+				chances++;
+			}
+		}
 		System.out.println("Enter the reading to set");
 		long readings = commonView.getLong();
 		
-		String status = operations.setReading(connNo, readings);
-		commonView.displayMessege(status);
+		boolean isUnitsSet = operations.setReading(connNo, readings);
+		if(isUnitsSet)
+			commonView.displayMessege("Reading has been set to "+readings);
+		else
+			commonView.displayMessege("Entered reading is less than past reading please check the readings ");
 	}
 	//View all pending payment list
 	private void viewNonPayers() {
