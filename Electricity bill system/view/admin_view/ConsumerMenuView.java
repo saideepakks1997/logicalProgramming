@@ -39,6 +39,7 @@ public class ConsumerMenuView {
 			case 4: consumerView.viewAllBills();
 				break;
 			case 9: commonView.displayMessege("Going back to previous menu");
+				loop = false;
 				break;
 			default:commonView.displayMessege("Enter correct option");
 				break;

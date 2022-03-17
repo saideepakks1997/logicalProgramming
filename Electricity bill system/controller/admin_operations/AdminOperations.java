@@ -104,7 +104,7 @@ public class AdminOperations implements IAdminOperations{
 	}
 
 	@Override
-	public String createConnectionForExistingConsumer(int customerNo,String connAddress, TypeOfConnection connType) {
+	public String createConnectionForExistingConsumer(long customerNo,String connAddress, TypeOfConnection connType) {
 		long serviceNo = this.eb.getConnNoSeries();
 		Consumer consumer = this.eb.getConsumers().get(customerNo);
 		Connection conn = new Connection(serviceNo, connType, connAddress, consumer);
@@ -122,7 +122,7 @@ public class AdminOperations implements IAdminOperations{
 	}
 
 	@Override
-	public String addNotification(int consumerNo, int reqIndex, String status,String reqType) {
+	public String addNotification(long consumerNo, int reqIndex, String status,String reqType) {
 		this.eb.getConsumers().get(consumerNo).setNotifications(status);
 		if(reqType.equalsIgnoreCase("newConnection"))
 			this.eb.getNewConnRequests().remove(reqIndex);

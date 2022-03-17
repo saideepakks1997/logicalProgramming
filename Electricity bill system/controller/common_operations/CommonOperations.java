@@ -150,7 +150,7 @@ public class CommonOperations implements ICommonOperations{
 	}
 
 	@Override
-	public boolean isValidCustomerNo(int customerNo) {
+	public boolean isValidCustomerNo(long customerNo) {
 		
 		return this.eb.getConsumers().containsKey(customerNo);
 	}
@@ -162,8 +162,8 @@ public class CommonOperations implements ICommonOperations{
 	}
 
 	@Override
-	public int getConsumerNoFromUserName(String user_name) {
-		int consumerNo = this.eb.getConsumerUserName().get(user_name).getConsumerNO();
+	public long getConsumerNoFromUserName(String user_name) {
+		long consumerNo = this.eb.getConsumerUserName().get(user_name).getConsumerNO();
 		return consumerNo;
 	}
 

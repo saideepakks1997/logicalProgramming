@@ -25,11 +25,11 @@ public interface ICommonOperations {
 
 	List<String> checkIfPasswordIsValid(String password);
 
-	public boolean isValidCustomerNo(int customerNo);
+	public boolean isValidCustomerNo(long customerNo);
 
 	public List<Bill> getBills(long serviceNo);
 
-	public int getConsumerNoFromUserName(String user_name);
+	public long getConsumerNoFromUserName(String user_name);
 
 
 }

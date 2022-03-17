@@ -18,7 +18,7 @@ public class ConsumerLoginView {
 	
 	CommonView commonView = null;
 //	public String user_name = null;
-	public int consumerNo = 0;
+	public long consumerNo = 0;
 	
 	public ConsumerLoginView(ElectricityBoard eb) {
 		this.operations = new ConsumerOperations(eb);
@@ -27,8 +27,10 @@ public class ConsumerLoginView {
 		this.commonView = new CommonView(eb);
 	}
 	
-	public void askLoggedInOptions(int consumerNo) {
+	public void askLoggedInOptions(long consumerNo) {
+		
 		this.consumerNo = consumerNo;
+			askToViewNotifications();
 //		this.user_name = user_name;
 		boolean loop = true;
 		while(loop) {
@@ -66,6 +68,23 @@ public class ConsumerLoginView {
 		}
 	}
 
+	private void askToViewNotifications() {
+		List<String> notifications = operations.getNotification(this.consumerNo);
+		if(notifications.size() > 0) {
+			commonView.displayMessege("You have Notifications \n"
+					+ "Press 1->For view notifications\n"
+					+ "Press any Number for ignore");
+			int opt = commonView.getInt();
+			if(opt == 1) {
+				viewNotifications();
+			}
+			else {
+				commonView.displayMessege("Back to login options");
+			}
+		}
+		
+	}
+
 	private void viewNotifications() {
 		List<String> notifications = operations.getNotification(this.consumerNo);
 		if(notifications.size() == 0) {
@@ -86,7 +105,12 @@ public class ConsumerLoginView {
 	public void viewPendingTransactions() {
 		long serviceNo = selectConnectionNo();
 		String pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
-		commonView.displayMessege(pendingPayments);
+		if(pendingPayments == null) {
+			commonView.displayMessege("No pending amount");
+		}
+		else {
+			commonView.displayMessege(pendingPayments);
+		}
 	}
 
 	public void viewAllBills() {

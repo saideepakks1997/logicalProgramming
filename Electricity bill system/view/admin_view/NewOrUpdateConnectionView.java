@@ -89,7 +89,7 @@ CommonView commonView = null;
 						+ "Any other number for non approval");
 				int approvalOpt = commonView.getInt();
 				NewConnectionRequest req = requests.get(opt-1);
-				int consumerNo = req.getConsumerNo(); 
+				long consumerNo = req.getConsumerNo(); 
 				if(approvalOpt == 1) {
 					String connAddress = req.getAddress();
 					TypeOfConnection connType = req.getConnType();
@@ -139,7 +139,7 @@ CommonView commonView = null;
 						+ "Any other number for non approval");
 				int approvalOpt = commonView.getInt();
 				ChangeOfConnectionRequest req = requests.get(opt-1);
-				int consumerNo = req.getConsumerNo(); 
+				long consumerNo = req.getConsumerNo(); 
 //						this.eb.getConsumerUserName().get(req.getUser_name()).getConsumerNO();
 				if(approvalOpt == 1) {
 					String status = operations.changeConnectionType(req.getConnType(), req.getServiceNo());

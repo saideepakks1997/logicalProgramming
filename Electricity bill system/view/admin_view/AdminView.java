@@ -134,7 +134,6 @@ public class AdminView {
 				chances++;
 			}
 			else {
-				
 				cmenuView.askOptions(consumerNo);
 			}
 		}

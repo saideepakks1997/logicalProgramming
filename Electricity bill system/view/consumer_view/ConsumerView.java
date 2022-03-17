@@ -5,7 +5,6 @@ import java.util.List;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
-import consumer.Consumer;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
@@ -67,6 +66,7 @@ public class ConsumerView {
 	
 
 	private void login() {
+		
 		boolean loop = true;
 		String user_name = "";
 		int  chances = 0;
@@ -103,14 +103,12 @@ public class ConsumerView {
 			}
 			else {
 				loop = false;
-				int consumerNo = commonOperations.getConsumerNoFromUserName(user_name);
+				long consumerNo = commonOperations.getConsumerNoFromUserName(user_name);
 				loginView.askLoggedInOptions(consumerNo);
 			}
 		}
 		
 	}
-
-	
 
 	private void registerConsumerForExistingConnection() {
 		boolean loop = true;
@@ -127,11 +125,11 @@ public class ConsumerView {
 		}
 		String user_name = registerUser(consumerNo);
 		commonView.displayMessege(user_name+" registered successfully");
-		int conNo = commonOperations.getConsumerNoFromUserName(user_name);
-		loginView.askLoggedInOptions(conNo);
+//		int consumerNo = commonOperations.getConsumerNoFromUserName(user_name);
+		loginView.askLoggedInOptions(consumerNo);
 	}
 
-	private String registerUser(int consumerNo) {
+	private String registerUser(long consumerNo) {
 		System.out.println("Enter login details to set");
 		boolean loop = true;
 		String user_name = null; 
@@ -184,7 +182,7 @@ public class ConsumerView {
 		System.out.println("Enter your address");
 		String address = commonView.getString();
 		
-		int consumerNo = operations.createConsumer(name,email,phoNo,address);
+		long consumerNo = operations.createConsumer(name,email,phoNo,address);
 		String user_name = registerUser(consumerNo);
 		commonView.displayMessege("Your consumer number is "+consumerNo);
 		loginView.askLoggedInOptions(consumerNo);

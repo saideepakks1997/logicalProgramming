@@ -6,13 +6,13 @@ import java.util.List;
 import connection.Connection;
 
 public class Consumer extends User{
-	private int consumerNO;
+	private long consumerNO;
 	
 	private List<Connection> connections = new ArrayList<Connection>();
 	
 	private List<String> notifications = new ArrayList<String>();
 	
-	public Consumer(int consumerNo, String name, String email, long phoNo,String address) {
+	public Consumer(long consumerNo, String name, String email, long phoNo,String address) {
 		this.setConsumerNO(consumerNo);
 		this.setName(name);
 		this.setEmailId(email);
@@ -20,11 +20,11 @@ public class Consumer extends User{
 		this.setAddress(address);
 	}
 
-	public int getConsumerNO() {
+	public long getConsumerNO() {
 		return consumerNO;
 	}
 
-	public void setConsumerNO(int consumerNO) {
+	public void setConsumerNO(long consumerNO) {
 		this.consumerNO = consumerNO;
 	}
 

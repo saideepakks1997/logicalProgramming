@@ -4,14 +4,16 @@ import connection.TypeOfConnection;
 
 public class ChangeOfConnectionRequest {
 //	private String user_name;
-	private int consumerNo;
+	private long requestNo;
+	private long consumerNo;
 	private long serviceNo;
 	private TypeOfConnection connType;
 	
-	public ChangeOfConnectionRequest (int consumerNo,long serviceNo, TypeOfConnection connType) {
+	public ChangeOfConnectionRequest (long consumerNo,long serviceNo, TypeOfConnection connType,long requestNo) {
 		this.setConsumerNo(consumerNo);
 		this.setServiceNo(serviceNo);
 		this.setConnType(connType);
+		this.setRequestNo(requestNo);
 	}
 
 	public long getServiceNo() {
@@ -31,11 +33,19 @@ public class ChangeOfConnectionRequest {
 	}
 
 
-	public int getConsumerNo() {
+	public long getConsumerNo() {
 		return consumerNo;
 	}
 
-	public void setConsumerNo(int consumerNo) {
+	public void setConsumerNo(long consumerNo) {
 		this.consumerNo = consumerNo;
+	}
+
+	public long getRequestNo() {
+		return requestNo;
+	}
+
+	public void setRequestNo(long requestNo) {
+		this.requestNo = requestNo;
 	}
 }

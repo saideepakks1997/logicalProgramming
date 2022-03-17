@@ -18,11 +18,11 @@ public interface IAdminOperations {
 
 	public String createConnectionForNewConsumer(String name,String email,long phoNO,String address,String connAddress, TypeOfConnection connType);
 
-	public String createConnectionForExistingConsumer(int customerNo,String connAddress, TypeOfConnection connType);
+	public String createConnectionForExistingConsumer(long customerNo,String connAddress, TypeOfConnection connType);
 
 	public List<NewConnectionRequest> getNewConnectionRequests();
 
-	public String addNotification(int consumerNo, int i, String status,String reqType);
+	public String addNotification(long consumerNo, int i, String status,String reqType);
 
 	public List<ChangeOfConnectionRequest> getConnectionChangeRequests();
 

@@ -13,10 +13,11 @@ import consumer.Consumer;
 public class ElectricityBoard {
 	private long billNoSeries = 11111111l;
 	private long connNoSeries = 22222l;
-	private int consumerNoSeries = 1;
+	private long consumerNoSeries = 1;
+	private long requestNoSeries = 1;
 	
 	//user_name and Consumer
-	private Map<Integer, Consumer> consumers = new HashMap<Integer, Consumer>();
+	private Map<Long, Consumer> consumers = new HashMap<Long, Consumer>();
 	private Map<String, Consumer>  consumerUserName = new HashMap<String, Consumer>();
 	private Map<String, Admin> admins = new HashMap<String, Admin>();
 	
@@ -43,7 +44,7 @@ public class ElectricityBoard {
 		this.getConsumers().get(consumer2.getConsumerNO()).setConnection(conn2);
 	}
 
-	public Map<Integer, Consumer> getConsumers() {
+	public Map<Long, Consumer> getConsumers() {
 		return consumers;
 	}
 
@@ -55,8 +56,8 @@ public class ElectricityBoard {
 		return admins;
 	}
 
-	public void setAdmins(Map<String, Admin> consumers) {
-		this.admins = admins ;
+	public void setAdmins(Map<String, Admin> consumer) {
+		this.admins = consumer ;
 	}
 
 	public Map<Long,Connection> getConnections() {
@@ -75,8 +76,12 @@ public class ElectricityBoard {
 		return connNoSeries++;
 	}
 
-	public int getConsumerNoSeries() {
+	public long getConsumerNoSeries() {
 		return this.consumerNoSeries++;
+	}
+	
+	public long getRequestNoSeries() {
+		return requestNoSeries++;
 	}
 
 	public Map<String, Consumer> getConsumerUserName() {
@@ -102,5 +107,9 @@ public class ElectricityBoard {
 	public void setConnChangeRequests(ChangeOfConnectionRequest connChangeRequest) {
 		this.connChangeRequests.add(connChangeRequest);
 	}
+
+	
+
+	
 
 }

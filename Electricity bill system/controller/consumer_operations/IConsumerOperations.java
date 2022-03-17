@@ -7,18 +7,18 @@ import connection.TypeOfConnection;
 
 public interface IConsumerOperations {
 
-	public String registerUser(int consumerNo, String user_name, String password);
+	public String registerUser(long consumerNo, String user_name, String password);
 
 	public boolean checkConsumerCredentials(String user_name, String password);
 
-	public List<Connection> getConsumerConnection(int consumerNo);
+	public List<Connection> getConsumerConnection(long consumerNo);
 
-	public String newConnectionRequest(int consumerNo, String address, TypeOfConnection conType);
+	public String newConnectionRequest(long consumerNo, String address, TypeOfConnection conType);
 
-	public String changeOfConnectionRequest(int consumerNo,long serviceNo, TypeOfConnection connType);
+	public String changeOfConnectionRequest(long consumerNo,long serviceNo, TypeOfConnection connType);
 
-	public List<String> getNotification(int  consumerNo);
+	public List<String> getNotification(long  consumerNo);
 
-	public int createConsumer(String name, String email, long phoNo, String address);
+	public long createConsumer(String name, String email, long phoNo, String address);
 
 }

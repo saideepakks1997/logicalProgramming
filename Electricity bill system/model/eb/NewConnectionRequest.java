@@ -5,15 +5,17 @@ import consumer.Consumer;
 
 public class NewConnectionRequest {
 //	private String user_name;
-	private int consumerNo;
+	private long requestNo;
+	private long consumerNo;
 	private String address;
 	private TypeOfConnection connType;
 //	private Consumer consumer;
 	
-	public NewConnectionRequest(int consumerNo, String address, TypeOfConnection connType) {
+	public NewConnectionRequest(long consumerNo, String address, TypeOfConnection connType,long requestNo) {
 		this.setConsumerNo(consumerNo);
 		this.setAddress(address);
 		this.setConnType(connType);
+		this.setRequestNo(consumerNo);
 	}
 	
 	public String toString() {
@@ -40,12 +42,20 @@ public class NewConnectionRequest {
 		this.connType = connType;
 	}
 
-	public int getConsumerNo() {
+	public long getConsumerNo() {
 		return consumerNo;
 	}
 
-	public void setConsumerNo(int consumerNo) {
+	public void setConsumerNo(long consumerNo) {
 		this.consumerNo = consumerNo;
+	}
+
+	public long getRequestNo() {
+		return requestNo;
+	}
+
+	public void setRequestNo(long requestNo) {
+		this.requestNo = requestNo;
 	}
 
 	
