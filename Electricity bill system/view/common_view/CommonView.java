@@ -1,5 +1,6 @@
 package common_view;
 
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -10,10 +11,16 @@ import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import connection.Connection;
 import connection.TypeOfConnection;
+import consumer.Consumer;
 import eb.ElectricityBoard;
+import validator_encrypter.Validator;
 
 public class CommonView {
 	ICommonOperations commonOperations = null;
+	Validator validate = new Validator();
+	
+	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public CommonView(ElectricityBoard eb) {
 		this.commonOperations = new CommonOperations(eb);
@@ -126,7 +133,6 @@ public class CommonView {
 					System.out.println("Start entering password from starting");
 				}
 			}
-				
 			else
 				displayPasswordError(passwordErrors);
 			}
@@ -159,68 +165,41 @@ public class CommonView {
 	public long getConnectionNo() {
 		boolean loop = true;
 		long connNo = 0;
+		int chances = 1;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter connection number");
 			connNo = getLong();
 			boolean isValid = commonOperations.isServiceNoValid(connNo);
 			if(!isValid) {
+				if(chances >= validate.getMaxChance()) {
+					displayChancesMessege();
+					loop = false;
+				}
 				displayMessege("Enter valid service number");
 				loop = true;
+				chances++;
 			}
 		}
 		return connNo;
 	}
-	
 	public void payBill() {
 		boolean loop = true;
 		long connNo = getConnectionNo();
-		while(loop) {
-			List<Payment> pendingPayments = commonOperations.getAllPedingPayments(connNo);
-			if(pendingPayments != null) {
-				
-				System.out.println("Enter option to accept the payment");
-				System.out.println("----------------------");
-				int i=1;
-				for(Payment payment:pendingPayments) {
-					System.out.println((i++)+"."+payment);
-				}
-				System.out.println("----------------------");
-				int opt = getInt();
-				
-				Bill bill = commonOperations.acceptPayment(opt, connNo);
-				if(bill != null) {
-					displayBill(bill);
-				}
-				else {
-					displayMessege("Please enter valid option");
-				}
-				
-				System.out.println("Still you want pay bills\n"
-						+ "1-> Yes\n"
-						+ "Press any no for No");
-				int no = getInt();
-				if(no != 1) {
-					loop = false;
-					displayMessege("Going back to previous menu");
-				}
-					
-			}
-			else {
-				displayMessege("No pending payments");
-				loop = false;
-			}
-			
-		}
+		viewAndPayAllPendingPayments(connNo);
 	}
 
+
 	public void displayBill(Bill bill) {
+		int i=1;
 		System.out.println("------------------");
 		System.out.println("Amount has been paid successfully\n"
+				+ "S.no:- "+(i++)
 				+ "bill No :- "+bill.getBillNo()+"\n"
 				+ "Paid amount :- "+bill.getPayment().getPayableAmount()+"\n"
 				+ "Units consumed :- "+bill.getPayment().getUnitsConsumed()+"\n"
-				+ "Paid date :- "+bill.getPaymentDate());
+				+ "Paid date :- "+bill.getPaymentDate().format(dateFormatter)+"\n"
+				+ "Paid time :- "+bill.getPaymentDate().format(timeFormatter));
 		System.out.println("------------------");
 		
 	}
@@ -254,7 +233,7 @@ public class CommonView {
 					return;
 				}
 				
-				Bill bill = commonOperations.acceptPayment(opt, serviceNo);
+				Bill bill = commonOperations.acceptPayment(opt, serviceNo,pendingPayments);
 				if(bill != null)
 					displayBill(bill);
 				else {
@@ -285,5 +264,25 @@ public class CommonView {
 		}
 		System.out.println("------------------");
 		
+	}
+	public void displayChancesMessege() {
+		System.out.println("------------------");
+		System.out.println("Maximum chances given please try after sometimes");
+		System.out.println("------------------");
+	}
+
+	public void displayConsumerConnection(Consumer consumer) {
+		System.out.println("--------------------------------------------------");
+		System.out.println("Consumer No :- "+consumer.getConsumerNO());
+		System.out.println("Consumer Name :- "+consumer.getName());
+		System.out.println("Consumer Address :- "+consumer.getAddress());
+		System.out.printf("%10s %30s %30s","Serivce No","Connection Type","Address");
+		for(Connection con: consumer.getConnections()) {
+			System.out.println();
+			System.out.printf("%10d %30s %30s",con.getServiceNo(),con.getConnectionType(),con.getConnAddress());
+			System.out.println();
+		}
+		
+		System.out.println("--------------------------------------------------");
 	}
 }

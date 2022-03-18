@@ -2,6 +2,7 @@ package admin_view;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import admin_operations.AdminOperations;
 import admin_operations.IAdminOperations;
@@ -10,6 +11,7 @@ import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
 import connection.Connection;
+import consumer.Consumer;
 import eb.ElectricityBoard;
 
 public class AdminView {
@@ -46,7 +48,7 @@ public class AdminView {
 		 			break;
 				case 2: viewNonPayers();
 					break;
-				case 3: payBill();
+				case 3: commonView.payBill();
 					break;
 				case 4: connectionView.askOptions();
 					break;
@@ -108,11 +110,7 @@ public class AdminView {
 		}
 	}
 	//pay amount
-	private void payBill() {
-		boolean loop = true;
-		long connNo = getConnectionNo();
-		commonView.viewAndPayAllPendingPayments(connNo);
-	}
+	
 	
 	private long getConnectionNo() {
 		boolean loop = true;
@@ -131,7 +129,12 @@ public class AdminView {
 	}
 	
 	private void ViewAllConsumers() {
-		// TODO Auto-generated method stub
+		Map<Long, Consumer> consumers = operations.getAllConsumers();
+		Set<Long> consumerNos = consumers.keySet();
+		for(Long cNo: consumerNos) {
+//			String cName = consumers.get(cNo).getName();
+			commonView.displayConsumerConnection(consumers.get(cNo));
+		}
 		
 	}
 

@@ -8,8 +8,16 @@ import java.util.TreeMap;
 
 import bill.Payment;
 import bill_calculation_operations.CommercialBillCalculation;
+import bill_calculation_operations.CottageAndTinyIndustriesCalculation;
 import bill_calculation_operations.DomesticBillCalculations;
-import bill_calculation_operations.ICalculateBill;
+import bill_calculation_operations.GovnAidedPlacesCalculation;
+import bill_calculation_operations.PowerLoomsCalculation;
+import bill_calculation_operations.PrivateHostpitalInstitutionCalculation;
+import bill_calculation_operations.PublicLightTownCalculation;
+import bill_calculation_operations.PublicLightsVillageAndIndustrialmetroCalculation;
+import bill_calculation_operations.PublicWorkshopCalculation;
+import bill_calculation_operations.TemporarySupplyCalculation;
+import bill_calculation_operations.CalculateBill;
 import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
@@ -19,7 +27,7 @@ import eb.NewConnectionRequest;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
-	ICalculateBill calculateBill = null;
+	CalculateBill calculateBill = null;
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
@@ -38,7 +46,6 @@ public class AdminOperations implements IAdminOperations{
 			}
 		}
 	
-
 	private void setPendingPayment(double readings, Connection conn) {
 		calculateBill = getBillCaulationObj(conn);
 		double payableAmount = calculateBill.calculteBillAmount(readings);
@@ -46,12 +53,31 @@ public class AdminOperations implements IAdminOperations{
 		conn.setPendingPayments(payment);
 	}
 
-	private ICalculateBill getBillCaulationObj(Connection conn) {
-		if(conn.getConnectionType() == TypeOfConnection.Domestic)
-			return new DomesticBillCalculations();
-		else if(conn.getConnectionType()== TypeOfConnection.ltCommercial)
-			return new CommercialBillCalculation();
-		return null;
+	private CalculateBill getBillCaulationObj(Connection conn) {
+		CalculateBill billCalculate = null;
+		switch (conn.getConnectionType()) {
+		case Domestic: billCalculate = new DomesticBillCalculations();
+			break;
+		case LtCommercial: billCalculate = new CommercialBillCalculation();
+			break;
+		case PublicWorkshop: billCalculate = new PublicWorkshopCalculation();
+			break;
+		case CottageAndTinyIndustries: billCalculate = new CottageAndTinyIndustriesCalculation();
+			break;
+		case PowerLooms: billCalculate = new PowerLoomsCalculation();
+			break;
+		case PublicLightsVillageAndIndustrialmetro: billCalculate = new PublicLightsVillageAndIndustrialmetroCalculation();
+			break;
+		case TemporarySupply: billCalculate = new TemporarySupplyCalculation();
+			break;
+		case PublicLightTown: billCalculate = new PublicLightTownCalculation();
+			break;
+		case GovnAidedPlaces: billCalculate = new GovnAidedPlacesCalculation();
+			break;
+		case PrivateHostpitalInstitution: billCalculate = new PrivateHostpitalInstitutionCalculation();
+			break;
+		}
+		return billCalculate;
 	}
 
 	@Override
@@ -100,7 +126,7 @@ public class AdminOperations implements IAdminOperations{
 	}
 
 	@Override
-	public String createConnectionForExistingConsumer(long customerNo,String connAddress, TypeOfConnection connType) {
+	public Connection createConnectionForExistingConsumer(long customerNo,String connAddress, TypeOfConnection connType) {
 		long serviceNo = this.eb.getConnNoSeries();
 		Consumer consumer = this.eb.getConsumers().get(customerNo);
 		Connection conn = new Connection(serviceNo, connType, connAddress, consumer);
@@ -108,7 +134,7 @@ public class AdminOperations implements IAdminOperations{
 		this.eb.setConnections(conn);
 		this.eb.getConsumers().get(customerNo).setConnection(conn);
 		
-		return "New connection has been created service no is "+conn.getServiceNo();
+		return conn;
 	}
 
 	@Override
@@ -118,14 +144,15 @@ public class AdminOperations implements IAdminOperations{
 	}
 
 	@Override
-	public String addNotification(long consumerNo, int reqIndex, String status,String reqType) {
+	public boolean addNotification(long consumerNo, int reqIndex, String status,String reqType) {
 		this.eb.getConsumers().get(consumerNo).setNotifications(status);
-		if(reqType.equalsIgnoreCase("newConnection"))
-			this.eb.getNewConnRequests().remove(reqIndex);
-		else if(reqType.equalsIgnoreCase("changetype"))
-			this.eb.getConnChangeRequests().remove(reqIndex);
 		
-		return "Notification has been added";
+//		if(reqType.equalsIgnoreCase("newConnection"))
+//			this.eb.getNewConnRequests().remove(reqIndex);
+//		else if(reqType.equalsIgnoreCase("changetype"))
+//			this.eb.getConnChangeRequests().remove(reqIndex);
+		
+		return true;
 	}
 
 	@Override
@@ -139,6 +166,21 @@ public class AdminOperations implements IAdminOperations{
 		String user_name = this.eb.getConsumers().get(consumerNo).getUser_name();
 		System.out.println("user_name in admine operations "+this.eb.getConsumers().get(consumerNo));
 		return user_name;
+	}
+
+	@Override
+	public Map<Long, Consumer> getAllConsumers() {
+		return this.eb.getConsumers();
+	}
+
+	@Override
+	public void updateStatus(NewConnectionRequest req, int index) {
+//		NewConnectionRequest req = this.eb.getNewConnRequests().get(index);
+		req.setStatusNo();
+		if(req.getStatusNo() == 3) {
+			this.eb.getNewConnRequests().remove(index);
+		}
+		
 	}
 	
 }

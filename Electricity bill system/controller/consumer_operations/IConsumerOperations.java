@@ -4,6 +4,7 @@ import java.util.List;
 
 import connection.Connection;
 import connection.TypeOfConnection;
+import eb.NewConnectionRequest;
 
 public interface IConsumerOperations {
 
@@ -13,7 +14,7 @@ public interface IConsumerOperations {
 
 	public List<Connection> getConsumerConnection(long consumerNo);
 
-	public String newConnectionRequest(long consumerNo, String address, TypeOfConnection conType);
+	public NewConnectionRequest newConnectionRequest(long consumerNo, String address, TypeOfConnection conType);
 
 	public String changeOfConnectionRequest(long consumerNo,long serviceNo, TypeOfConnection connType);
 

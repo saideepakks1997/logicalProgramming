@@ -9,8 +9,6 @@ public class User {
 	protected String address;
 	protected String gender;
 	protected LocalDate dob;
-	protected String user_name;
-	private String password;
 	
 	public String getName() {
 		return name;
@@ -47,18 +45,5 @@ public class User {
 	}
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
-	}
-	public String getUser_name() {
-		return user_name;
-	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public boolean validatePassword(String password) {
-		return this.password.equals(password);
 	}
 }

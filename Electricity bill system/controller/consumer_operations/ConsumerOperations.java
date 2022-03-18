@@ -20,16 +20,16 @@ public class ConsumerOperations implements IConsumerOperations{
 	public boolean registerUser(long consumerNo, String user_name, String password) {
 		password = encrypt.encryptPassword(password);
 		Consumer consumer = this.eb.getConsumers().get(consumerNo);
-		System.out.println("register :- "+password);
 		consumer.setUser_name(user_name);
 		consumer.setPassword(password);
 		
-		this.eb.setConsumerUserName(consumer);
+		this.eb.setConsumerMapping(consumer);
 		return true;
 	}
 	@Override
 	public boolean checkConsumerCredentials(String user_name, String password) {
-		Consumer consumer = this.eb.getConsumerUserName().get(user_name);
+		Long consumerNo = this.eb.getConsumerMapping().get(user_name);
+		Consumer consumer = this.eb.getConsumers().get(consumerNo);
 		password = encrypt.encryptPassword(password);
 		System.out.println("Login :- "+password);
 		return consumer.validatePassword(password);
@@ -41,11 +41,11 @@ public class ConsumerOperations implements IConsumerOperations{
 		return connections;
 	}
 	@Override
-	public String newConnectionRequest(long consumerNo, String address, TypeOfConnection connType) {
+	public NewConnectionRequest newConnectionRequest(long consumerNo, String address, TypeOfConnection connType) {
 		long requestNo = this.eb.getRequestNoSeries();
 		NewConnectionRequest request = new NewConnectionRequest(consumerNo, address, connType,requestNo);
 		this.eb.setNewConnRequests(request);
-		return "New Connection has been requested and the request number is "+requestNo;
+		return request;
 	}
 	@Override
 	public String changeOfConnectionRequest(long consumerNo,long serviceNo, TypeOfConnection connType) {

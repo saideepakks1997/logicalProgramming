@@ -1,6 +1,5 @@
 package bill;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Bill {
@@ -12,14 +11,6 @@ public class Bill {
 		this.setBillNo(billNo);
 		this.setPayment(payment);
 		this.setPaymentDate(LocalDateTime.now());
-	}
-	
-	public String toString() {
-		String bill = "Bill No :-"+this.getBillNo()+"\n"
-				+ "Paid amount :-"+this.getPayment().getPayableAmount()+"\n"
-				+ "Units consumed :-"+this.getPayment().getUnitsConsumed()+"\n"
-				+ "Paid date :- "+this.getPaymentDate();
-		return bill;
 	}
 	
 	public long getBillNo() {

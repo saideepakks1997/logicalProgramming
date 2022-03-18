@@ -15,7 +15,7 @@ public interface ICommonOperations {
 
 	public List<Payment> getAllPedingPayments(long connNo);
 
-	public Bill acceptPayment(int opt, long connNo);
+	public Bill acceptPayment(int opt, long connNo,List<Payment> pendingPayments);
 
 	public String getConnectionType(long connNo);
 

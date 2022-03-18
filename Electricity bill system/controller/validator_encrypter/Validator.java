@@ -8,7 +8,7 @@ public class Validator {
 	 private String PASSWORD_REGEX = 
 			"((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,15})";
 	 private String EMAIL_REGEX = "^(.+)@(.+)$";
-
+	 private int maxChancesForValidation = 3;
 				
 		public boolean validatePassword(String password) {
 			boolean isValid = validate(PASSWORD_REGEX, password);
@@ -22,6 +22,12 @@ public class Validator {
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(field);
 			return matcher.matches();
+		}
+		public int getMaxChance() {
+			return maxChancesForValidation;
+		}
+		public void setMaxChance(int maxChance) {
+			this.maxChancesForValidation = maxChance;
 		}
 }
 

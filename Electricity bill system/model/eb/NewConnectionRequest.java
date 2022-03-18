@@ -1,27 +1,32 @@
 package eb;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import connection.TypeOfConnection;
-import consumer.Consumer;
 
 public class NewConnectionRequest {
-//	private String user_name;
+	private int statusNo;
 	private long requestNo;
 	private long consumerNo;
 	private String address;
 	private TypeOfConnection connType;
-//	private Consumer consumer;
+	private LocalDateTime requestedTime;
+	private LocalDateTime lastUpdatedTime; 
 	
 	public NewConnectionRequest(long consumerNo, String address, TypeOfConnection connType,long requestNo) {
 		this.setConsumerNo(consumerNo);
 		this.setAddress(address);
 		this.setConnType(connType);
 		this.setRequestNo(consumerNo);
+		this.setRequestedTime(LocalDateTime.now());
 	}
 	
 	public String toString() {
 		String request = "ConsumerNo :- "+this.getConsumerNo()+"\n"
 						+ "Address :- "+this.getAddress()+"\n"
-						+ "Type of connection requested :- "+this.getConnType();
+						+ "Type of connection requested :- "+this.getConnType()+"\n"
+						+ "Request Status :- "+RequestStatus.values()[this.statusNo].displayName();
 		return request;
 	}
 	
@@ -56,6 +61,30 @@ public class NewConnectionRequest {
 
 	public void setRequestNo(long requestNo) {
 		this.requestNo = requestNo;
+	}
+
+	public int getStatusNo() {
+		return statusNo;
+	}
+
+	public void setStatusNo() {
+		this.statusNo++;
+	}
+
+	public LocalDateTime getRequestedTime() {
+		return requestedTime;
+	}
+
+	public void setRequestedTime(LocalDateTime requestedTime) {
+		this.requestedTime = requestedTime;
+	}
+
+	public LocalDateTime getLastUpdatedTime() {
+		return lastUpdatedTime;
+	}
+
+	public void setLastUpdatedTime(LocalDateTime lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
 	}
 
 	

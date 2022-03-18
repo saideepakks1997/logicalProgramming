@@ -60,9 +60,9 @@ public class CommonOperations implements ICommonOperations{
 	}
 
 	@Override
-	public Bill acceptPayment(int opt, long connNo) {
+	public Bill acceptPayment(int opt, long connNo,List<Payment> pendingPayments) {
 		Connection connection = this.eb.getConnections().get(connNo);
-		List<Payment> pendingPayments = connection.getPendingPayments();
+		
 		try {
 			Payment payment = pendingPayments.get(opt-1);
 			pendingPayments.remove(opt-1);
@@ -91,7 +91,7 @@ public class CommonOperations implements ICommonOperations{
 
 	@Override
 	public boolean checkIfUserNameIsCorrect(String user_name) {
-		boolean isValid = this.eb.getConsumerUserName().containsKey(user_name);
+		boolean isValid = this.eb.getConsumerMapping().containsKey(user_name);
 		return isValid;
 	}
 	
@@ -159,7 +159,7 @@ public class CommonOperations implements ICommonOperations{
 
 	@Override
 	public long getConsumerNoFromUserName(String user_name) {
-		long consumerNo = this.eb.getConsumerUserName().get(user_name).getConsumerNO();
+		long consumerNo = this.eb.getConsumerMapping().get(user_name);
 		return consumerNo;
 	}
 

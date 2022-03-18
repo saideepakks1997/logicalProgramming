@@ -126,53 +126,110 @@ public class ConsumerView {
 			}
 		}
 		String user_name = registerUser(consumerNo);
-		commonView.displayMessege(user_name+" registered successfully");
-//		int consumerNo = commonOperations.getConsumerNoFromUserName(user_name);
-		loginView.askLoggedInOptions(consumerNo);
+		if(user_name != null) {
+			commonView.displayMessege(user_name+" registered successfully");
+			loginView.askLoggedInOptions(consumerNo);
+		}
+		else {
+			commonView.displayMessege("Registered not done");
+		}
 	}
 
 	private String registerUser(long consumerNo) {
 		System.out.println("Enter login details to set");
+		String user_name = getUserNameFromUser();
+		System.out.println("user name 1:- "+user_name);
+		if(user_name == null) {
+			return null;
+		}
+		
+		String password = getPasswordFromUser();
+		if(password != null) {
+			boolean isRegistered = operations.registerUser(consumerNo,user_name, password);
+			if(isRegistered) {
+				return user_name;
+			}
+		}
+		return null;
+	}
+	
+	private String getUserNameFromUser() {
 		boolean loop = true;
-		String user_name = null; 
+		int chances = 1;
+		String user_name = null;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter user name to set");
 			user_name = commonView.getString();
+			System.out.println("user name :- "+user_name);
 			boolean isUserTaken = commonOperations.checkIfUserNameIsCorrect(user_name);
 			if(isUserTaken) {
+				
+				if(chances >= validate.getMaxChance()) {
+					commonView.displayChancesMessege();
+					return null;
+				}
 				commonView.displayMessege(user_name+" already taken please try different name");
 				loop =  true;
+				chances++;
 			}
 		}
-		loop = true; 
-		String password = null ;
+		System.out.println("user name :- "+user_name);
+		return user_name;
+	}
+	
+	private String getPasswordFromUser() {
+		boolean loop = true;
+		int chances = 1;
+		String password = null;
+		//Getting password
 		while(loop) {
 			System.out.println("Enter the password to set ");
 			password = commonView.getString();
 			boolean isValidPassword = validate.validatePassword(password);
-			if(!isValidPassword) {
-				System.out.println("Re-enter the password ");
-				String reCheckPassword = commonView.getString();
-				if(password.equals(reCheckPassword)) {
+			if(isValidPassword) {
+				boolean isReenterValid =reEnterPassword(password);
+				if(!isReenterValid)
+					return null;
+				else
 					loop = false;
-				}
-				else {
-					System.out.println("Re-entered password does not matches with password");
-					System.out.println("Start entering password from starting");
-				}
 			}
-			else
-				commonView.displayMessege("Please enter valid password");
+			else {
+				if(chances >= validate.getMaxChance()) {
+					loop = false;
+					commonView.displayChancesMessege();
+					return null;
+				}
+					commonView.displayMessege("Please enter valid password");
+					chances++;
 			}
-		boolean isValid = operations.registerUser(consumerNo,user_name, password);
-		if(isValid)
-			commonView.displayMessege("Registered successfully");
-		else
-			commonView.displayMessege("Registered is not successfully done");
-		return user_name;
+		}
+		return password;
 	}
-	
+
+	private boolean reEnterPassword(String password) {
+		boolean loop = true;
+		int chances = 1;
+		while(loop){
+			System.out.println("Re-enter the password to check");
+			String reCheckPassword = commonView.getString();
+			if(password.equals(reCheckPassword)) {
+				return true;
+			}
+			else {
+				if(chances >= validate.getMaxChance()) {
+					commonView.displayChancesMessege();
+					return false;
+				}
+				chances++;
+				System.out.println("Re-entered password does not matches with password\n"
+						+ "Again enter the password to recheck");
+			}
+		}
+		return false;
+	}
+
+
 	private void registerConsumerForNewConnection() {
 		System.out.println("Start entering details for registration");
 		System.out.println("Enter name ");

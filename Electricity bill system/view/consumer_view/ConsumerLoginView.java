@@ -12,6 +12,8 @@ import connection.TypeOfConnection;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
+import eb.NewConnectionRequest;
+import eb.RequestStatus;
 
 public class ConsumerLoginView {
 	IConsumerOperations operations = null;
@@ -111,7 +113,6 @@ public class ConsumerLoginView {
 		}
 		else {
 			commonView.displayPendingPayment(pendingPayments);
-			commonView.displayMessege(pendingPayments);
 		}
 	}
 
@@ -119,11 +120,12 @@ public class ConsumerLoginView {
 		long serviceNo = selectConnectionNo();
 		List<Bill> bills = commonOperations.getBills(serviceNo);
 		if(bills.size() == 0) {
-			commonView.displayMessege("No bill available");
+			commonView.displayMessege("No transaction available");
 		}
 		else {
-			for(Bill bill: bills)
-				commonView.displayMessege(bill);
+			for(Bill bill: bills) {
+				commonView.displayBill(bill);
+			}
 		}
 	}
 
@@ -144,8 +146,9 @@ public class ConsumerLoginView {
 		System.out.println("Select type of connection");
 		TypeOfConnection conType = commonView.selectTypeOfConnection();
 		
-		String result = operations.newConnectionRequest(this.consumerNo, address, conType);
-		commonView.displayMessege(result);
+		NewConnectionRequest request = operations.newConnectionRequest(this.consumerNo, address, conType);
+//		String status = RequestStatus.values()[request.getStatusNo()].displayName(); 
+		commonView.displayMessege("Request has been sent and request Number is "+request.getRequestNo());
 	}
 
 	public void payBill() {

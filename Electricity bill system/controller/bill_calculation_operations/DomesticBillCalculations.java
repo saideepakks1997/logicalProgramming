@@ -1,6 +1,6 @@
 package bill_calculation_operations;
 
-public class DomesticBillCalculations implements ICalculateBill{
+public class DomesticBillCalculations extends CalculateBill{
 	double amount = 0;
 	
 	@Override

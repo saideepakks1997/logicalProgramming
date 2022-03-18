@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import connection.Connection;
 import connection.TypeOfConnection;
@@ -17,8 +18,9 @@ public class ElectricityBoard {
 	private long requestNoSeries = 1;
 	
 	//user_name and Consumer
-	private Map<Long, Consumer> consumers = new HashMap<Long, Consumer>();
-	private Map<String, Consumer>  consumerUserName = new HashMap<String, Consumer>();
+	private Map<Long, Consumer> consumers = new TreeMap<Long, Consumer>();
+//	private Map<String, Consumer>  consumerUserName = new HashMap<String, Consumer>();
+	private Map<String, Long> consumerMapping = new HashMap<String, Long>();
 	private Map<String, Admin> admins = new HashMap<String, Admin>();
 	
 	private Map<Long,Connection> connections = new HashMap<Long, Connection>();
@@ -32,7 +34,7 @@ public class ElectricityBoard {
 		Consumer consumer1 = new Consumer(getConsumerNoSeries(),"Sai", "ks.sai@gmail.com", 9787898l, "trl");
 		Consumer consumer2 = new Consumer(getConsumerNoSeries(),"Bharath", "bharath@gmail.com", 9787848l, "Chennai");
 		Connection conn1 = new Connection(getConnNoSeries(), TypeOfConnection.Domestic,"main road trl",consumer1);
-		Connection conn2 = new Connection(getConnNoSeries(), TypeOfConnection.ltCommercial,"1st street trt",consumer2);
+		Connection conn2 = new Connection(getConnNoSeries(), TypeOfConnection.LtCommercial,"1st street trt",consumer2);
 		
 		this.setConnections(conn1);
 		this.setConsumers(consumer1);
@@ -84,14 +86,6 @@ public class ElectricityBoard {
 		return requestNoSeries++;
 	}
 
-	public Map<String, Consumer> getConsumerUserName() {
-		return consumerUserName;
-	}
-
-	public void setConsumerUserName(Consumer consumer) {
-		this.consumerUserName.put(consumer.getUser_name(), consumer);
-	}
-
 	public List<NewConnectionRequest> getNewConnRequests() {
 		return newConnRequests;
 	}
@@ -106,6 +100,14 @@ public class ElectricityBoard {
 
 	public void setConnChangeRequests(ChangeOfConnectionRequest connChangeRequest) {
 		this.connChangeRequests.add(connChangeRequest);
+	}
+
+	public Map<String, Long> getConsumerMapping() {
+		return consumerMapping;
+	}
+
+	public void setConsumerMapping(Consumer consumer) {
+		this.consumerMapping.put(consumer.getUser_name(), consumer.getConsumerNO());
 	}
 
 	

@@ -7,14 +7,18 @@ import admin_operations.IAdminOperations;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
+import connection.Connection;
 import connection.TypeOfConnection;
 import eb.ChangeOfConnectionRequest;
 import eb.ElectricityBoard;
 import eb.NewConnectionRequest;
+import eb.RequestStatus;
+import validator_encrypter.Validator;
 
 public class NewOrUpdateConnectionView {
-CommonView commonView = null;
-	
+	CommonView commonView = null;
+	Validator validate = new Validator();
+
 	ICommonOperations commonOperations = null;
 	IAdminOperations operations = null;
 	
@@ -85,21 +89,28 @@ CommonView commonView = null;
 			}
 			else {
 				display = false;
-				System.out.println("Enter 1->For approval\n"
+				System.out.println("Enter 1->For approval and move forward\n"
 						+ "Any other number for non approval");
 				int approvalOpt = commonView.getInt();
 				NewConnectionRequest req = requests.get(opt-1);
-				long consumerNo = req.getConsumerNo(); 
+				long consumerNo = req.getConsumerNo();
+				String status = null;
 				if(approvalOpt == 1) {
-					String connAddress = req.getAddress();
-					TypeOfConnection connType = req.getConnType();
-					String status = operations.createConnectionForExistingConsumer(consumerNo,connAddress,connType);
-					commonView.displayMessege(status);
-					operations.addNotification(consumerNo, opt-1,status,"newConnection");
+					if(req.getStatusNo() == 3) {
+						System.out.println("Entered man");
+						String connAddress = req.getAddress();
+						TypeOfConnection connType = req.getConnType();
+						operations.createConnectionForExistingConsumer(consumerNo,connAddress,connType);
+						
+					}
+					operations.updateStatus(req, opt-1);
+					status = RequestStatus.values()[req.getStatusNo()].displayName();
+					commonView.displayMessege("Moved to "+status);
+					operations.addNotification(consumerNo, opt-1,status ,"newConnection");
 				}
 				else {
-					String status = "New connection request has been not approved";
-					commonView.displayMessege(status);
+					String msg = "New connection request has been not approved";
+					commonView.displayMessege(msg+" and disapproved at stage "+status);
 					operations.addNotification(consumerNo, opt-1,status,"newConnection");
 				}
 			}
@@ -144,7 +155,7 @@ CommonView commonView = null;
 				if(approvalOpt == 1) {
 					String status = operations.changeConnectionType(req.getConnType(), req.getServiceNo());
 					commonView.displayMessege(status);
-					status = operations.addNotification(consumerNo, opt-1, status, "changetype");
+					boolean isDone = operations.addNotification(consumerNo, opt-1, status, "changetype");
 					commonView.displayMessege(status);
 				}
 				else {
@@ -193,17 +204,36 @@ CommonView commonView = null;
 		TypeOfConnection connType = commonView.selectTypeOfConnection();
 		System.out.println("Enter the connection address");
 		String connAddress = commonView.getString();
-		String status = operations.createConnectionForExistingConsumer(customerNo,connAddress,connType);
-		commonView.displayMessege(status);
+		Connection conn = operations.createConnectionForExistingConsumer(customerNo,connAddress,connType);
+		commonView.displayMessege("Connection has been created successfully .Connection number is "+conn.getServiceNo());
 	}
 
 	private void createConnectionForNewConsumer() {
+		int chances = 1;
+		boolean loop = true;
 		System.out.println("Start entering consumer details ");
 		System.out.println("Enter name ");
 		String name = commonView.getString();
 		
-		System.out.println("Enter email id");
-		String emailId = commonView.getString();
+		String emailId = null;
+		while(loop) {
+			loop = false;
+			System.out.println("Enter email id");
+			emailId = commonView.getString();
+			boolean isValidemail = validate.validateEmail(emailId);
+			if(!isValidemail) {
+				loop = true;
+				if(chances >= validate.getMaxChance()) {
+					commonView.displayChancesMessege();
+					commonView.displayMessege("Connection creation failed \n "
+							+ "Going back to previous menu");
+					return;
+				}
+				chances++;
+				commonView.displayMessege("Please enter valid email id");
+			}
+		}
+		
 		
 		System.out.println("Enter phone no");
 		long phoNo= commonView.getLong();

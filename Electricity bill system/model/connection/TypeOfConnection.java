@@ -2,5 +2,13 @@ package connection;
 
 public enum TypeOfConnection {
 	Domestic,
-	ltCommercial;
+	LtCommercial,
+	PublicWorkshop,
+	CottageAndTinyIndustries,
+	PowerLooms,
+	PublicLightsVillageAndIndustrialmetro,//same
+	TemporarySupply,//same
+	PublicLightTown,//same
+	GovnAidedPlaces,//same
+	PrivateHostpitalInstitution;//same	
 }

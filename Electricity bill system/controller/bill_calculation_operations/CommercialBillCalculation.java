@@ -1,6 +1,6 @@
 package bill_calculation_operations;
 
-public class CommercialBillCalculation implements ICalculateBill{
+public class CommercialBillCalculation extends CalculateBill{
 	
 	@Override
 	public double calculteBillAmount(double units) {
