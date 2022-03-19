@@ -7,17 +7,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import bill.Payment;
-import bill_calculation_operations.CommercialBillCalculation;
-import bill_calculation_operations.CottageAndTinyIndustriesCalculation;
+import bill_calculation_operations.AllUnitsCalculation;
+import bill_calculation_operations.DiffrentUnitCalculation;
 import bill_calculation_operations.DomesticBillCalculations;
-import bill_calculation_operations.GovnAidedPlacesCalculation;
-import bill_calculation_operations.PowerLoomsCalculation;
-import bill_calculation_operations.PrivateHostpitalInstitutionCalculation;
-import bill_calculation_operations.PublicLightTownCalculation;
-import bill_calculation_operations.PublicLightsVillageAndIndustrialmetroCalculation;
-import bill_calculation_operations.PublicWorkshopCalculation;
-import bill_calculation_operations.TemporarySupplyCalculation;
-import bill_calculation_operations.CalculateBill;
+import bill_calculation_operations.ICalculateBill;
 import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
@@ -27,7 +20,7 @@ import eb.NewConnectionRequest;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
-	CalculateBill calculateBill = null;
+	ICalculateBill calculateBill = null;
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
@@ -48,34 +41,30 @@ public class AdminOperations implements IAdminOperations{
 	
 	private void setPendingPayment(double readings, Connection conn) {
 		calculateBill = getBillCaulationObj(conn);
-		double payableAmount = calculateBill.calculteBillAmount(readings);
+		double payableAmount = calculateBill.calculteBillAmount(readings,conn.getConnectionType());
 		Payment payment = new Payment(payableAmount, readings); 
 		conn.setPendingPayments(payment);
 	}
 
-	private CalculateBill getBillCaulationObj(Connection conn) {
-		CalculateBill billCalculate = null;
+	private ICalculateBill getBillCaulationObj(Connection conn) {
+		ICalculateBill billCalculate = null;
 		switch (conn.getConnectionType()) {
 		case Domestic: billCalculate = new DomesticBillCalculations();
 			break;
-		case LtCommercial: billCalculate = new CommercialBillCalculation();
+		case PowerLooms:
+		case CottageAndTinyIndustries:
+		case PublicWorkshop:
+		case LtCommercial:
+			billCalculate = new DiffrentUnitCalculation();
 			break;
-		case PublicWorkshop: billCalculate = new PublicWorkshopCalculation();
+		case PrivateHostpitalInstitution:
+		case GovnAidedPlaces:
+		case PublicLightTown:
+		case TemporarySupply:
+		case PublicLightsVillageAndIndustrialmetro:
+			billCalculate = new AllUnitsCalculation();
 			break;
-		case CottageAndTinyIndustries: billCalculate = new CottageAndTinyIndustriesCalculation();
-			break;
-		case PowerLooms: billCalculate = new PowerLoomsCalculation();
-			break;
-		case PublicLightsVillageAndIndustrialmetro: billCalculate = new PublicLightsVillageAndIndustrialmetroCalculation();
-			break;
-		case TemporarySupply: billCalculate = new TemporarySupplyCalculation();
-			break;
-		case PublicLightTown: billCalculate = new PublicLightTownCalculation();
-			break;
-		case GovnAidedPlaces: billCalculate = new GovnAidedPlacesCalculation();
-			break;
-		case PrivateHostpitalInstitution: billCalculate = new PrivateHostpitalInstitutionCalculation();
-			break;
+		
 		}
 		return billCalculate;
 	}

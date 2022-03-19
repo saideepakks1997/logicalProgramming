@@ -5,6 +5,7 @@ import java.util.List;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
+import connection.TypeOfConnection;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
@@ -42,6 +43,8 @@ public class ConsumerView {
 				break;
 			case 3: login();
 				break;
+			case 4: viewTarrifs();
+				break;
 			case 9: loop = false;
 				commonView.displayMessege("Back to previous menu");
 				break;	
@@ -50,6 +53,14 @@ public class ConsumerView {
 			}
 		}
 	}
+	private void viewTarrifs() {
+		List<TypeOfConnection> conns = commonOperations.getAllConnectionTypes();
+		for(TypeOfConnection conn:conns) {
+			commonView.displayMessege(conn);
+		}
+		
+	}
+
 	private void consumerRegistration() {
 		commonView.displayMessege("Enter option before registration\n"
 				+ "1->select if you already have connection\n"
