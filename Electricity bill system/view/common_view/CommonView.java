@@ -127,6 +127,7 @@ public class CommonView {
 				if(chances >= validate.getMaxChance()) {
 					displayChancesMessege();
 					loop = false;
+					return -1;
 				}
 				displayMessege("Enter valid service number");
 				loop = true;

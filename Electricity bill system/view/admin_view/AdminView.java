@@ -72,28 +72,20 @@ public class AdminView {
 	//  month reading 100 and next month may be 175
 	private void setUnitsConsumed() {
 		boolean loop = true;
-		long connNo = 0;
-		int chances = 0;//gives chanses for 3 times for incorrect input
 		while(loop) {
 			loop = false;
-			connNo = getConnectionNo();
-			boolean isValidConnNo = commonOperations.checkIfValidConnectionNo(connNo);
-			if(!isValidConnNo) {
-				if(chances >= 2) {
-					commonView.displayChancesMessege();
-				}
-				commonView.displayMessege("Please enter valid connection number");
-				chances++;
+			long connNo = commonView.getConnectionNo();
+			if(connNo != -1) {
+				System.out.println("Enter the reading to set");
+				long readings = commonView.getLong();
+				
+				boolean isReadingsSet = operations.setReading(connNo, readings);
+				if(isReadingsSet)
+					commonView.displayMessege("Reading has been set to "+readings);
+				else
+					commonView.displayMessege("Entered reading is less than past reading please check the readings ");
 			}
 		}
-		System.out.println("Enter the reading to set");
-		long readings = commonView.getLong();
-		
-		boolean isReadingsSet = operations.setReading(connNo, readings);
-		if(isReadingsSet)
-			commonView.displayMessege("Reading has been set to "+readings);
-		else
-			commonView.displayMessege("Entered reading is less than past reading please check the readings ");
 	}
 	
 	//View all pending payment list
@@ -111,22 +103,6 @@ public class AdminView {
 		}
 	}
 	
-	
-	private long getConnectionNo() {
-		boolean loop = true;
-		long connNo = 0;
-		while(loop) {
-			loop = false;
-			System.out.println("Enter connection number");
-			connNo = commonView.getLong();
-			boolean isValid = commonOperations.checkIfValidConnectionNo(connNo);
-			if(!isValid) {
-				commonView.displayMessege("Enter valid service number");
-				loop = true;
-			}
-		}
-		return connNo;
-	}
 	
 	private void ViewAllConsumers() {
 		Map<Long, Consumer> consumers = operations.getAllConsumers();
@@ -157,7 +133,5 @@ public class AdminView {
 				cmenuView.askOptions(consumerNo);
 			}
 		}
-		
-		
 	}
 }

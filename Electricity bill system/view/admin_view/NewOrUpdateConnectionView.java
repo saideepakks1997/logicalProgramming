@@ -74,7 +74,6 @@ public class NewOrUpdateConnectionView {
 			//get request option
 			int opt = getRequestOption(requests);
 			
-//			int opt = commonView.getInt();
 			if(opt == -1) {
 				commonView.displayMessege("No options selected going back to previous menu");
 				loop = false;
