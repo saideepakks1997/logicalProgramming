@@ -28,16 +28,18 @@ public class ConsumerView {
 	}
 	
 	public void askConsumerOptions() {
+		boolean isAdmin = false;
 		boolean loop = true;
 		while(loop) {
 			commonView.displayMessege("Select option \n"
 					+ "1->Quick pay\n"
 					+ "2->Register consumer\n"
 					+ "3->login\n"
+					+ "4->View all tarrifs\n"
 					+ "9->Back to previous menu");
 			int opt = commonView.getInt();
 			switch (opt) {
-			case 1: commonView.payBill();
+			case 1: commonView.payBill(isAdmin);
 				break;
 			case 2: consumerRegistration();
 				break;
@@ -56,10 +58,12 @@ public class ConsumerView {
 	private void viewTarrifs() {
 		List<TypeOfConnection> conns = commonOperations.getAllConnectionTypes();
 		for(TypeOfConnection conn:conns) {
-			commonView.displayMessege(conn);
+			System.out.println("Connection Type:- "+conn);
+			commonView.displayMessege(conn.getObj());
 		}
 		
 	}
+
 
 	private void consumerRegistration() {
 		commonView.displayMessege("Enter option before registration\n"

@@ -48,14 +48,16 @@ public class ConsumerOperations implements IConsumerOperations{
 		return request;
 	}
 	@Override
-	public String changeOfConnectionRequest(long consumerNo,long serviceNo, TypeOfConnection connType) {
+	public ChangeOfConnectionRequest changeOfConnectionRequest(long consumerNo,long serviceNo, TypeOfConnection connType) {
 		if(this.eb.getConnections().get(serviceNo).getConnectionType() == connType) {
-			return "Connection is already of type "+connType;
+			return null;
+//					"Connection is already of type "+connType;
 		}
 		long requestNo = this.eb.getRequestNoSeries();
 		ChangeOfConnectionRequest request = new ChangeOfConnectionRequest(consumerNo,serviceNo, connType, requestNo);
 		this.eb.setConnChangeRequests(request);
-		return "Change of connection for "+serviceNo+" has been requested successfully and request number is "+requestNo;
+		return request;
+//				"Change of connection for "+serviceNo+" has been requested successfully and request number is "+requestNo;
 	}
 	@Override
 	public List<String> getNotification(long  consumerNo) {

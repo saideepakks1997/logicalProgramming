@@ -10,40 +10,22 @@ public class DomesticBillCalculations implements ICalculateBill{
 		double amount = 0;
 		if(units <= 100)
 			return 0;
-		else if(units <= 200)
+		else if(units <= 200) 
 			amount = lessThan200Units(units);
-		else if(units <= 500)
+			
+		else if(units <= 500) 
 			amount = lessThan500Units(units);
+			
 		else if(units > 500)
 			amount = greaterThan500(units);
 		
-		else if(units <= 200) {
-			units -= 100;
-			amount = units * 1.5;
-			return amount;
-		}
-		else if(units <= 500) {
-			units -= 100;
-			amount = 100 * 2;
-			units -= 100;
-			amount = units * 3;
-			return amount;
-		}
-		else if(units > 500) {
-			units -= 100;
-			amount = 100 * 3.5;
-			units -= 100;
-			amount += (300 * 4.6);
-			units -= 300;
-			amount += (units * 6.6);
-			return amount;
-		}
-		return 0;
+		return amount;
 	}
 
 	private double lessThan200Units(double units) {
 		units -= 100;
 		amount = units * 1.5;
+		System.out.println("Amount :- "+amount);
 		return amount;
 	}
 	
@@ -69,11 +51,4 @@ public class DomesticBillCalculations implements ICalculateBill{
 		amount += (units * chargesGreaterThan500);
 		return amount;
 	}
-
-	
-
-	
-
-	
-
 }

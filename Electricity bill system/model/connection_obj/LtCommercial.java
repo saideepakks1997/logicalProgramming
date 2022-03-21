@@ -2,22 +2,22 @@ package connection_obj;
 
 public class LtCommercial extends ConnectionObj{
 	
-	private double minUnits = 100;
+	private int minUnits = 100;
 	private double chargesBelowMin = 5;
 	private double chargesAboveMin = 8.05;
 	
-	@Override
-	public String getTarrif() {
-		String val = "less than "+minUnits+" "+chargesBelowMin+"\n"
-				+ "greater than "+minUnits+" "+chargesAboveMin;
+	
+	public String toString() {
+		String val = "less than"+minUnits+" :- "+chargesBelowMin+" rupees per unit\n"
+				+ "greater than "+minUnits+" :- "+chargesAboveMin+" rupees per unit";
 		return val;
 	}
-
-	public double getMinUnits() {
+	
+	public int getMinUnits() {
 		return minUnits;
 	}
 
-	public void setMinUnits(double minUnits) {
+	public void setMinUnits(int minUnits) {
 		this.minUnits = minUnits;
 	}
 

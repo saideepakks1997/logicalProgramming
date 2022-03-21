@@ -21,7 +21,14 @@ public class ChangeOfConnectionRequest {
 		this.setRequestNo(requestNo);
 		this.setRequestedTime(LocalDateTime.now());
 	}
-
+	
+	public String toString() {
+		String request = "ConsumerNo :- "+this.getConsumerNo()+"\n"
+				+ "Type of connection requested for change:- "+this.getConnType()+"\n"
+				+ "Request Status :- "+RequestStatus.values()[this.statusNo].displayName();
+		return request;
+	}
+	
 	public long getServiceNo() {
 		return serviceNo;
 	}
@@ -59,7 +66,7 @@ public class ChangeOfConnectionRequest {
 		return statusNo;
 	}
 
-	public void setStatusNo(int statusNo) {
+	public void setStatusNo() {
 		++this.statusNo;
 	}
 

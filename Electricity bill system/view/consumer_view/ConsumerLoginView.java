@@ -11,6 +11,7 @@ import connection.Connection;
 import connection.TypeOfConnection;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
+import eb.ChangeOfConnectionRequest;
 import eb.ElectricityBoard;
 import eb.NewConnectionRequest;
 import eb.RequestStatus;
@@ -31,7 +32,7 @@ public class ConsumerLoginView {
 	}
 	
 	public void askLoggedInOptions(long consumerNo) {
-		
+		boolean isAdmin = false;
 		this.consumerNo = consumerNo;
 			askToViewNotifications();
 //		this.user_name = user_name;
@@ -50,7 +51,7 @@ public class ConsumerLoginView {
 			switch (opt) {
 			case 1: viewConnectionDetails();
 				break;
-			case 2: payBill();
+			case 2: payBill(isAdmin);
 				break;
 			case 3: requestForNewConnection();
 				break;
@@ -131,12 +132,16 @@ public class ConsumerLoginView {
 
 	private void requestForChangeOfConnection() {
 		long serviceNo = selectConnectionNo();
-		String result;
 		if(serviceNo != -1) {
 			System.out.println("Select connection type");
 			TypeOfConnection connType = commonView.selectTypeOfConnection();
-			result = operations.changeOfConnectionRequest(this.consumerNo,serviceNo, connType);
-			commonView.displayMessege(result);
+			ChangeOfConnectionRequest requestObj = operations.changeOfConnectionRequest(this.consumerNo,serviceNo, connType);
+			if(requestObj != null) {
+				commonView.displayMessege("Connection is already of type "+connType);
+			}
+			else {
+				commonView.displayMessege("Change of connection for "+requestObj.getServiceNo()+" has been requested successfully and request number is "+requestObj.getRequestNo());
+			}
 		}
 	}
 
@@ -151,10 +156,10 @@ public class ConsumerLoginView {
 		commonView.displayMessege("Request has been sent and request Number is "+request.getRequestNo());
 	}
 
-	public void payBill() {
+	public void payBill(boolean isAdmin) {
 		long serviceNo = selectConnectionNo();
 		if(serviceNo != -1)
-			commonView.viewAndPayAllPendingPayments(serviceNo);
+			commonView.viewAndPayAllPendingPayments(serviceNo, isAdmin);
 	}
 
 	public void viewConnectionDetails() {

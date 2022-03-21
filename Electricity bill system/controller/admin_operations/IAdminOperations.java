@@ -16,15 +16,15 @@ public interface IAdminOperations {
 
 	public Map<Long, List<Payment>> getNonPayers();
 
-	public String changeConnectionType(TypeOfConnection typeOfConnection, long connNo);
+	public boolean changeConnectionType(TypeOfConnection typeOfConnection, long connNo);
 
-	public String createConnectionForNewConsumer(String name,String email,long phoNO,String address,String connAddress, TypeOfConnection connType);
+	public Connection createConnectionForNewConsumer(String name,String email,long phoNO,String address,String connAddress, TypeOfConnection connType);
 
 	public Connection createConnectionForExistingConsumer(long customerNo,String connAddress, TypeOfConnection connType);
 
 	public List<NewConnectionRequest> getNewConnectionRequests();
 
-	public boolean addNotification(long consumerNo, int i, String status,String reqType);
+	public boolean addNotification(long consumerNo, String status);
 
 	public List<ChangeOfConnectionRequest> getConnectionChangeRequests();
 
@@ -32,6 +32,11 @@ public interface IAdminOperations {
 
 	public Map<Long, Consumer> getAllConsumers();
 
-	public void updateStatus(NewConnectionRequest req, int index);
+	public boolean updateNewConnectionStatus(NewConnectionRequest req, int index);
+
+	public boolean updateNotification(long consumerNo, int i, String status, String string);
 	
+	public boolean updateConnectionChangeStatus(ChangeOfConnectionRequest req, int index);
+
+	public boolean removeRequest(int reqIndex,String reqType);
 }

@@ -2,21 +2,22 @@ package connection_obj;
 
 public class CottageAndTinyIndustries extends ConnectionObj{
 
-	private double minUnits = 500;
+	private int minUnits = 500;
 	private double chargesBelowMin = 4;
 	private double chargesAboveMin = 4.6;
-	@Override
-	public String getTarrif() {
-		String val = "less than "+minUnits+" units"+chargesBelowMin+"\n"
-				+ "greater than "+minUnits+" units"+chargesAboveMin;
+	
+	
+	public String toString() {
+		String val = "less than "+minUnits+" units:- "+chargesBelowMin+" rupees per unit\n"
+				+ "greater than "+minUnits+" units:- "+chargesAboveMin+" rupees per unit";
 		return val;
 	}
 	
-	public double getMinUnits() {
+	public int getMinUnits() {
 		return minUnits;
 	}
 
-	public void setMinUnits(double minUnits) {
+	public void setMinUnits(int minUnits) {
 		this.minUnits = minUnits;
 	}
 

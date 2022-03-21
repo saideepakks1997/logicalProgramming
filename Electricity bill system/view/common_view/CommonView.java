@@ -1,6 +1,8 @@
 package common_view;
 
+import java.beans.Customizer;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -13,6 +15,8 @@ import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
 import eb.ElectricityBoard;
+import payment_options.AdminPaymentOptions;
+import payment_options.ConsumerPaymentOptions;
 import validator_encrypter.Validator;
 
 public class CommonView {
@@ -28,9 +32,9 @@ public class CommonView {
 
 	Scanner sc  = new Scanner(System.in);
 	public void displayMessege(Object messege) {
-		System.out.println("-----------------------");
+		System.out.println("---------------------------------------------------");
 		System.out.println(messege);
-		System.out.println("-----------------------");
+		System.out.println("---------------------------------------------------");
 	}
 	
 	public int getInt() {
@@ -88,58 +92,6 @@ public class CommonView {
 		System.out.println("---------------------------------------");
 	}
 	
-	public void displayPasswordError(List<String> errors) {
-		System.out.println("-------------------------");
-		for(String error:errors)
-			System.out.println(error);
-		
-		System.out.println("-------------------------");
-	}
-
-	public String registerUser() {
-		System.out.println("Enter your name");
-		String name = getString();
-		
-		System.out.println("Enter your email id");
-		String email = getString();
-		
-		System.out.println("Enter phone no");
-		long phoNo = getLong();
-		boolean loop = true;
-		String user_name = null; 
-		while(loop) {
-			System.out.println("Enter user name ");
-			user_name = getString();
-			boolean isUserTaken = commonOperations.checkIfUserNameIsCorrect(user_name);
-			if(isUserTaken)
-				displayMessege(user_name+" already taken please try different name");
-			else 
-				loop = false;
-		}
-		loop = true; 
-		String password = null ;
-		while(loop) {
-			System.out.println("Enter the password to set ");
-			password = getString();
-			List<String> passwordErrors = commonOperations.checkIfPasswordIsValid(password);
-			if(passwordErrors.size() == 0) {
-				System.out.println("Re-enter the password ");
-				String reCheckPassword = getString();
-				if(password.equals(reCheckPassword)) {
-					loop = false;
-				}
-				else {
-					System.out.println("Re-entered password does not matches with password");
-					System.out.println("Start entering password from starting");
-				}
-			}
-			else
-				displayPasswordError(passwordErrors);
-			}
-		return user_name;
-		
-	}
-	
 	public TypeOfConnection selectTypeOfConnection() {
 		boolean loop = true;
 		List<TypeOfConnection> connTypes = commonOperations.getAllConnectionTypes();
@@ -170,7 +122,7 @@ public class CommonView {
 			loop = false;
 			System.out.println("Enter connection number");
 			connNo = getLong();
-			boolean isValid = commonOperations.isServiceNoValid(connNo);
+			boolean isValid = commonOperations.checkIfValidConnectionNo(connNo);
 			if(!isValid) {
 				if(chances >= validate.getMaxChance()) {
 					displayChancesMessege();
@@ -183,10 +135,10 @@ public class CommonView {
 		}
 		return connNo;
 	}
-	public void payBill() {
+	public void payBill(boolean isAdmin) {
 		boolean loop = true;
 		long connNo = getConnectionNo();
-		viewAndPayAllPendingPayments(connNo);
+		viewAndPayAllPendingPayments(connNo,isAdmin);
 	}
 
 
@@ -199,7 +151,8 @@ public class CommonView {
 				+ "Paid amount :- "+bill.getPayment().getPayableAmount()+"\n"
 				+ "Units consumed :- "+bill.getPayment().getUnitsConsumed()+"\n"
 				+ "Paid date :- "+bill.getPaymentDate().format(dateFormatter)+"\n"
-				+ "Paid time :- "+bill.getPaymentDate().format(timeFormatter));
+				+ "Paid time :- "+bill.getPaymentDate().format(timeFormatter)+"\n"
+				+ "Paid Through :- "+bill.getPaidThrough());
 		System.out.println("------------------");
 		
 	}
@@ -216,7 +169,7 @@ public class CommonView {
 		System.out.println("-------------------------------------------");
 	}
 	
-	public void viewAndPayAllPendingPayments(long serviceNo) {
+	public void viewAndPayAllPendingPayments(long serviceNo, boolean isAdmin) {
 		boolean loop = true;
 		while(loop) {
 			List<Payment> pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
@@ -232,10 +185,13 @@ public class CommonView {
 					displayMessege("No transaction has been done");
 					return;
 				}
+				String paymentThrough = getPaymentOption(isAdmin);
 				
-				Bill bill = commonOperations.acceptPayment(opt, serviceNo,pendingPayments);
-				if(bill != null)
+				Bill bill = commonOperations.acceptPayment(opt, serviceNo,pendingPayments,paymentThrough);
+				if(bill != null) {
 					displayBill(bill);
+				}
+					
 				else {
 					displayMessege("Please enter valid option");
 				}
@@ -254,6 +210,47 @@ public class CommonView {
 				loop = false;
 			}
 		}
+	}
+
+	private String getPaymentOption(boolean isAdmin) {
+		String paymentType = null;
+		boolean loop = true;
+		while(loop) {
+			loop = false;
+			if(isAdmin) {
+				int i=1;
+				List<AdminPaymentOptions> paymentopts = commonOperations.getAdminPaymentOptions();
+				System.out.println("Select option");
+				for(AdminPaymentOptions payment: paymentopts) {
+					System.out.println((i++)+"."+payment);
+				}
+				int opt = getInt();
+				if(opt < 0 || opt > paymentopts.size()) {
+					System.out.println("Enter valid option");
+					loop = true;
+				}
+				else {
+					paymentType = paymentopts.get(opt-1).toString();
+				}
+			}
+			else {
+				int i=1;
+				List<ConsumerPaymentOptions> paymentopts = commonOperations.getConsumerPaymentOptions();
+				System.out.println("Select option");
+				for(ConsumerPaymentOptions payment: paymentopts) {
+					System.out.println((i++)+"."+payment);
+				}
+				int opt = getInt();
+				if(opt < 0 || opt > paymentopts.size()) {
+					System.out.println("Enter valid option");
+					loop = true;
+				}
+				else {
+					paymentType = paymentopts.get(opt-1).toString();
+				}
+			}
+		}
+		return paymentType;
 	}
 
 	public void displayPendingPayment(List<Payment> pendingPayments) {
@@ -276,13 +273,12 @@ public class CommonView {
 		System.out.println("Consumer No :- "+consumer.getConsumerNO());
 		System.out.println("Consumer Name :- "+consumer.getName());
 		System.out.println("Consumer Address :- "+consumer.getAddress());
-		System.out.printf("%10s %30s %30s","Serivce No","Connection Type","Address");
+		System.out.printf("%10s %15s %30s %30s","Serivce No","Current Units","Connection Type","Connection Address");
 		for(Connection con: consumer.getConnections()) {
 			System.out.println();
-			System.out.printf("%10d %30s %30s",con.getServiceNo(),con.getConnectionType(),con.getConnAddress());
+			System.out.printf("%10d %15d %30s %30s",con.getServiceNo(),con.getCurrentUnit(),con.getConnectionType(),con.getConnAddress());
 			System.out.println();
 		}
-		
 		System.out.println("--------------------------------------------------");
 	}
 }

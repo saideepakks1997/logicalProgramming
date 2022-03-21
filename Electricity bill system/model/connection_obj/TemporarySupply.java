@@ -5,6 +5,7 @@ public class TemporarySupply extends ConnectionObj{
 	public TemporarySupply() {
 		this.charges = 12;
 	}
+
 	
 	public double getCharges() {
 		return this.charges;

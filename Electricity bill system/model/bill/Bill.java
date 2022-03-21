@@ -2,15 +2,19 @@ package bill;
 
 import java.time.LocalDateTime;
 
+import payment_options.ConsumerPaymentOptions;
+
 public class Bill {
 	private long billNo;
 	private Payment payment;
 	private LocalDateTime paymentDate;
+	private String paidThrough;
 	
-	public Bill(long billNo, Payment payment) {
+	public Bill(long billNo, Payment payment,String paidThrough) {
 		this.setBillNo(billNo);
 		this.setPayment(payment);
 		this.setPaymentDate(LocalDateTime.now());
+		this.setPaidThrough(paidThrough);
 	}
 	
 	public long getBillNo() {
@@ -31,5 +35,13 @@ public class Bill {
 	}
 	public void setPaymentDate(LocalDateTime paymentDate) {
 		this.paymentDate = paymentDate;
+	}
+
+	public String getPaidThrough() {
+		return paidThrough;
+	}
+
+	public void setPaidThrough(String paidThrough) {
+		this.paidThrough = paidThrough;
 	}
 }

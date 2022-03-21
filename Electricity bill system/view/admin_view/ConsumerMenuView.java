@@ -19,6 +19,7 @@ public class ConsumerMenuView {
 
 	public void askOptions(int consumerNo) {
 		boolean loop = true;
+		boolean isAdmin = true;
 		this.consumerView.consumerNo = consumerNo;
 		while(loop) {
 			commonView.displayMessege("Enter option \n"
@@ -32,7 +33,7 @@ public class ConsumerMenuView {
 			switch (opt) {
 			case 1: consumerView.viewConnectionDetails();
 				break;
-			case 2: consumerView.payBill();
+			case 2: consumerView.payBill(isAdmin);
 				break;
 			case 3: consumerView.viewPendingTransactions();
 				break;

@@ -10,7 +10,6 @@ import bill.Payment;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
-import connection.Connection;
 import consumer.Consumer;
 import eb.ElectricityBoard;
 
@@ -32,8 +31,10 @@ public class AdminView {
 	}
 
 	public void adminOptions() {
+		boolean isAdmin = true;
 		boolean loop = true;
 		while(loop) {
+			
 			commonView.displayMessege("Enter option\n"
 					+ "1->Set units consumed\n"
 					+ "2->View non payers\n"
@@ -48,7 +49,7 @@ public class AdminView {
 		 			break;
 				case 2: viewNonPayers();
 					break;
-				case 3: commonView.payBill();
+				case 3: commonView.payBill(isAdmin);
 					break;
 				case 4: connectionView.askOptions();
 					break;
@@ -63,7 +64,6 @@ public class AdminView {
 					break;
 			}
 		}
-		
 	}
 	
 
@@ -73,14 +73,14 @@ public class AdminView {
 	private void setUnitsConsumed() {
 		boolean loop = true;
 		long connNo = 0;
-		int chances = 0;
+		int chances = 0;//gives chanses for 3 times for incorrect input
 		while(loop) {
 			loop = false;
 			connNo = getConnectionNo();
 			boolean isValidConnNo = commonOperations.checkIfValidConnectionNo(connNo);
 			if(!isValidConnNo) {
 				if(chances >= 2) {
-					commonView.displayMessege("Maximum chances given going back to previous menu");
+					commonView.displayChancesMessege();
 				}
 				commonView.displayMessege("Please enter valid connection number");
 				chances++;
@@ -89,12 +89,13 @@ public class AdminView {
 		System.out.println("Enter the reading to set");
 		long readings = commonView.getLong();
 		
-		boolean isUnitsSet = operations.setReading(connNo, readings);
-		if(isUnitsSet)
+		boolean isReadingsSet = operations.setReading(connNo, readings);
+		if(isReadingsSet)
 			commonView.displayMessege("Reading has been set to "+readings);
 		else
 			commonView.displayMessege("Entered reading is less than past reading please check the readings ");
 	}
+	
 	//View all pending payment list
 	private void viewNonPayers() {
 		Map<Long, List<Payment>> nonPayers =  operations.getNonPayers();
@@ -109,7 +110,6 @@ public class AdminView {
 			}
 		}
 	}
-	//pay amount
 	
 	
 	private long getConnectionNo() {
@@ -119,7 +119,7 @@ public class AdminView {
 			loop = false;
 			System.out.println("Enter connection number");
 			connNo = commonView.getLong();
-			boolean isValid = commonOperations.isServiceNoValid(connNo);
+			boolean isValid = commonOperations.checkIfValidConnectionNo(connNo);
 			if(!isValid) {
 				commonView.displayMessege("Enter valid service number");
 				loop = true;
@@ -132,7 +132,6 @@ public class AdminView {
 		Map<Long, Consumer> consumers = operations.getAllConsumers();
 		Set<Long> consumerNos = consumers.keySet();
 		for(Long cNo: consumerNos) {
-//			String cName = consumers.get(cNo).getName();
 			commonView.displayConsumerConnection(consumers.get(cNo));
 		}
 		
