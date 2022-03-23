@@ -4,24 +4,20 @@ package admin_operations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
+
 import bill.Payment;
-import bill_calculation_operations.AllUnitsCalculation;
-import bill_calculation_operations.DiffrentUnitCalculation;
-import bill_calculation_operations.DomesticBillCalculations;
-import bill_calculation_operations.ICalculateBill;
 import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
-import eb.ChangeOfConnectionRequest;
 import eb.ElectricityBoard;
-import eb.NewConnectionRequest;
+import eb.RequestObj;
 import eb.RequestStatus;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
-	ICalculateBill calculateBill = null;
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
@@ -41,8 +37,8 @@ public class AdminOperations implements IAdminOperations{
 		}
 	
 	private boolean setPendingPayment(double readings, Connection conn) {
-		calculateBill = getBillCaulationObj(conn);
-		double payableAmount = calculateBill.calculteBillAmount(readings,conn.getConnectionType());
+		double payableAmount = conn.getConnectionType().getObj().calculateBill(readings);
+
 		if(payableAmount > 0) {
 			Payment payment = new Payment(payableAmount, readings); 
 			conn.setPendingPayments(payment);
@@ -50,30 +46,7 @@ public class AdminOperations implements IAdminOperations{
 		}
 		return true;
 	}
-
-	private ICalculateBill getBillCaulationObj(Connection conn) {
-		ICalculateBill billCalculate = null;
-		switch (conn.getConnectionType()) {
-		case Domestic: billCalculate = new DomesticBillCalculations();
-			break;
-		case PowerLooms:
-		case CottageAndTinyIndustries:
-		case PublicWorkshop:
-		case LtCommercial:
-			billCalculate = new DiffrentUnitCalculation();
-			break;
-		case PrivateHostpitalInstitution:
-		case GovnAidedPlaces:
-		case PublicLightTown:
-		case TemporarySupply:
-		case PublicLightsVillageAndIndustrialmetro:
-			billCalculate = new AllUnitsCalculation();
-			break;
-		
-		}
-		return billCalculate;
-	}
-
+	
 	@Override
 	public Map<Long, List<Payment>> getNonPayers() {
 		Map<Long,List<Payment>> nonPayers = new TreeMap<Long,List<Payment>>();
@@ -132,19 +105,19 @@ public class AdminOperations implements IAdminOperations{
 		return conn;
 	}
 
-	@Override
-	public List<NewConnectionRequest> getNewConnectionRequests() {
-		List<NewConnectionRequest> requests = this.eb.getNewConnRequests();
-		return requests;
-	}
+//	@Override
+//	public List<NewConnectionRequest> getNewConnectionRequests() {
+//		List<NewConnectionRequest> requests = this.eb.getNewConnRequests();
+//		return requests;
+//	}
 
 	
 
-	@Override
-	public List<ChangeOfConnectionRequest> getConnectionChangeRequests() {
-		List<ChangeOfConnectionRequest> req = this.eb.getConnChangeRequests();
-		return req;
-	}
+//	@Override
+//	public List<ChangeOfConnectionRequest> getConnectionChangeRequests() {
+//		List<ChangeOfConnectionRequest> req = this.eb.getConnChangeRequests();
+//		return req;
+//	}
 
 	@Override
 	public String getUserNameFromConsumerNo(int consumerNo) {
@@ -158,18 +131,9 @@ public class AdminOperations implements IAdminOperations{
 		return this.eb.getConsumers();
 	}
 
-	@Override
-	public boolean updateNewConnectionStatus(NewConnectionRequest req, int index) {
-		req.setStatusNo();
-		if(req.getStatusNo() == RequestStatus.values().length - 1) {
-			this.eb.getNewConnRequests().remove(index);
-		}
-		return true;
-	}
 	
 	@Override
 	public boolean addNotification(long consumerNo, String status) {
-		System.out.println("add");
 		this.eb.getConsumers().get(consumerNo).setNotifications(status);
 		return true;
 	}
@@ -180,21 +144,69 @@ public class AdminOperations implements IAdminOperations{
 		 return true;
 		}
 
+//	@Override
+//	public boolean updateConnectionChangeStatus(ChangeOfConnectionRequest req, int index) {
+//		req.setStatusNo();
+//		if(req.getStatusNo() == RequestStatus.values().length-1) {
+//			this.eb.getConnChangeRequests().remove(index);
+//		}
+//		return true;
+//	}
+
+//	@Override
+//	public boolean removeRequest(int reqIndex, String reqType) {
+//		if(reqType.equalsIgnoreCase("newConnection"))
+//			this.eb.getNewConnRequests().remove(reqIndex);
+//		else if(reqType.equalsIgnoreCase("changetype"))
+//			this.eb.getConnChangeRequests().remove(reqIndex);
+//		return true;
+//	}
+
 	@Override
-	public boolean updateConnectionChangeStatus(ChangeOfConnectionRequest req, int index) {
-		req.setStatusNo();
-		if(req.getStatusNo() == RequestStatus.values().length-1) {
-			this.eb.getConnChangeRequests().remove(index);
+	public List<RequestObj> getRequests(boolean isNewConnectionReq) {
+		Set<RequestObj> allRequests = this.eb.getRequests();
+		List<RequestObj> requests = new ArrayList<>();
+		//all new Connection requests
+		if(isNewConnectionReq) {
+			for(RequestObj r : allRequests) {
+				if(r.isNewConnectionReq()) {
+					requests.add(r);
+					System.out.println(r);
+				}
+					
+			}
 		}
-		return true;
+		//all change of type connections change requests
+		else {
+			for(RequestObj r : allRequests) {
+				if(!r.isNewConnectionReq())
+					requests.add(r);
+			}
+		}
+		return requests;
 	}
 
 	@Override
-	public boolean removeRequest(int reqIndex, String reqType) {
-		if(reqType.equalsIgnoreCase("newConnection"))
-			this.eb.getNewConnRequests().remove(reqIndex);
-		else if(reqType.equalsIgnoreCase("changetype"))
-			this.eb.getConnChangeRequests().remove(reqIndex);
-		return true;
+	public boolean updateStatus(RequestObj req) {
+		req.setStatusNo();
+		if(req.getStatusNo() == RequestStatus.values().length - 1) {
+			Set<RequestObj> requests = this.eb.getRequests();
+					requests.remove(req);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeRequest(RequestObj req) {
+		boolean isRemoved = this.eb.getRequests().remove(req);
+		return isRemoved;
+	}
+
+	@Override
+	public void setNotification(RequestObj req, String status) {
+		long consumerNo = req.getConsumerNo();
+		Consumer consumer = this.eb.getConsumers().get(consumerNo);
+		consumer.setNotifis(req, status);
+		req.setLastUpdatedTime();
 	}
 }

@@ -1,148 +1,116 @@
 package connection;
 
-import connection_obj.ConnectionObj;
 import connection_obj.*;
 
 public enum TypeOfConnection {
 	Domestic{
-		Domestic obj = new Domestic();
-
+		int freeUnits = 100;
+		DomesticConnection obj = new DomesticConnection(freeUnits);
+		
 		
 		@Override
-		public Domestic getObj() {
-			
+		public DomesticConnection getObj() {
 			return obj;
 		}
 	},
 	LtCommercial{
-		LtCommercial obj = new LtCommercial();
 		public double minUnits = 100;
 		public double chargesBelowMin = 5;
 		public double chargesAboveMin = 8.05;
 		
-		
-		public String getTarrif() {
-			String val = "less than "+minUnits+" "+chargesBelowMin+"\n"
-					+ "greater than "+minUnits+" "+chargesAboveMin;
-			return val;
-		}
+		SplitChargesConnection conObj = new SplitChargesConnection(minUnits, chargesBelowMin, chargesAboveMin);
 
 
 		@Override
-		public LtCommercial getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SplitChargesConnection getObj() {
+			return conObj;
 		}
 	},
 	PublicWorkshop{
-		PublicWorkshop obj = new PublicWorkshop();
 		public double minUnits = 120;
 		public double chargesBelowMin = 2.85;
 		public double chargesAboveMin = 5.75;
 		
-		public String getTarrif() {
-			String val = "less than "+minUnits+" "+chargesBelowMin+"\n"
-					+ "greater than "+minUnits+" "+chargesAboveMin;
-			return val;
-		}
-
+		SplitChargesConnection conObj = new SplitChargesConnection(minUnits, chargesBelowMin, chargesAboveMin);
+		
+		
 		@Override
-		public PublicWorkshop getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SplitChargesConnection getObj() {
+			return conObj;
 		}
 	},
 	CottageAndTinyIndustries{
-		CottageAndTinyIndustries obj = new CottageAndTinyIndustries();
 		public double minUnits = 500;
 		public double chargesBelowMin = 4;
 		public double chargesAboveMin = 4.6;
 		
-		public String getTarrif() {
-			String val = "less than "+minUnits+" units"+chargesBelowMin+"\n"
-					+ "greater than "+minUnits+" units"+chargesAboveMin;
-			return val;
-		}
+		SplitChargesConnection conObj = new SplitChargesConnection(minUnits, chargesBelowMin, chargesAboveMin);
 
 		@Override
-		public CottageAndTinyIndustries getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SplitChargesConnection getObj() {
+			return conObj;
 		}
 	},
 	PowerLooms {
-		PowerLooms obj = new PowerLooms();
+		public int minUnits = 1000;
+		public double chargesBelowMin = 2.3;
+		public double chargesAboveMin = 4.6;
+		
+		SplitChargesConnection conObj = new SplitChargesConnection(minUnits, chargesBelowMin, chargesAboveMin);
 
 		@Override
-		public PowerLooms getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SplitChargesConnection getObj() {
+			return conObj;
 		}
 	},
 	PublicLightsVillageAndIndustrialmetro{
-		PublicLightsVillageAndIndustrialmetro obj = new PublicLightsVillageAndIndustrialmetro();
 		public double charges = 6.35;
-		public String getTarrif() {
-			String val = "All units  "+charges;
-			return val;
-		}
+		
+		SameChargesConnection conObj = new SameChargesConnection(charges);
+		
 		@Override
-		public PublicLightsVillageAndIndustrialmetro getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SameChargesConnection getObj() {
+			return conObj;
 		}
 	},//same
 	TemporarySupply{
-		TemporarySupply obj = new TemporarySupply();
 		public double charges = 12;
-		public String getTarrif() {
-			String val = "All units  "+charges;
-			return val;
-		}
+		
+		SameChargesConnection conObj = new SameChargesConnection(charges);
+
 		@Override
-		public TemporarySupply getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SameChargesConnection getObj() {
+			return conObj;
 		}
 	},//same
 	PublicLightTown{
-		PublicLightTown obj = new PublicLightTown();
 		public double charges = 6.35;
-		public String getTarrif() {
-			String val = "All units  "+charges;
-			return val;
-		}
+		
+		SameChargesConnection conObj = new SameChargesConnection(charges);
+
 		@Override
-		public PublicLightTown getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SameChargesConnection getObj() {
+			return conObj;
 		}
 	},//same
 	GovnAidedPlaces{
-		GovnAidedPlaces obj = new GovnAidedPlaces();
 		public double charges = 5.75;
-//		public ConnectionObj obj = new LtCommercial();
-		public String getTarrif() {
-			String val = "All units  "+charges;
-			return val;
-		}
+
+		SameChargesConnection conObj = new SameChargesConnection(charges);
+
 		@Override
-		public GovnAidedPlaces getObj() {
-			// TODO Auto-generated method stub
-			return obj;
+		public SameChargesConnection getObj() {
+			return conObj;
 		}
 	},//same
 	PrivateHostpitalInstitution{
-		PrivateHostpitalInstitution obj = new PrivateHostpitalInstitution();
 		public double charges = 7.5;
-		public String getTarrif() {
-			String val = "All units  "+charges;
-			return val;
-		}
+		
+		SameChargesConnection conObj = new SameChargesConnection(charges);
+
 		@Override
-		public PrivateHostpitalInstitution getObj() {
-			
-			return obj;
+		public SameChargesConnection getObj() {
+			return conObj;
 		}
 	};//same
 	

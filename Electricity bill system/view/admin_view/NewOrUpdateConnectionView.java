@@ -9,9 +9,8 @@ import common_operations.ICommonOperations;
 import common_view.CommonView;
 import connection.Connection;
 import connection.TypeOfConnection;
-import eb.ChangeOfConnectionRequest;
 import eb.ElectricityBoard;
-import eb.NewConnectionRequest;
+import eb.RequestObj;
 import eb.RequestStatus;
 import validator_encrypter.Validator;
 
@@ -62,155 +61,130 @@ public class NewOrUpdateConnectionView {
 	//is requested by consumer in online
 	private void viewAndApproveNewConnection() {
 		boolean loop = true;
-		boolean display = true;
+		boolean isNewConnRequest = true;
 		while(loop) {
-			List<NewConnectionRequest> requests = operations.getNewConnectionRequests();
+			List<RequestObj> requests = operations.getRequests(isNewConnRequest);
 			if(requests.size() == 0) {
-				//This will display on first iteration only
-				if(display)
-					commonView.displayMessege("No requests available");
-				return;
+				System.out.println("No requests in the queue");
+				break;
 			}
-			//get request option
-			int opt = getRequestOption(requests);
-			
-			if(opt == -1) {
-				commonView.displayMessege("No options selected going back to previous menu");
-				loop = false;
-			}
-			else if(opt > requests.size() || opt < 0) {
-				commonView.displayMessege("Enter correct option");
-			}
-			else{
-				display = false;
+			RequestObj request = getRequestObjectFromAdmin(requests, isNewConnRequest);
+			if(request != null) {
 				System.out.println("Enter 1->For approval and move forward\n"
 						+ "Any other number for non approval");
 				int approvalOpt = commonView.getInt();
-				NewConnectionRequest req = requests.get(opt-1);
-				long consumerNo = req.getConsumerNo();
+				
+				long consumerNo = request.getConsumerNo();
 				String status = null;
 				if(approvalOpt == 1) {
-					//updating status
-					operations.updateNewConnectionStatus(req, opt-1);
-					status = RequestStatus.values()[req.getStatusNo()].displayName();
+					//updating status numbers
+					operations.updateStatus(request);
+					status = RequestStatus.values()[request.getStatusNo()].displayName();
 					commonView.displayMessege("Moved to "+status+" status");
-					status += "  request number( "+req.getRequestNo()+" )";
-					//last status
-					if(req.getStatusNo() != RequestStatus.values().length-1) {
-						//first approval
-						if(req.getStatusNo() == 1)
-							operations.addNotification(consumerNo,status );
-						else
-							operations.updateNotification(consumerNo, opt-1,status,"newConnection");
-					}
-					else if(req.getStatusNo() == RequestStatus.values().length-1) {
-						String connAddress = req.getAddress();
-						TypeOfConnection connType = req.getConnType();
-						Connection con = operations.createConnectionForExistingConsumer(consumerNo,connAddress,connType);
+					status += "  request number( "+request.getRequestNo()+" )";
+					if(request.getStatusNo() == RequestStatus.values().length-1) {
+						Connection con = operations.createConnectionForExistingConsumer(consumerNo,request.getAddress(),request.getConnType());
 						if(con != null) {
 							status += " And your connection number is "+con.getServiceNo();
 						}
-						operations.updateNotification(consumerNo,opt-1, status, "newConnection");
 					}
+					operations.setNotification(request, status);
 				}
 				else {
-					String msg = "New connection request has been not approved for request no "+req.getRequestNo();
+					String msg = "New connection request has been not approved for request no "+request.getRequestNo();
 					commonView.displayMessege(msg);
-					operations.addNotification(consumerNo,status);
-					operations.removeRequest(opt-1, "newConnection");
+					operations.setNotification(request, status);
+					//remove request from admin
+					operations.removeRequest(request);
 				}
-			}
-		}
-	}
-	
-	private int getRequestOption(List<NewConnectionRequest> requests) {
-		System.out.println("Select the request number for approval or not approving\n"
-				+ "(-1) for not selecting anything");
-		int i=1;
-		for(NewConnectionRequest request: requests) {
-			System.out.println("-----------------------");
-			System.out.println("Sno :- "+(i++)+"\n"+request);
-			System.out.println("-----------------------");
-		}
-		int opt = commonView.getInt();
-		return opt;
-	}
-
-	//view requests for change type connection which 
-	//is requested by consumer in online
-	private void viewAndChangetype() {
-		boolean loop = true;
-		boolean display = true;
-		while(loop) {
-			List<ChangeOfConnectionRequest> requests = operations.getConnectionChangeRequests();
-			if(requests.size() == 0) {
-				if(display)
-					commonView.displayMessege("No requests available");
-				return;
-			}
-			int opt = getConnectionRequestOpt(requests);
-			
-			if(opt == -1) {
-				commonView.displayMessege("No options selected");
+			}						
+			if(!stillAcceptRequest()) 
 				loop = false;
 			}
-			else if(opt > requests.size() || opt < 0) {
-				commonView.displayMessege("Enter correct option");
+	}
+	
+	private void viewAndChangetype() {
+		boolean loop = true;
+		boolean isNewConnRequest = false;
+		while(loop) {
+			List<RequestObj> requests = operations.getRequests(isNewConnRequest);
+			if(requests.size() == 0) {
+				System.out.println("No requests in the queue");
+				break;
 			}
-			else {
-				display = false;
+			RequestObj request = getRequestObjectFromAdmin(requests, isNewConnRequest);
+
+			if(request != null) {
 				System.out.println("Enter 1->For approval\n"
 						+ "Any other number for non approval");
 				int approvalOpt = commonView.getInt();
 				
-				ChangeOfConnectionRequest req = requests.get(opt-1);
-				long consumerNo = req.getConsumerNo(); 
 				String status = null;
 				if(approvalOpt == 1) {
-					operations.updateConnectionChangeStatus(req, opt-1);
-					status = RequestStatus.values()[req.getStatusNo()].displayName();
+					//update status number
+					operations.updateStatus(request);
+					status = RequestStatus.values()[request.getStatusNo()].displayName();
 					commonView.displayMessege("Moved to "+status+" status");
-					//last approval
-					status += " for request number "+req.getRequestNo();
-					if(req.getStatusNo() != RequestStatus.values().length-1) {
-						//first approval
-						if(req.getStatusNo() == 1)
-							operations.addNotification(consumerNo, status);
-						else
-							operations.updateNotification(consumerNo, opt-1,status,"newConnection");
-					}
-					else if(req.getStatusNo() == RequestStatus.values().length-1) {
-						TypeOfConnection conn = req.getConnType();
-						long connNo = req.getServiceNo();
+					status += " for request number "+request.getRequestNo();
+//						
+					if(request.getStatusNo() == RequestStatus.values().length-1) {
+						TypeOfConnection conn = request.getConnType();
+						long connNo = request.getServiceNo();
 						operations.changeConnectionType(conn,connNo);
-						
 						commonView.displayMessege(status+"\n"
 								+ "Changed type to "+conn);
-						operations.updateNotification(consumerNo,opt-1, status, "newConnection");
 					}
+					operations.setNotification(request, status);
 				}
 				else {
-					 String messege = "Change of connection has not approved  for request no "+req.getRequestNo();
+					 String messege = "Change of connection has not approved  for request no "+request.getRequestNo();
 					commonView.displayMessege(messege);
-					operations.addNotification(consumerNo,messege);
-					operations.removeRequest(opt-1, "changeType");
+					operations.setNotification(request, status);
+					operations.removeRequest(request);
 				}
 			}
-			
+			if(!stillAcceptRequest()) 
+				loop = false;
 		}
 	}
-	private int getConnectionRequestOpt(List<ChangeOfConnectionRequest> requests) {
-		System.out.println("Select the request number for approval \n"
-				+ "(-1) for not selecting anything");
-		int i=1;
-		for(ChangeOfConnectionRequest request: requests) {
-			System.out.println("-----------------------");
-			System.out.println("Sno :- "+(i++)+"."+request);
-			System.out.println("-----------------------");
+	private RequestObj getRequestObjectFromAdmin(List<RequestObj> requests, boolean isNewConnRequest) {
+		if(requests.size() == 0) {
+			commonView.displayMessege("No requests available");
+		return null;
 		}
+		int opt = getRequestOption(requests, isNewConnRequest);
+		if(opt == -1) {
+			commonView.displayMessege("No options selected going back to previous menu");
+		}
+		else if(opt > requests.size() || opt < 0) {
+			commonView.displayMessege("Enter correct option");
+			return null;
+		}
+		else {
+			return requests.get(opt-1);
+		}
+		return null;
+	}
+
+	private boolean stillAcceptRequest() {
+		commonView.displayMessege("Still you want to accept the request\n"
+				+ "1->YES\n"
+				+ "Enter any number for NO");
+		int opt = commonView.getInt();
+		if(opt != 1)
+			return false;
+		return true;
+	}
+
+	private int getRequestOption(List<RequestObj> requests, boolean isNewConnRequest) {
+		System.out.println("Select the request number for approval or not approving\n"
+				+ "(-1) for not selecting anything");
+		commonView.displayRequest(requests,isNewConnRequest);
 		int opt = commonView.getInt();
 		return opt;
 	}
+
+
 
 	//offline creation of connection
 	private void createNewConnection() {
@@ -303,7 +277,6 @@ public class NewOrUpdateConnectionView {
 	}
 	
 	private void changeConnectionType() {
-		boolean loop = true;
 		long connNo = commonView.getConnectionNo();
 		String connType= commonOperations.getConnectionType(connNo);
 		commonView.displayMessege("Current connection type is for service no"
@@ -316,5 +289,5 @@ public class NewOrUpdateConnectionView {
 		else {
 			commonView.displayMessege("Connection type "+connType+" has been updated for service no "+connNo);
 		}
-		}	
+	}
 }

@@ -20,9 +20,9 @@ public class CommonOperations implements ICommonOperations{
 	}
 	
 	@Override
-	public boolean checkUserNameAvailable(String user_name, String user) {
-		if(user.equalsIgnoreCase("consumer")) {
-			return eb.getConsumers().containsKey(user_name);
+	public boolean checkUserNameAvailable(String user_name, boolean isConsumer) {
+		if(isConsumer) {
+			return eb.getConsumerMapping().containsKey(user_name);
 		}
 		else {
 			return eb.getAdmins().containsKey(user_name);
@@ -38,14 +38,7 @@ public class CommonOperations implements ICommonOperations{
 			return this.eb.getConsumers().get(user_name).validatePassword(password);
 	}
 
-//	@Override
-//	public boolean isServiceNoValid(long connNo) {
-//		Connection conn = this.eb.getConnections().get(connNo);
-//		if(conn == null) {
-//			return false;
-//		}
-//		return true;
-//	}
+
 
 	@Override
 	public List<Payment> getAllPedingPayments(long connNo) {
@@ -89,11 +82,11 @@ public class CommonOperations implements ICommonOperations{
 		return connectionTypes;
 	}
 
-	@Override
-	public boolean checkIfUserNameIsCorrect(String user_name) {
-		boolean isValid = this.eb.getConsumerMapping().containsKey(user_name);
-		return isValid;
-	}
+//	@Override
+//	public boolean checkIfUserNameIsCorrect(String user_name) {
+//		boolean isValid = this.eb.getConsumerMapping().containsKey(user_name);
+//		return isValid;
+//	}
 	
 //	check if password follows all the standards
 //	@Override

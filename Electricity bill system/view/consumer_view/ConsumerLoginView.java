@@ -11,17 +11,14 @@ import connection.Connection;
 import connection.TypeOfConnection;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
-import eb.ChangeOfConnectionRequest;
 import eb.ElectricityBoard;
-import eb.NewConnectionRequest;
-import eb.RequestStatus;
+import eb.RequestObj;
 
 public class ConsumerLoginView {
 	IConsumerOperations operations = null;
 	ICommonOperations commonOperations = null;
 	
 	CommonView commonView = null;
-//	public String user_name = null;
 	public long consumerNo = 0;
 	
 	public ConsumerLoginView(ElectricityBoard eb) {
@@ -35,7 +32,6 @@ public class ConsumerLoginView {
 		boolean isAdmin = false;
 		this.consumerNo = consumerNo;
 			askToViewNotifications();
-//		this.user_name = user_name;
 		boolean loop = true;
 		while(loop) {
 			commonView.displayMessege("Enter option \n"
@@ -90,7 +86,8 @@ public class ConsumerLoginView {
 	}
 
 	private void viewNotifications() {
-		List<String> notifications = operations.getNotification(this.consumerNo);
+//		List<String> notifications = operations.getNotification(this.consumerNo);
+		List<String> notifications = operations.getNotification2(this.consumerNo);
 		if(notifications.size() == 0) {
 			commonView.displayMessege("No notifications to display");
 		}
@@ -135,12 +132,12 @@ public class ConsumerLoginView {
 		if(serviceNo != -1) {
 			System.out.println("Select connection type");
 			TypeOfConnection connType = commonView.selectTypeOfConnection();
-			ChangeOfConnectionRequest requestObj = operations.changeOfConnectionRequest(this.consumerNo,serviceNo, connType);
-			if(requestObj != null) {
+			RequestObj request = operations.changeOfConnectionReq(this.consumerNo, serviceNo, connType);
+			if(request == null) {
 				commonView.displayMessege("Connection is already of type "+connType);
 			}
 			else {
-				commonView.displayMessege("Change of connection for "+requestObj.getServiceNo()+" has been requested successfully and request number is "+requestObj.getRequestNo());
+				commonView.displayMessege("Change of connection for "+request.getServiceNo()+" has been requested successfully and request number is "+request.getRequestNo());
 			}
 		}
 	}
@@ -151,9 +148,13 @@ public class ConsumerLoginView {
 		System.out.println("Select type of connection");
 		TypeOfConnection conType = commonView.selectTypeOfConnection();
 		
-		NewConnectionRequest request = operations.newConnectionRequest(this.consumerNo, address, conType);
-//		String status = RequestStatus.values()[request.getStatusNo()].displayName(); 
-		commonView.displayMessege("Request has been sent and request Number is "+request.getRequestNo());
+		RequestObj reqObj = operations.newConnectionReq(this.consumerNo, address, conType);
+		if(reqObj != null) {
+			commonView.displayMessege("Request has been sent and request Number is "+reqObj.getRequestNo());
+		}
+		else {
+			commonView.displayMessege("Request failed");
+		}
 	}
 
 	public void payBill(boolean isAdmin) {

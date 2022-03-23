@@ -19,6 +19,7 @@ public class ConsumerView {
 	IConsumerOperations operations = null;
 	ICommonOperations commonOperations = null;
 	
+	boolean isConsumer = true;
 	public ConsumerView(ElectricityBoard eb) {
 		this.commonView = new CommonView(eb);
 		this.loginView = new ConsumerLoginView(eb);
@@ -91,7 +92,7 @@ public class ConsumerView {
 			loop = false;
 			System.out.println("Enter user name");
 			user_name = commonView.getString();
-			boolean isValidUserName = commonOperations.checkIfUserNameIsCorrect(user_name);
+			boolean isValidUserName = commonOperations.checkUserNameAvailable(user_name, isConsumer);
 			if(!isValidUserName) {
 				if(chances >= 2) {
 					commonView.displayMessege("Maximum chances has been give please try after sometime");
@@ -176,8 +177,7 @@ public class ConsumerView {
 			loop = false;
 			System.out.println("Enter user name to set");
 			user_name = commonView.getString();
-			System.out.println("user name :- "+user_name);
-			boolean isUserTaken = commonOperations.checkIfUserNameIsCorrect(user_name);
+			boolean isUserTaken = commonOperations.checkUserNameAvailable(user_name,isConsumer);
 			if(isUserTaken) {
 				
 				if(chances >= validate.getMaxChance()) {
@@ -189,7 +189,6 @@ public class ConsumerView {
 				chances++;
 			}
 		}
-		System.out.println("user name :- "+user_name);
 		return user_name;
 	}
 	

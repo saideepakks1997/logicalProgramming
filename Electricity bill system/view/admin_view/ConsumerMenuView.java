@@ -1,9 +1,6 @@
 package admin_view;
 
-import common_operations.CommonOperations;
-import common_operations.ICommonOperations;
 import common_view.CommonView;
-import consumer_operations.IConsumerOperations;
 import consumer_view.ConsumerLoginView;
 
 import eb.ElectricityBoard;

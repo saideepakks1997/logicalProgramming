@@ -9,11 +9,10 @@ import payment_options.AdminPaymentOptions;
 import payment_options.ConsumerPaymentOptions;
 
 public interface ICommonOperations {
-	public boolean checkUserNameAvailable(String user_name, String userType);
+	public boolean checkUserNameAvailable(String user_name, boolean isConsumer);
 
 	public boolean validatePassword(String user_name,String password, String userType);
 
-//	public boolean isServiceNoValid(long connNo);
 
 	public List<Payment> getAllPedingPayments(long connNo);
 
@@ -23,7 +22,7 @@ public interface ICommonOperations {
 
 	public List<TypeOfConnection> getAllConnectionTypes();
 
-	public boolean checkIfUserNameIsCorrect(String user_name);
+//	public boolean checkIfUserNameIsCorrect(String user_name);
 
 //	List<String> checkIfPasswordIsValid(String password);
 

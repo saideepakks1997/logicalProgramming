@@ -1,8 +1,6 @@
 package common_view;
 
-import java.beans.Customizer;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +13,8 @@ import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
 import eb.ElectricityBoard;
+import eb.RequestObj;
+import eb.RequestStatus;
 import payment_options.AdminPaymentOptions;
 import payment_options.ConsumerPaymentOptions;
 import validator_encrypter.Validator;
@@ -137,7 +137,6 @@ public class CommonView {
 		return connNo;
 	}
 	public void payBill(boolean isAdmin) {
-		boolean loop = true;
 		long connNo = getConnectionNo();
 		viewAndPayAllPendingPayments(connNo,isAdmin);
 	}
@@ -178,7 +177,6 @@ public class CommonView {
 				System.out.println("Enter option to accept the payment \n"
 						+ "enter (-1) to exit without paying");
 				System.out.println("----------------------");
-				int i=1;
 				displayPendingPayment(pendingPayments);
 				int opt = getInt();
 				
@@ -281,5 +279,34 @@ public class CommonView {
 			System.out.println();
 		}
 		System.out.println("--------------------------------------------------");
+	}
+
+	public void displayRequest(List<RequestObj> requests, boolean isNewConnRequest) {
+		int i = 1;
+		if(isNewConnRequest) {
+			for(RequestObj req : requests) {
+				System.out.println("------------------------------");
+				System.out.println("S.NO"+(i++));
+				System.out.println(
+						"ConsumerNo :- "+req.getConsumerNo()+"\n"
+								+ "Address :- "+req.getAddress()+"\n"
+								+ "Type of connection requested :- "+req.getConnType()+"\n"
+								+ "Request Status :- "+RequestStatus.values()[req.getStatusNo()].displayName()
+						);
+				System.out.println("------------------------------");
+			}
+		}
+		else {
+			for(RequestObj req : requests) {
+				System.out.println("------------------------------");
+				System.out.println("S.NO :- "+(i++));
+				System.out.println(
+						"ConsumerNo :- "+req.getConsumerNo()+"\n"
+								+ "Type of connection requested for change:- "+req.getConnType()+"\n"
+								+ "Request Status :- "+RequestStatus.values()[req.getStatusNo()].displayName()
+						);
+				System.out.println("------------------------------");
+			}
+		}
 	}
 }

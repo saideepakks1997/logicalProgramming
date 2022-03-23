@@ -4,18 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
+import javax.swing.text.GapContent;
+
+import comparator.RequestObjComparator;
 import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Admin;
 import consumer.Consumer;
+import file_paths.GetSeriesNo;
 
 public class ElectricityBoard {
-	private long billNoSeries = 11111111l;
-	private long connNoSeries = 22222l;
-	private long consumerNoSeries = 1;
-	private long requestNoSeries = 1;
+	GetSeriesNo getSeries = new GetSeriesNo();
+	
+	private long billNoSeries;
+	private long connNoSeries;
+	private long consumerNoSeries;
+	private long requestNoSeries;
 	
 	//user_name and Consumer
 	private Map<Long, Consumer> consumers = new TreeMap<Long, Consumer>();
@@ -25,8 +33,9 @@ public class ElectricityBoard {
 	
 	private Map<Long,Connection> connections = new HashMap<Long, Connection>();
 	
-	private List<NewConnectionRequest> newConnRequests = new ArrayList<NewConnectionRequest>();
-	private List<ChangeOfConnectionRequest> connChangeRequests = new ArrayList<ChangeOfConnectionRequest>();
+	private Set<RequestObj> requests = new TreeSet<>(new RequestObjComparator());
+//	private List<NewConnectionRequest> newConnRequests = new ArrayList<NewConnectionRequest>();
+//	private List<ChangeOfConnectionRequest> connChangeRequests = new ArrayList<ChangeOfConnectionRequest>();
 	
 	public ElectricityBoard() {
 		Admin admin1 = new Admin("admin1", "admin1");
@@ -71,36 +80,36 @@ public class ElectricityBoard {
 	}
 
 	public long getBillNoSeries() {
-		return billNoSeries++;
+		return getSeries.getSeries("billNoSeriess");
 	}
 	
 	public long getConnNoSeries() {
-		return connNoSeries++;
+		return getSeries.getSeries("connNoSeries");
 	}
 
 	public long getConsumerNoSeries() {
-		return this.consumerNoSeries++;
+		return getSeries.getSeries("consumerNoSeries");
 	}
 	
 	public long getRequestNoSeries() {
-		return requestNoSeries++;
+		return getSeries.getSeries("requestNoSeries");
 	}
 
-	public List<NewConnectionRequest> getNewConnRequests() {
-		return newConnRequests;
-	}
+//	public List<NewConnectionRequest> getNewConnRequests() {
+//		return newConnRequests;
+//	}
+//
+//	public void setNewConnRequests(NewConnectionRequest newConnRequest) {
+//		this.newConnRequests.add(newConnRequest);
+//	}
 
-	public void setNewConnRequests(NewConnectionRequest newConnRequest) {
-		this.newConnRequests.add(newConnRequest);
-	}
-
-	public List<ChangeOfConnectionRequest> getConnChangeRequests() {
-		return connChangeRequests;
-	}
-
-	public void setConnChangeRequests(ChangeOfConnectionRequest connChangeRequest) {
-		this.connChangeRequests.add(connChangeRequest);
-	}
+//	public List<ChangeOfConnectionRequest> getConnChangeRequests() {
+//		return connChangeRequests;
+//	}
+//
+//	public void setConnChangeRequests(ChangeOfConnectionRequest connChangeRequest) {
+//		this.connChangeRequests.add(connChangeRequest);
+//	}
 
 	public Map<String, Long> getConsumerMapping() {
 		return consumerMapping;
@@ -110,8 +119,11 @@ public class ElectricityBoard {
 		this.consumerMapping.put(consumer.getUser_name(), consumer.getConsumerNO());
 	}
 
-	
+	public Set<RequestObj> getRequests() {
+		return requests;
+	}
 
-	
-
+	public void setRequests(RequestObj request) {
+		this.requests.add(request);
+	}
 }

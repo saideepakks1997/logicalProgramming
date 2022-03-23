@@ -1,6 +1,6 @@
 package consumer;
 
-public class Admin extends User implements ICredentials   {
+public class Admin extends User    {
 	private String user_name ;
 	private String password;
 	public Admin(String user_name, String password) {
@@ -8,15 +8,15 @@ public class Admin extends User implements ICredentials   {
 		this.setPassword(password);
 	}
 
-	@Override
+	
 	public String getUser_name() {
 		return user_name;
 	}
-	@Override
+	
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
 	}
-	@Override
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}

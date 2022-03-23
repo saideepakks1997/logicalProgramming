@@ -44,6 +44,7 @@ public class MainView {
 		}
 	}
 	private boolean login() {
+		boolean isConsumer = false;
 		boolean loop = true;
 		String user_name = null;
 		int chances = 0;
@@ -51,7 +52,7 @@ public class MainView {
 			loop = false;
 			System.out.println("Enter user name for logging in");
 			user_name = commonView.getString();
-			if(!operations.checkUserNameAvailable(user_name, "admin")) {
+			if(!operations.checkUserNameAvailable(user_name, isConsumer )) {
 				if(chances >= 2) {
 					loop = false;
 					commonView.displayMessege("Chances over please try after sometime");
