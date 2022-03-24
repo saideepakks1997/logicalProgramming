@@ -77,10 +77,5 @@ public class GetSeriesNo {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-			
-			
-		
 	}
 }

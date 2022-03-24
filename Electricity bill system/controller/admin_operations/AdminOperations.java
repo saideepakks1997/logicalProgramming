@@ -66,14 +66,13 @@ public class AdminOperations implements IAdminOperations{
 	@Override
 	public boolean changeConnectionType(TypeOfConnection connectionType, long connNo) {
 		TypeOfConnection prevConnType = this.eb.getConnections().get(connNo).getConnectionType();
-		if(prevConnType == connectionType) {
+		if(prevConnType == connectionType) { 
+			
 			return false;
-//					"The connection type is already "+connectionType;
 		}
 		else {
 			this.eb.getConnections().get(connNo).setConnectionType(connectionType);
 			return true;
-//					"Connection type "+connectionType+" has been updated for service no "+connNo;
 		}
 	}
 
@@ -89,8 +88,6 @@ public class AdminOperations implements IAdminOperations{
 		this.eb.getConsumers().get(consumer.getConsumerNO()).setConnection(conn);
 		
 		return conn;
-//				"Connection has been created successfully service number is "+serviceNo+""
-//				+ " and consumer no is "+consumer.getConsumerNO();
 	}
 
 	@Override
@@ -105,62 +102,11 @@ public class AdminOperations implements IAdminOperations{
 		return conn;
 	}
 
-//	@Override
-//	public List<NewConnectionRequest> getNewConnectionRequests() {
-//		List<NewConnectionRequest> requests = this.eb.getNewConnRequests();
-//		return requests;
-//	}
-
-	
-
-//	@Override
-//	public List<ChangeOfConnectionRequest> getConnectionChangeRequests() {
-//		List<ChangeOfConnectionRequest> req = this.eb.getConnChangeRequests();
-//		return req;
-//	}
-
-	@Override
-	public String getUserNameFromConsumerNo(int consumerNo) {
-		String user_name = this.eb.getConsumers().get(consumerNo).getUser_name();
-		System.out.println("user_name in admine operations "+this.eb.getConsumers().get(consumerNo));
-		return user_name;
-	}
 
 	@Override
 	public Map<Long, Consumer> getAllConsumers() {
 		return this.eb.getConsumers();
 	}
-
-	
-	@Override
-	public boolean addNotification(long consumerNo, String status) {
-		this.eb.getConsumers().get(consumerNo).setNotifications(status);
-		return true;
-	}
-	
-	@Override
-	public boolean updateNotification(long consumerNo, int i, String status, String string) {
-		 this.eb.getConsumers().get(consumerNo).getNotifications().set(i,status);
-		 return true;
-		}
-
-//	@Override
-//	public boolean updateConnectionChangeStatus(ChangeOfConnectionRequest req, int index) {
-//		req.setStatusNo();
-//		if(req.getStatusNo() == RequestStatus.values().length-1) {
-//			this.eb.getConnChangeRequests().remove(index);
-//		}
-//		return true;
-//	}
-
-//	@Override
-//	public boolean removeRequest(int reqIndex, String reqType) {
-//		if(reqType.equalsIgnoreCase("newConnection"))
-//			this.eb.getNewConnRequests().remove(reqIndex);
-//		else if(reqType.equalsIgnoreCase("changetype"))
-//			this.eb.getConnChangeRequests().remove(reqIndex);
-//		return true;
-//	}
 
 	@Override
 	public List<RequestObj> getRequests(boolean isNewConnectionReq) {

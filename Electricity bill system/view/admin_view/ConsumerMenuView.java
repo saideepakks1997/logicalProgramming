@@ -9,6 +9,7 @@ public class ConsumerMenuView {
 	CommonView commonView = null;
 	ConsumerLoginView consumerView = null;
 	String user_name = null;
+	boolean isAdmin = true;
 	public ConsumerMenuView(ElectricityBoard eb) {
 		this.commonView = new CommonView(eb);
 		this.consumerView = new ConsumerLoginView(eb);
@@ -16,7 +17,7 @@ public class ConsumerMenuView {
 
 	public void askOptions(int consumerNo) {
 		boolean loop = true;
-		boolean isAdmin = true;
+		
 		this.consumerView.consumerNo = consumerNo;
 		while(loop) {
 			commonView.displayMessege("Enter option \n"
@@ -30,7 +31,7 @@ public class ConsumerMenuView {
 			switch (opt) {
 			case 1: consumerView.viewConnectionDetails();
 				break;
-			case 2: consumerView.payBill(isAdmin);
+			case 2: payBill();
 				break;
 			case 3: consumerView.viewPendingTransactions();
 				break;
@@ -44,7 +45,12 @@ public class ConsumerMenuView {
 			}
 		}
 		
-		
 	}
+	void payBill() {
+		long serviceNo = consumerView.selectConnectionNo();
+		if(serviceNo != -1)
+			commonView.viewAndPayAllPendingPayments(serviceNo, isAdmin);
+	}
+	
 
 }

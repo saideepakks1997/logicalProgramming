@@ -13,6 +13,7 @@ import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
 import eb.RequestObj;
+import validator_encrypter.Validator;
 
 public class ConsumerLoginView {
 	IConsumerOperations operations = null;
@@ -20,7 +21,7 @@ public class ConsumerLoginView {
 	
 	CommonView commonView = null;
 	public long consumerNo = 0;
-	
+	Validator validate = new Validator();
 	public ConsumerLoginView(ElectricityBoard eb) {
 		this.operations = new ConsumerOperations(eb);
 		this.commonOperations = new CommonOperations(eb);
@@ -47,7 +48,7 @@ public class ConsumerLoginView {
 			switch (opt) {
 			case 1: viewConnectionDetails();
 				break;
-			case 2: payBill(isAdmin);
+			case 2: commonView.payBill(isAdmin);
 				break;
 			case 3: requestForNewConnection();
 				break;
@@ -86,8 +87,7 @@ public class ConsumerLoginView {
 	}
 
 	private void viewNotifications() {
-//		List<String> notifications = operations.getNotification(this.consumerNo);
-		List<String> notifications = operations.getNotification2(this.consumerNo);
+		List<String> notifications = operations.getNotification(this.consumerNo);
 		if(notifications.size() == 0) {
 			commonView.displayMessege("No notifications to display");
 		}
@@ -99,32 +99,35 @@ public class ConsumerLoginView {
 			}
 			System.out.println("---------------------");
 		}
-		
-		
 	}
 
 	public void viewPendingTransactions() {
 		long serviceNo = selectConnectionNo();
-		List<Payment> pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
-		if(pendingPayments == null) {
-			commonView.displayMessege("No pending amount");
-		}
-		else {
-			commonView.displayPendingPayment(pendingPayments);
+		if(serviceNo != -1) {
+			List<Payment> pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
+			if(pendingPayments == null) {
+				commonView.displayMessege("No pending amount");
+			}
+			else {
+				commonView.displayPendingPayment(pendingPayments);
+			}
 		}
 	}
 
 	public void viewAllBills() {
 		long serviceNo = selectConnectionNo();
-		List<Bill> bills = commonOperations.getBills(serviceNo);
-		if(bills.size() == 0) {
-			commonView.displayMessege("No transaction available");
-		}
-		else {
-			for(Bill bill: bills) {
-				commonView.displayBill(bill);
+		if(serviceNo != -1) {
+			List<Bill> bills = commonOperations.getBills(serviceNo);
+			if(bills.size() == 0) {
+				commonView.displayMessege("No transaction available");
+			}
+			else {
+				for(Bill bill: bills) {
+					commonView.displayBill(bill);
+				}
 			}
 		}
+		
 	}
 
 	private void requestForChangeOfConnection() {
@@ -132,12 +135,14 @@ public class ConsumerLoginView {
 		if(serviceNo != -1) {
 			System.out.println("Select connection type");
 			TypeOfConnection connType = commonView.selectTypeOfConnection();
-			RequestObj request = operations.changeOfConnectionReq(this.consumerNo, serviceNo, connType);
-			if(request == null) {
-				commonView.displayMessege("Connection is already of type "+connType);
-			}
-			else {
-				commonView.displayMessege("Change of connection for "+request.getServiceNo()+" has been requested successfully and request number is "+request.getRequestNo());
+			if(connType != null) {
+				RequestObj request = operations.changeOfConnectionReq(this.consumerNo, serviceNo, connType);
+				if(request == null) {
+					commonView.displayMessege("Connection is already of type "+connType);
+				}
+				else {
+					commonView.displayMessege("Change of connection for "+request.getServiceNo()+" has been requested successfully and request number is "+request.getRequestNo());
+				}
 			}
 		}
 	}
@@ -148,19 +153,16 @@ public class ConsumerLoginView {
 		System.out.println("Select type of connection");
 		TypeOfConnection conType = commonView.selectTypeOfConnection();
 		
-		RequestObj reqObj = operations.newConnectionReq(this.consumerNo, address, conType);
-		if(reqObj != null) {
-			commonView.displayMessege("Request has been sent and request Number is "+reqObj.getRequestNo());
+		if(conType != null) {
+			RequestObj reqObj = operations.newConnectionReq(this.consumerNo, address, conType);
+			if(reqObj != null) {
+				commonView.displayMessege("Request has been sent and request Number is "+reqObj.getRequestNo());
+			}
+			else {
+				commonView.displayMessege("Request failed");
+			}
 		}
-		else {
-			commonView.displayMessege("Request failed");
-		}
-	}
-
-	public void payBill(boolean isAdmin) {
-		long serviceNo = selectConnectionNo();
-		if(serviceNo != -1)
-			commonView.viewAndPayAllPendingPayments(serviceNo, isAdmin);
+		
 	}
 
 	public void viewConnectionDetails() {
@@ -168,8 +170,9 @@ public class ConsumerLoginView {
 		commonView.displayConnections(consumerConns);
 	}
 	
-	private long selectConnectionNo() {
+	public long selectConnectionNo() {
 		boolean loop = true;
+		int chances = 1;
 		while(loop) {
 			loop = false;
 			
@@ -178,13 +181,23 @@ public class ConsumerLoginView {
 				commonView.displayMessege("No connection found ");
 				return -1;
 			}
+			
 			System.out.println("Select connection to pay bill\n");
 			int i=1;
+			
 			for(Connection conn: conns) {
 				System.out.println((i++)+"."+conn.getServiceNo());
 			}
+			
 			int opt = commonView.getInt();
 			if(opt > conns.size()) {
+				System.out.println("Entering into max value");
+				if(chances >= validate.getMaxChance()) {
+					commonView.displayChancesMessege();
+					commonView.displayMessege("Going back to previous menu");
+					return -1;
+				}
+				chances++;
 				commonView.displayMessege("Enter correct option");
 				loop = true;
 			}

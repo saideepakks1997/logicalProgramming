@@ -123,7 +123,9 @@ public class AdminView {
 			boolean isValid = commonOperations.isValidCustomerNo(consumerNo);
 			if(!isValid) {
 				if(chances >= 2) {
-					commonView.displayMessege("Maximum chances given going back to previous menu");
+					commonView.displayChancesMessege();
+					commonView.displayMessege("going back to previous menu");
+					return;
 				}
 				commonView.displayMessege("Please enter valid consumer no");
 				loop = true;

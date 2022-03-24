@@ -110,7 +110,7 @@ public class ConsumerView {
 			loop = false;
 			System.out.println("Enter the password");
 			String password = commonView.getString();
-			boolean isValidLoginDetails = operations.checkConsumerCredentials(user_name, password);
+			boolean isValidLoginDetails = commonOperations.validatePassword(user_name, password, "consumer");
 			if(!isValidLoginDetails) {
 				if(chances >= 2) {
 					commonView.displayMessege("Maximum chances has been give please try after sometime");

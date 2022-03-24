@@ -18,16 +18,15 @@ import consumer.Consumer;
 import file_paths.GetSeriesNo;
 
 public class ElectricityBoard {
-	GetSeriesNo getSeries = new GetSeriesNo();
+//	GetSeriesNo getSeries = new GetSeriesNo();
 	
-	private long billNoSeries;
-	private long connNoSeries;
-	private long consumerNoSeries;
-	private long requestNoSeries;
+	private long billNoSeries = 111111;
+	private long connNoSeries = 22222;
+	private long consumerNoSeries = 1;
+	private long requestNoSeries= 1;
 	
-	//user_name and Consumer
+	//consumerNo and Consumer
 	private Map<Long, Consumer> consumers = new TreeMap<Long, Consumer>();
-//	private Map<String, Consumer>  consumerUserName = new HashMap<String, Consumer>();
 	private Map<String, Long> consumerMapping = new HashMap<String, Long>();
 	private Map<String, Admin> admins = new HashMap<String, Admin>();
 	
@@ -80,36 +79,24 @@ public class ElectricityBoard {
 	}
 
 	public long getBillNoSeries() {
-		return getSeries.getSeries("billNoSeriess");
+		return this.billNoSeries++;
+//				getSeries.getSeries("billNoSeriess");
 	}
 	
 	public long getConnNoSeries() {
-		return getSeries.getSeries("connNoSeries");
+		return this.connNoSeries++;
+//				getSeries.getSeries("connNoSeries");
 	}
 
 	public long getConsumerNoSeries() {
-		return getSeries.getSeries("consumerNoSeries");
+		return this.consumerNoSeries++;
+//				getSeries.getSeries("consumerNoSeries");
 	}
 	
 	public long getRequestNoSeries() {
-		return getSeries.getSeries("requestNoSeries");
+		return 	this.requestNoSeries++;
+//				getSeries.getSeries("requestNoSeries");
 	}
-
-//	public List<NewConnectionRequest> getNewConnRequests() {
-//		return newConnRequests;
-//	}
-//
-//	public void setNewConnRequests(NewConnectionRequest newConnRequest) {
-//		this.newConnRequests.add(newConnRequest);
-//	}
-
-//	public List<ChangeOfConnectionRequest> getConnChangeRequests() {
-//		return connChangeRequests;
-//	}
-//
-//	public void setConnChangeRequests(ChangeOfConnectionRequest connChangeRequest) {
-//		this.connChangeRequests.add(connChangeRequest);
-//	}
 
 	public Map<String, Long> getConsumerMapping() {
 		return consumerMapping;

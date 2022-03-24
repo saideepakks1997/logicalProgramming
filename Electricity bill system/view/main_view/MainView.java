@@ -1,16 +1,20 @@
 package main_view;
 
+
 import admin_view.AdminView;
 import common_operations.CommonOperations;
 import common_operations.ICommonOperations;
 import common_view.CommonView;
 import consumer_view.ConsumerView;
 import eb.ElectricityBoard;
+import validator_encrypter.Validator;
 
 public class MainView {
 	CommonView commonView = null;
 	AdminView adminView = null;
 	ConsumerView consumerView = null;
+	
+	Validator validate = new Validator(); 
 	
 	ICommonOperations operations = null;
 	public MainView(ElectricityBoard eb) {
@@ -47,15 +51,15 @@ public class MainView {
 		boolean isConsumer = false;
 		boolean loop = true;
 		String user_name = null;
-		int chances = 0;
+		int chances = 1;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter user name for logging in");
 			user_name = commonView.getString();
 			if(!operations.checkUserNameAvailable(user_name, isConsumer )) {
-				if(chances >= 2) {
-					loop = false;
-					commonView.displayMessege("Chances over please try after sometime");
+				if(chances >= validate.getMaxChance()) {
+					commonView.displayChancesMessege();
+					commonView.displayMessege("Going back to previous menu");
 					return false;
 				}
 					
@@ -66,18 +70,19 @@ public class MainView {
 				}
 			}
 		}
-		chances = 0;
+		chances = 1;
 		loop = true;
 		while(loop) {
 			System.out.println("Enter password");
 			String password = commonView.getString();
 			boolean isValid = operations.validatePassword(user_name,password, "admin");
 			if(!isValid) {
-				if(chances >= 2) {
-					loop = false;
-					commonView.displayMessege("Chances over please try after sometime");
+				if(chances >= validate.getMaxChance()) {
+					commonView.displayChancesMessege();
+					commonView.displayMessege("Going back to previous menu");
 					return false;
 				}
+				chances++;
 				commonView.displayMessege("please enter correct password");
 			}
 			else {

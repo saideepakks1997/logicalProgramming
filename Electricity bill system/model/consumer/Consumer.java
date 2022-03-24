@@ -20,8 +20,6 @@ public class Consumer extends User {
 	
 	private List<Connection> connections = new ArrayList<Connection>();
 	
-	private List<String> notifications = new ArrayList<String>();
-	
 	private Map<RequestObj, String> notifis = new TreeMap<RequestObj, String>(new RequestObjectDescendingComp()); 
 	
 	public Consumer(long consumerNo, String name, String email, long phoNo,String address) {
@@ -49,14 +47,7 @@ public class Consumer extends User {
 		this.connections.add(connection);
 	}
 
-	public List<String> getNotifications() {
-		return notifications;
-	}
 
-	public void setNotifications(String notification) {
-		this.notifications.add(notification);
-	}
-	
 	public String getUser_name() {
 		return user_name;
 	}

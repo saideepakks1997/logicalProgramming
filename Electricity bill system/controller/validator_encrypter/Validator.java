@@ -7,7 +7,8 @@ public class Validator {
 	
 	 private String PASSWORD_REGEX = 
 			"((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,15})";
-	 private String EMAIL_REGEX = "^(.+)@(.+)$";
+		private   String EMAIL_REGEX = 
+				"^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$" ;
 	 private int maxChancesForValidation = 3;
 				
 		public boolean validatePassword(String password) {

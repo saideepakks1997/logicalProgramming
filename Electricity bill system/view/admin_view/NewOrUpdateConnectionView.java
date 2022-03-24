@@ -209,6 +209,7 @@ public class NewOrUpdateConnectionView {
 	
 	
 	private void createConnectionForExistingConsumer() {
+		int chances = 1;
 		boolean loop = true;
 		int customerNo = 0;
 		while(loop) {
@@ -217,15 +218,29 @@ public class NewOrUpdateConnectionView {
 			customerNo = commonView.getInt();
 			boolean isValidCustomerId = commonOperations.isValidCustomerNo(customerNo);
 			if(!isValidCustomerId) {
+				if(chances >= validate.getMaxChance()) {
+					commonView.displayChancesMessege();
+					
+					commonView.displayMessege("Connection Creation failed \n"
+							+ "Going back to previous menu");
+					return;
+				}
+				chances++;
 				loop = true;
 				commonView.displayMessege("Please enter valid consumer no");
 				}
 		}
 		TypeOfConnection connType = commonView.selectTypeOfConnection();
-		System.out.println("Enter the connection address");
-		String connAddress = commonView.getString();
-		Connection conn = operations.createConnectionForExistingConsumer(customerNo,connAddress,connType);
-		commonView.displayMessege("Connection has been created successfully .Connection number is "+conn.getServiceNo());
+		if(connType != null) {
+			System.out.println("Enter the connection address");
+			String connAddress = commonView.getString();
+			Connection conn = operations.createConnectionForExistingConsumer(customerNo,connAddress,connType);
+			commonView.displayMessege("Connection has been created successfully .Connection number is "+conn.getServiceNo());
+		}
+		else {
+			commonView.displayMessege("Connection creation has been  Failed");
+		}
+		
 	}
 
 	private void createConnectionForNewConsumer() {
@@ -265,15 +280,20 @@ public class NewOrUpdateConnectionView {
 		String connAddress = commonView.getString();
 		
 		TypeOfConnection connType = commonView.selectTypeOfConnection();
-		Connection conn = operations.createConnectionForNewConsumer(name,emailId,phoNo,address,connAddress, connType);
-		if(conn != null) {
-			commonView.displayMessege("Connection has been created successfully service number is "+conn.getServiceNo()+""
-					+ " and consumer no is "+conn.getConsumer().getConsumerNO());
-			
+		if(connType != null) {
+			Connection conn = operations.createConnectionForNewConsumer(name,emailId,phoNo,address,connAddress, connType);
+			if(conn != null) {
+				commonView.displayMessege("Connection has been created successfully service number is "+conn.getServiceNo()+""
+						+ " and consumer no is "+conn.getConsumer().getConsumerNO());
+				}
+			else {
+				commonView.displayMessege("Connection creation failed");
+			}
 		}
 		else {
 			commonView.displayMessege("Connection creation failed");
 		}
+		
 	}
 	
 	private void changeConnectionType() {
@@ -282,12 +302,18 @@ public class NewOrUpdateConnectionView {
 		commonView.displayMessege("Current connection type is for service no"
 				+ " "+connNo+" is "+connType);
 		TypeOfConnection selectedconnType = commonView.selectTypeOfConnection();
-		boolean isChanged = operations.changeConnectionType(selectedconnType,connNo);
-		if(isChanged) {
-			commonView.displayMessege("The connection type is already "+connType);
+		if(selectedconnType != null) {
+			boolean isChanged = operations.changeConnectionType(selectedconnType,connNo);
+			if(!isChanged) {
+				commonView.displayMessege("The connection type is already "+connType);
+			}
+			else {
+				commonView.displayMessege("Connection type "+selectedconnType+" has been updated for service no "+connNo);
+			}
 		}
 		else {
-			commonView.displayMessege("Connection type "+connType+" has been updated for service no "+connNo);
+			commonView.displayMessege("Change of Connection failed");
 		}
+		
 	}
 }
