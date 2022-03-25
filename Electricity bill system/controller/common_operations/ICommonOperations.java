@@ -45,5 +45,7 @@ public interface ICommonOperations {
 	//List of all Consumer payment options
 	public List<ConsumerPaymentOptions> getConsumerPaymentOptions();
 
+	public void gerenateData();
+
 
 }

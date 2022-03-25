@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import connection.Connection;
+import connection.ConnectionFiles;
 import connection.TypeOfConnection;
 import consumer.Consumer;
+import consumer.ConsumerFiles;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 import validator_encrypter.Encryption;
@@ -14,8 +16,10 @@ import validator_encrypter.Encryption;
 public class ConsumerOperations implements IConsumerOperations{
 	ElectricityBoard eb = null;
 	Encryption encrypt = new Encryption();
+	ConsumerFiles consumerFile = null;
 	public ConsumerOperations(ElectricityBoard eb) {
 		this.eb = eb;
+		this.consumerFile = new ConsumerFiles(eb);
 	}
 	@Override
 	public boolean registerUser(long consumerNo, String user_name, String password) {
@@ -24,15 +28,17 @@ public class ConsumerOperations implements IConsumerOperations{
 		consumer.setUser_name(user_name);
 		consumer.setPassword(password);
 		
-		boolean isDone = consumer.setUserNamePassword(user_name, password);
-		
+//		boolean isDone = consumer.setUserNamePassword(user_name, password);
+		consumerFile.updateConusumer(consumer);
 		this.eb.setConsumerMapping(consumer);
-		return isDone;
+		
+		return true;
 	}
 
 	@Override
 	public List<Connection> getConsumerConnection(long consumerNo) {
-		List<Connection> connections = this.eb.getConsumers().get(consumerNo).getConnections();
+		List<Connection> connections = (List<Connection>) this.eb.getConsumers().get(consumerNo).getConnections().values(); 
+				
 		return connections;
 	}
 	
@@ -54,6 +60,7 @@ public class ConsumerOperations implements IConsumerOperations{
 		System.out.println("New connection reqs "+request);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
+		consumerFile.updateConusumer(consumer);
 		return request;
 	}
 	@Override
@@ -70,6 +77,7 @@ public class ConsumerOperations implements IConsumerOperations{
 		System.out.println(request);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
+		consumerFile.updateConusumer(consumer);
 		return request;
 	}
 	@Override

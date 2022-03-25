@@ -1,5 +1,6 @@
 package connection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +10,11 @@ import bill.Bill;
 import bill.Payment;
 import consumer.Consumer;
 
-public class Connection {
+public class Connection implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long serviceNo;
 	private TypeOfConnection connectionType;
 	private long currentUnit;
@@ -48,7 +53,9 @@ public class Connection {
 	}
 
 	public void setCurrentUnit(long currentUnit) {
+		System.out.println(currentUnit);
 		this.currentUnit = currentUnit;
+		System.out.println("setted"+this.currentUnit);
 	}
 
 

@@ -1,10 +1,15 @@
 package eb;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import connection.TypeOfConnection;
 
-public class RequestObj {
+public class RequestObj implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int statusNo;
 	private long requestNo;
 	private long consumerNo;
@@ -13,8 +18,9 @@ public class RequestObj {
 	private LocalDateTime requestedTime;
 	private LocalDateTime lastUpdatedTime;
 	private String address;
-	private boolean isNewConnectionReq;
-	
+	private boolean isNewConnectionReq;//new connection request or change of status request
+	//if rejected or accepted returns true if the status is in the middle returns false
+	private boolean isRequestCompleted;
 	//Request for new connection 
 	public RequestObj(long consumerNo, String address, TypeOfConnection connType,long requestNo) {
 		this.setConsumerNo(consumerNo);
@@ -24,7 +30,7 @@ public class RequestObj {
 		this.setRequestedTime(LocalDateTime.now());
 		this.setLastUpdatedTime();
 		this.setIsNewConnectionReq(true);
-		System.out.println("change of request Created");
+		this.setRequestCompleted(false);
 	}
 	//change of connection type
 	public RequestObj(long consumerNo,long serviceNo, TypeOfConnection connType,long requestNo) {
@@ -35,6 +41,7 @@ public class RequestObj {
 		this.setRequestedTime(LocalDateTime.now());
 		this.setLastUpdatedTime();
 		this.setIsNewConnectionReq(false);
+		this.setRequestCompleted(false);
 	}
 	
 	public int getStatusNo() {
@@ -90,5 +97,11 @@ public class RequestObj {
 	}
 	public void setIsNewConnectionReq(boolean isNewConnectionReq) {
 		this.isNewConnectionReq = isNewConnectionReq;
+	}
+	public boolean isRequestCompleted() {
+		return isRequestCompleted;
+	}
+	public void setRequestCompleted(boolean isRequestCompleted) {
+		this.isRequestCompleted = isRequestCompleted;
 	}
 }

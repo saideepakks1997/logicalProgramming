@@ -1,6 +1,8 @@
 package eb;
 
-public enum RequestStatus {
+import java.io.Serializable;
+
+public enum RequestStatus implements Serializable{
 	status1("Requested"),
 	status2("Application Accepted and moved to AE"),
 	status3("Background verification of documents started"),

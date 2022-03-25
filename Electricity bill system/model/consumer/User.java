@@ -1,8 +1,13 @@
 package consumer;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class User {
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected String name;
 	protected String emailId;
 	protected long phoNo;

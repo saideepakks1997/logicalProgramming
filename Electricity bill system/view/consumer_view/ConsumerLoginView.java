@@ -48,7 +48,7 @@ public class ConsumerLoginView {
 			switch (opt) {
 			case 1: viewConnectionDetails();
 				break;
-			case 2: commonView.payBill(isAdmin);
+			case 2: payBillForParticularConsumer(isAdmin);
 				break;
 			case 3: requestForNewConnection();
 				break;
@@ -206,5 +206,11 @@ public class ConsumerLoginView {
 			}
 		}
 		return 0;
+	}
+	public void payBillForParticularConsumer(boolean isAdmin) {
+		long serviceNo = selectConnectionNo();
+		if(serviceNo != -1)
+			commonView.viewAndPayAllPendingPayments(serviceNo, isAdmin);
+		
 	}
 }

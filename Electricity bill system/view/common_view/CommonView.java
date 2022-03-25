@@ -1,9 +1,11 @@
 package common_view;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import bill.Bill;
 import bill.Payment;
@@ -126,8 +128,9 @@ public class CommonView {
 		System.out.println("Consumer Name :- "+consumer.getName());
 		System.out.println("Consumer Address :- "+consumer.getAddress());
 		System.out.printf("%10s %15s %30s %30s","Serivce No","Current Units","Connection Type","Connection Address");
-		for(Connection con: consumer.getConnections()) {
-			System.out.println();
+		Collection<Connection> connections =  consumer.getConnections().values();
+		for(Connection con: connections) {
+			System.out.println("HIMAN");
 			System.out.printf("%10d %15d %30s %30s",con.getServiceNo(),con.getCurrentUnit(),con.getConnectionType(),con.getConnAddress());
 			System.out.println();
 		}
@@ -372,6 +375,9 @@ public class CommonView {
 		}
 		return paymentType;
 	}
+
+
+	
 
 	
 }

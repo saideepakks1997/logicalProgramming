@@ -105,10 +105,17 @@ public class AdminView {
 	
 	
 	private void ViewAllConsumers() {
+		System.out.println("Entering");
 		Map<Long, Consumer> consumers = operations.getAllConsumers();
 		Set<Long> consumerNos = consumers.keySet();
 		for(Long cNo: consumerNos) {
-			commonView.displayConsumerConnection(consumers.get(cNo));
+			try {
+				commonView.displayConsumerConnection(consumers.get(cNo));
+			}
+			catch(NullPointerException e) {
+				System.out.println("Entering");
+			}
+			
 		}
 		
 	}

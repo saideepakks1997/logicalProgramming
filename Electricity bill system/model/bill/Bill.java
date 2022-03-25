@@ -1,10 +1,15 @@
 package bill;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import payment_options.ConsumerPaymentOptions;
 
-public class Bill {
+public class Bill implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long billNo;
 	private Payment payment;
 	private LocalDateTime paymentDate;

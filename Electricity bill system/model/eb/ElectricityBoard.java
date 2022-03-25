@@ -39,19 +39,22 @@ public class ElectricityBoard {
 	public ElectricityBoard() {
 		Admin admin1 = new Admin("admin1", "admin1");
 		admins.put(admin1.getUser_name(),admin1);
-		Consumer consumer1 = new Consumer(getConsumerNoSeries(),"Sai", "ks.sai@gmail.com", 9787898l, "trl");
-		Consumer consumer2 = new Consumer(getConsumerNoSeries(),"Bharath", "bharath@gmail.com", 9787848l, "Chennai");
-		Connection conn1 = new Connection(getConnNoSeries(), TypeOfConnection.Domestic,"main road trl",consumer1);
-		Connection conn2 = new Connection(getConnNoSeries(), TypeOfConnection.LtCommercial,"1st street trt",consumer2);
-		
-		this.setConnections(conn1);
-		this.setConsumers(consumer1);
-		this.getConsumers().get(consumer1.getConsumerNO()).setConnection(conn1);
-		
-		
-		this.setConnections(conn2);
-		this.setConsumers(consumer2);
-		this.getConsumers().get(consumer2.getConsumerNO()).setConnection(conn2);
+//		Consumer consumer1 = new Consumer(getConsumerNoSeries(),"Sai", "ks.sai@gmail.com", 9787898l, "trl");
+//		Consumer consumer2 = new Consumer(getConsumerNoSeries(),"Bharath", "bharath@gmail.com", 9787848l, "Chennai");
+//		Connection conn1 = new Connection(getConnNoSeries(), TypeOfConnection.Domestic,"main road trl",consumer1);
+//		Connection conn2 = new Connection(getConnNoSeries(), TypeOfConnection.LtCommercial,"1st street trt",consumer2);
+////		
+////		consumer1.setConnection(conn1);
+//		this.setConnections(conn1);
+//		this.setConsumers(consumer1);
+//		consumer1.setConnection(conn1);
+////		consumer1.setConnection(conn1);
+////		this.getConsumers().get(consumer1.getConsumerNO()).setConnection(conn1);
+////		
+////		
+//		this.setConnections(conn2);
+//		this.setConsumers(consumer2);
+//		this.getConsumers().get(consumer2.getConsumerNO()).setConnection(conn2);
 	}
 
 	public Map<Long, Consumer> getConsumers() {

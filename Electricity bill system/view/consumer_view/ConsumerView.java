@@ -263,4 +263,6 @@ public class ConsumerView {
 		commonView.displayMessege("Your consumer number is "+consumerNo);
 		loginView.askLoggedInOptions(consumerNo);
 	}
+	
+	
 }

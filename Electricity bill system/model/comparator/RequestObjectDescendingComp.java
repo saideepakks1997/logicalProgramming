@@ -1,11 +1,14 @@
 package comparator;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
 import eb.RequestObj;
 
 
-public class RequestObjectDescendingComp implements Comparator<RequestObj>{
+public class RequestObjectDescendingComp implements Comparator<RequestObj>,Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public int compare(RequestObj obj1, RequestObj obj2) {

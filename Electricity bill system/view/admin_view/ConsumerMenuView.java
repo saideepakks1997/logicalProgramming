@@ -31,7 +31,7 @@ public class ConsumerMenuView {
 			switch (opt) {
 			case 1: consumerView.viewConnectionDetails();
 				break;
-			case 2: payBill();
+			case 2: consumerView.payBillForParticularConsumer(isAdmin);
 				break;
 			case 3: consumerView.viewPendingTransactions();
 				break;
@@ -46,11 +46,7 @@ public class ConsumerMenuView {
 		}
 		
 	}
-	void payBill() {
-		long serviceNo = consumerView.selectConnectionNo();
-		if(serviceNo != -1)
-			commonView.viewAndPayAllPendingPayments(serviceNo, isAdmin);
-	}
+	
 	
 
 }
