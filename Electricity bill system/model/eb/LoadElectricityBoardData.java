@@ -9,58 +9,16 @@ import java.util.Set;
 
 import connection.Connection;
 import consumer.Consumer;
-import files.FileDetails;
+import files_details.FileDetails;
 import input_output_streams.MyObjectInputStream;
 
-public class LoadData {
+public class LoadElectricityBoardData {
 	FileDetails files = FileDetails.getFiles();
 	ElectricityBoard eb = null;
-	public LoadData(ElectricityBoard eb) {
+	public LoadElectricityBoardData(ElectricityBoard eb) {
 		this.eb = eb;
 	}
-//	request,connection,consumer
-	public void loadRequest() {
-		try(
-				FileInputStream fis = new FileInputStream(files.getRequestsFile());
-				MyObjectInputStream mis = new MyObjectInputStream(fis);
-				){
-			
-			while(fis.available() != 0) {
-				RequestObj request = (RequestObj)mis.readObject();
-				this.eb.setRequests(request);
-			}
-		}
-		catch(FileNotFoundException e) {
-//			e.printStackTrace();
-		}
-		catch(IOException e) {
-//			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-		}
-		
-	}
-	public void loadConnection() {
-		try(
-				FileInputStream fis = new FileInputStream(files.getConnectionFile());
-				MyObjectInputStream mis = new MyObjectInputStream(fis);
-				){
-			
-			while(fis.available() != 0) {
-				Connection conn = (Connection)mis.readObject();
-				System.out.println("connection units ->"+conn.getCurrentUnit());
-				this.eb.setConnections(conn);
-			}
-		}
-		catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+	
 	public void loadConsumer() {
 		try(
 				FileInputStream fis = new FileInputStream(files.getConsumerFile());
@@ -100,10 +58,5 @@ public class LoadData {
 		}
 		
 	}
-	public void loadData() {
-		this.loadConsumer();
-//		this.loadConnection();
-//		this.loadRequest();
-		
-	}
+
 }

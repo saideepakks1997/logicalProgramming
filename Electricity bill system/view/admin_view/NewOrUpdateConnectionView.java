@@ -298,21 +298,26 @@ public class NewOrUpdateConnectionView {
 	
 	private void changeConnectionType() {
 		long connNo = commonView.getConnectionNo();
-		String connType= commonOperations.getConnectionType(connNo);
-		commonView.displayMessege("Current connection type is for service no"
-				+ " "+connNo+" is "+connType);
-		TypeOfConnection selectedconnType = commonView.selectTypeOfConnection();
-		if(selectedconnType != null) {
-			boolean isChanged = operations.changeConnectionType(selectedconnType,connNo);
-			if(!isChanged) {
-				commonView.displayMessege("The connection type is already "+connType);
+		if(connNo != -1) {
+			String connType= commonOperations.getConnectionType(connNo);
+			commonView.displayMessege("Current connection type is for service no"
+					+ " "+connNo+" is "+connType);
+			TypeOfConnection selectedconnType = commonView.selectTypeOfConnection();
+			if(selectedconnType != null) {
+				boolean isChanged = operations.changeConnectionType(selectedconnType,connNo);
+				if(!isChanged) {
+					commonView.displayMessege("The connection type is already "+connType);
+				}
+				else {
+					commonView.displayMessege("Connection type "+selectedconnType+" has been updated for service no "+connNo);
+				}
 			}
 			else {
-				commonView.displayMessege("Connection type "+selectedconnType+" has been updated for service no "+connNo);
+				commonView.displayMessege("Change of Connection failed");
 			}
 		}
 		else {
-			commonView.displayMessege("Change of Connection failed");
+			commonView.displayMessege("Change of connection type failed");
 		}
 		
 	}

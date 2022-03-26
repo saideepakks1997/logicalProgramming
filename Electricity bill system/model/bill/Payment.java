@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Payment implements Serializable{
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private double payableAmount;
 	private boolean isPaid;
@@ -21,7 +19,7 @@ public class Payment implements Serializable{
 	}
 	
 	public String toString() {
-		String payment = "Payable amount :- "+this.getPayableAmount()+"  "
+		String payment = "Payable amount :- "+(double)Math.round(this.getPayableAmount() * 100) / 100 +"  "
 				+ "Units Consumed :- "+this.getUnitsConsumed()+"  "
 				+ "Due date :- "+this.getDueDate();
 		return payment;

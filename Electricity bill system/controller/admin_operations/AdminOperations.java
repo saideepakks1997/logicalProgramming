@@ -7,24 +7,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-
+import add_or_update_files.ConsumerFiles;
 import bill.Payment;
 import connection.Connection;
-import connection.ConnectionFiles;
+//import connection.ConnectionFiles;
 import connection.TypeOfConnection;
 import consumer.Consumer;
-import consumer.ConsumerFiles;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 import eb.RequestStatus;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
-	ConnectionFiles connFiles = null;
 	ConsumerFiles consumerFiles = null;
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
-		this.connFiles = new ConnectionFiles(eb);
 		this.consumerFiles = new ConsumerFiles(eb);
 	}
 	
@@ -37,12 +34,6 @@ public class AdminOperations implements IAdminOperations{
 			else {
 				double readings = newReadings - pastReadings;
 				conn.setCurrentUnit(newReadings);
-//				Connection consumer = this.eb.getConsumers().get(1l).getConnections().get(0);
-//				System.out.println(conn);
-//				System.out.println(consumer);
-				
-//				connFiles.updateConnectionUnit(conn, newReadings);
-				
 				setPendingPayment(readings, conn);
 				return true;
 			}
@@ -56,7 +47,6 @@ public class AdminOperations implements IAdminOperations{
 			conn.setPendingPayments(payment);
 		}
 		consumerFiles.updateConusumer(conn);
-//		connFiles.updateConnection(conn);
 		
 		return true;
 	}
@@ -79,13 +69,16 @@ public class AdminOperations implements IAdminOperations{
 
 	@Override
 	public boolean changeConnectionType(TypeOfConnection connectionType, long connNo) {
-		TypeOfConnection prevConnType = this.eb.getConnections().get(connNo).getConnectionType();
+		Connection conn = this.eb.getConnections().get(connNo);
+		TypeOfConnection prevConnType = conn.getConnectionType();
 		if(prevConnType == connectionType) { 
-			
 			return false;
 		}
 		else {
-			this.eb.getConnections().get(connNo).setConnectionType(connectionType);
+//			this.eb.getConnections().get(connNo).setConnectionType(connectionType);
+			conn.setConnectionType(connectionType);
+			System.out.println(conn.getConnectionType());
+			this.consumerFiles.updateConusumer(conn);
 			return true;
 		}
 	}
@@ -99,8 +92,9 @@ public class AdminOperations implements IAdminOperations{
 
 		this.eb.setConnections(conn);
 		this.eb.setConsumers(consumer);
-		this.eb.getConsumers().get(consumer.getConsumerNO()).setConnection(conn);
-		
+		consumer.setConnection(conn);
+//		this.eb.getConsumers().get(consumer.getConsumerNO()).setConnection(conn);
+		this.consumerFiles.addCustomer(consumer);
 		return conn;
 	}
 
@@ -112,7 +106,7 @@ public class AdminOperations implements IAdminOperations{
 		
 		this.eb.setConnections(conn);
 		this.eb.getConsumers().get(customerNo).setConnection(conn);
-		
+		this.consumerFiles.updateConusumer(consumer);
 		return conn;
 	}
 

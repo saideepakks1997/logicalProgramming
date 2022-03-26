@@ -75,7 +75,7 @@ public class CommonView {
 		System.out.println("--------------Service no:-"+connNo+"---------------");
 		int i=1;
 		for(Payment payment: list) {
-			System.out.println(i+"."+payment);
+			System.out.println((i++)+"."+payment);
 		}
 		System.out.println("---------------------------------------");
 	}
@@ -84,7 +84,7 @@ public class CommonView {
 		int i=1;
 		System.out.println("------------------");
 		System.out.println("Amount has been paid successfully\n"
-				+ "S.no:- "+(i++)
+				+ "S.no:- "+(i++)+"\n"
 				+ "bill No :- "+bill.getBillNo()+"\n"
 				+ "Paid amount :- "+bill.getPayment().getPayableAmount()+"\n"
 				+ "Units consumed :- "+bill.getPayment().getUnitsConsumed()+"\n"
@@ -130,7 +130,7 @@ public class CommonView {
 		System.out.printf("%10s %15s %30s %30s","Serivce No","Current Units","Connection Type","Connection Address");
 		Collection<Connection> connections =  consumer.getConnections().values();
 		for(Connection con: connections) {
-			System.out.println("HIMAN");
+			System.out.println();
 			System.out.printf("%10d %15d %30s %30s",con.getServiceNo(),con.getCurrentUnit(),con.getConnectionType(),con.getConnAddress());
 			System.out.println();
 		}
@@ -238,8 +238,8 @@ public class CommonView {
 			System.out.println("Enter connection number");
 			connNo = getLong();
 			
-			if(connNo == -1)
-				return -1;
+//			if(connNo == -1)
+//				return -1;
 			
 			boolean isValid = commonOperations.checkIfValidConnectionNo(connNo);
 			if(!isValid) {

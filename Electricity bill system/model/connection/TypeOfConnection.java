@@ -7,7 +7,6 @@ public enum TypeOfConnection {
 		int freeUnits = 100;
 		DomesticConnection obj = new DomesticConnection(freeUnits);
 		
-		
 		@Override
 		public DomesticConnection getObj() {
 			return obj;
@@ -25,6 +24,7 @@ public enum TypeOfConnection {
 		public SplitChargesConnection getObj() {
 			return conObj;
 		}
+
 	},
 	PublicWorkshop{
 		public double minUnits = 120;
@@ -38,6 +38,7 @@ public enum TypeOfConnection {
 		public SplitChargesConnection getObj() {
 			return conObj;
 		}
+
 	},
 	CottageAndTinyIndustries{
 		public double minUnits = 500;
@@ -50,6 +51,7 @@ public enum TypeOfConnection {
 		public SplitChargesConnection getObj() {
 			return conObj;
 		}
+
 	},
 	PowerLooms {
 		public int minUnits = 1000;
@@ -62,6 +64,7 @@ public enum TypeOfConnection {
 		public SplitChargesConnection getObj() {
 			return conObj;
 		}
+
 	},
 	PublicLightsVillageAndIndustrialmetro{
 		public double charges = 6.35;
@@ -72,6 +75,7 @@ public enum TypeOfConnection {
 		public SameChargesConnection getObj() {
 			return conObj;
 		}
+
 	},//same
 	TemporarySupply{
 		public double charges = 12;
@@ -82,6 +86,7 @@ public enum TypeOfConnection {
 		public SameChargesConnection getObj() {
 			return conObj;
 		}
+
 	},//same
 	PublicLightTown{
 		public double charges = 6.35;
@@ -112,6 +117,7 @@ public enum TypeOfConnection {
 		public SameChargesConnection getObj() {
 			return conObj;
 		}
+
 	};//same
 	
 	public abstract ConnectionObj getObj();

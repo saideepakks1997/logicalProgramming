@@ -113,7 +113,7 @@ public class AdminView {
 				commonView.displayConsumerConnection(consumers.get(cNo));
 			}
 			catch(NullPointerException e) {
-				System.out.println("Entering");
+				
 			}
 			
 		}

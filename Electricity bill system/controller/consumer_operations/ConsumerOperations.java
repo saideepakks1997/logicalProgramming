@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import add_or_update_files.ConsumerFiles;
 import connection.Connection;
-import connection.ConnectionFiles;
 import connection.TypeOfConnection;
 import consumer.Consumer;
-import consumer.ConsumerFiles;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 import validator_encrypter.Encryption;
@@ -48,6 +47,7 @@ public class ConsumerOperations implements IConsumerOperations{
 		long consumerNo = this.eb.getConsumerNoSeries();
 		Consumer consumer = new Consumer(consumerNo, name, email, phoNo, address);
 		this.eb.setConsumers(consumer);
+		this.consumerFile.addCustomer(consumer);
 		return consumer.getConsumerNO();
 	}
 	

@@ -47,5 +47,7 @@ public interface ICommonOperations {
 
 	public void gerenateData();
 
+	public void loadData();
+
 
 }

@@ -7,11 +7,11 @@ import common_operations.ICommonOperations;
 import common_view.CommonView;
 import consumer_view.ConsumerView;
 import eb.ElectricityBoard;
-import eb.LoadData;
+import eb.LoadElectricityBoardData;
 import validator_encrypter.Validator;
 
 public class MainView {
-	LoadData loadData = null;
+	
 	CommonView commonView = null;
 	AdminView adminView = null;
 	ConsumerView consumerView = null;
@@ -24,11 +24,11 @@ public class MainView {
 		this.consumerView = new ConsumerView(eb);
 		this.commonView = new CommonView(eb);
 		this.operations = new CommonOperations(eb);
-		this.loadData = new LoadData(eb);
+		
 	}
 	public void askOptions(){
-//		operations.gerenateData();
-		loadData.loadData();
+		operations.gerenateData();
+		operations.loadData();
 		boolean loop = true;
 		boolean isValid = false;
 		while(loop) {

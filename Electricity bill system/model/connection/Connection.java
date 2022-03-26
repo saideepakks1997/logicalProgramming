@@ -21,7 +21,6 @@ public class Connection implements Serializable{
 	private Consumer consumer;
 	private String connAddress;
 	
-//	private Map<Long, Bill> bills = new HashMap<>();
 	private List<Payment> pendingPayments = new ArrayList<>();
 	private List<Bill> bills = new ArrayList<Bill>();
 	
@@ -53,9 +52,7 @@ public class Connection implements Serializable{
 	}
 
 	public void setCurrentUnit(long currentUnit) {
-		System.out.println(currentUnit);
 		this.currentUnit = currentUnit;
-		System.out.println("setted"+this.currentUnit);
 	}
 
 

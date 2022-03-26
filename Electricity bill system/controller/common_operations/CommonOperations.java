@@ -4,34 +4,31 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import add_or_update_files.ConsumerFiles;
 import bill.Bill;
 import bill.Payment;
 import connection.Connection;
-import connection.ConnectionFiles;
 import connection.TypeOfConnection;
 import consumer.Consumer;
-import consumer.ConsumerFiles;
 import eb.ElectricityBoard;
-import files.FileDetails;
+import eb.LoadElectricityBoardData;
+import files_details.FileDetails;
 import payment_options.AdminPaymentOptions;
 import payment_options.ConsumerPaymentOptions;
 import validator_encrypter.Encryption;
 
 public class CommonOperations implements ICommonOperations{
-	
+	LoadElectricityBoardData loadData = null;
 	ConsumerFiles consumerFiles = null;
-	ConnectionFiles connFiles = null;
 	
 	FileDetails files = FileDetails.getFiles();
 	ElectricityBoard eb = null;
 	
 	Encryption encrypt = new Encryption();
-	ConnectionFiles connFile = null;
 	public CommonOperations(ElectricityBoard eb) {
 		this.eb = eb;
 		this.consumerFiles = new ConsumerFiles(eb);
-		this.connFiles = new ConnectionFiles(eb);
-		this.connFile = new ConnectionFiles(eb);
+		this.loadData = new LoadElectricityBoardData(eb);
 	}
 	
 	@Override
@@ -140,18 +137,17 @@ public class CommonOperations implements ICommonOperations{
 
 	@Override
 	public void gerenateData() {
-		Consumer consumer1 = new Consumer(this.eb.getConsumerNoSeries(),"Sai", "ks.sai@gmail.com", 9787898l, "trl");
-//		Consumer consumer2 = new Consumer(this.eb.getConsumerNoSeries(),"Bharath", "bharath@gmail.com", 9787848l, "Chennai");
-		Connection conn1 = new Connection(this.eb.getConnNoSeries(), TypeOfConnection.Domestic,"main road trl",consumer1);
-//		Connection conn2 = new Connection(this.eb.getConnNoSeries(), TypeOfConnection.LtCommercial,"1st street trt",consumer2);
-		consumer1.setConnection(conn1);
 		File consumerFile = files.getConsumerFile();
-		File connectionFile = files.getConnectionFile();
-		if(!consumerFile.exists() && !connectionFile.exists() && consumerFile.length() == 0) {
+		if(!consumerFile.exists() && consumerFile.length() == 0) {
+			Consumer consumer1 = new Consumer(this.eb.getConsumerNoSeries(),"Sai", "ks.sai@gmail.com", 9787898l, "trl");
+			Connection conn1 = new Connection(this.eb.getConnNoSeries(), TypeOfConnection.Domestic,"main road trl",consumer1);
+			consumer1.setConnection(conn1);
 			consumerFiles.addCustomer(consumer1);
-			connFiles.addConnection(conn1);
 		}
-		
-		
+	}
+
+	@Override
+	public void loadData() {
+		loadData.loadConsumer();
 	}
 }

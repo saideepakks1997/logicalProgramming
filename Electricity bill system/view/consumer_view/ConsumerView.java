@@ -154,7 +154,6 @@ public class ConsumerView {
 	private String registerUser(long consumerNo) {
 		System.out.println("Enter login details to set");
 		String user_name = getUserNameFromUser();
-		System.out.println("user name 1:- "+user_name);
 		if(user_name == null) {
 			return null;
 		}
