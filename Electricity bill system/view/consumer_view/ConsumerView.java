@@ -275,26 +275,27 @@ public class ConsumerView {
 
 
 	private void registerConsumerForNewConnection() {
-		System.out.println("Start entering details for registration");
-		System.out.println("Enter name ");
-		String name = commonView.getString();
-		
-		String email = commonView.getEmail();
-		if(email == null)
+		try {
+			System.out.println("Start entering details for registration");
+			System.out.println("Enter name ");
+			String name = commonView.getString();
+			
+			String email = commonView.getEmail();
+			Long phoNo= commonView.getPhoNo();
+			
+			
+			System.out.println("Enter your address");
+			String address = commonView.getString();
+			
+			long consumerNo = operations.createConsumer(name,email,phoNo,address);
+			String user_name = registerUser(consumerNo);
+			commonView.displayMessege("Your consumer number is "+consumerNo+" and user name is "+user_name);
+			loginView.askLoggedInOptions(consumerNo);
+		}
+		catch(NullPointerException e) {
 			return;
+		}
 		
-		Long phoNo= commonView.getPhoNo();
-		if(phoNo == null)
-			return;
-		
-		System.out.println("Enter your address");
-		String address = commonView.getString();
-		
-		long consumerNo = operations.createConsumer(name,email,phoNo,address);
-		String user_name = registerUser(consumerNo);
-		commonView.displayMessege("Your consumer number is "+consumerNo+" and user name is "+user_name);
-		loginView.askLoggedInOptions(consumerNo);
 	}
-	
 	
 }

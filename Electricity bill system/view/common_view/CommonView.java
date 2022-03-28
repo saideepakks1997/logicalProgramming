@@ -416,6 +416,7 @@ public class CommonView {
 							+ "Going back to previous menu");
 					return null;
 				}
+				loop = true;
 				chances++;
 				displayMessege("Please enter valid email id");
 			}
