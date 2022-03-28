@@ -25,5 +25,7 @@ public interface IConsumerOperations {
 	//Get notifications
 	public List<String> getNotification(long consumerNo);
 
+	public String getUserNameIfAlreadyRegiestered(Long consumerNo);
+
 
 }

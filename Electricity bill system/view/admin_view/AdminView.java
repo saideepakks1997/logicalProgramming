@@ -43,8 +43,9 @@ public class AdminView {
 					+ "5->View all consumers\n"
 					+ "6->Go to consumer menu\n"
 					+ "9->log out");
-			int opt = commonView.getInt();
-			switch(opt) {
+			Integer opt = commonView.getInt();
+			try {
+				switch(opt) {
 				case 1: setUnitsConsumed();
 		 			break;
 				case 2: viewNonPayers();
@@ -63,6 +64,11 @@ public class AdminView {
 				default: commonView.displayMessege("please enter correct option");
 					break;
 			}
+			}
+			catch (NullPointerException e) {
+				
+			}
+			
 		}
 	}
 	
@@ -72,20 +78,26 @@ public class AdminView {
 	//  month reading 100 and next month may be 175
 	private void setUnitsConsumed() {
 		boolean loop = true;
-		while(loop) {
-			loop = false;
-			long connNo = commonView.getConnectionNo();
-			if(connNo != -1) {
-				System.out.println("Enter the reading to set");
-				long readings = commonView.getLong();
-				
-				boolean isReadingsSet = operations.setReading(connNo, readings);
-				if(isReadingsSet)
-					commonView.displayMessege("Reading has been set to "+readings);
-				else
-					commonView.displayMessege("Entered reading is less than past reading please check the readings ");
+		try {
+			while(loop) {
+				loop = false;
+				long connNo = commonView.getConnectionNo();
+				if(connNo != -1) {
+					System.out.println("Enter the reading to set");
+					Long readings = commonView.getLong();
+					
+					boolean isReadingsSet = operations.setReading(connNo, readings);
+					if(isReadingsSet)
+						commonView.displayMessege("Reading has been set to "+readings);
+					else
+						commonView.displayMessege("Entered reading is less than past reading please check the readings ");
+				}
 			}
 		}
+		catch (NullPointerException e) {
+			return;
+		}
+		
 	}
 	
 	//View all pending payment list
@@ -126,20 +138,25 @@ public class AdminView {
 		while(loop) {
 			loop = false;
 			System.out.println("Enter Conumer number");
-			int consumerNo = commonView.getInt();
-			boolean isValid = commonOperations.isValidCustomerNo(consumerNo);
-			if(!isValid) {
-				if(chances >= 2) {
-					commonView.displayChancesMessege();
-					commonView.displayMessege("going back to previous menu");
-					return;
+			Integer consumerNo = commonView.getInt();
+			try {
+				boolean isValid = commonOperations.isValidCustomerNo(consumerNo);
+				if(!isValid) {
+					if(chances >= 2) {
+						commonView.displayChancesMessege();
+						commonView.displayMessege("going back to previous menu");
+						return;
+					}
+					commonView.displayMessege("Please enter valid consumer no");
+					loop = true;
+					chances++;
 				}
-				commonView.displayMessege("Please enter valid consumer no");
-				loop = true;
-				chances++;
+				else {
+					cmenuView.askOptions(consumerNo);
+				}
 			}
-			else {
-				cmenuView.askOptions(consumerNo);
+			catch (NullPointerException e) {
+				return;
 			}
 		}
 	}

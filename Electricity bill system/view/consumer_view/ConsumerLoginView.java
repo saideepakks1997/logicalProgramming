@@ -32,7 +32,7 @@ public class ConsumerLoginView {
 	public void askLoggedInOptions(long consumerNo) {
 		boolean isAdmin = false;
 		this.consumerNo = consumerNo;
-			askToViewNotifications();
+		askToViewNotifications();
 		boolean loop = true;
 		while(loop) {
 			commonView.displayMessege("Enter option \n"
@@ -40,32 +40,38 @@ public class ConsumerLoginView {
 					+ "2->Pay bill\n"
 					+ "3->Request for new connection\n"
 					+ "4->Request for change of connection type\n"
-					+ "5->View pendings transaction"
+					+ "5->View pendings transaction\n"
 					+ "6->View transactions\n"
 					+ "7->Notifications\n"
 					+ "9->Log out");
-			int opt = commonView.getInt();
-			switch (opt) {
-			case 1: viewConnectionDetails();
-				break;
-			case 2: payBillForParticularConsumer(isAdmin);
-				break;
-			case 3: requestForNewConnection();
-				break;
-			case 4: requestForChangeOfConnection();
-				break;
-			case 5: viewPendingTransactions();
-				break;
-			case 6: viewAllBills();
-				break;
-			case 7: viewNotifications();
-				break;
-			case 9: loop = false;
-				commonView.displayMessege("Logging out");
-				break;
-			default:commonView.displayMessege("Enter the correct option");
-				break;
+			Integer opt = commonView.getInt();
+			try {
+				switch (opt) {
+				case 1: viewConnectionDetails();
+					break;
+				case 2: payBillForParticularConsumer(isAdmin);
+					break;
+				case 3: requestForNewConnection();
+					break;
+				case 4: requestForChangeOfConnection();
+					break;
+				case 5: viewPendingTransactions();
+					break;
+				case 6: viewAllBills();
+					break;
+				case 7: viewNotifications();
+					break;
+				case 9: loop = false;
+					commonView.displayMessege("Logging out");
+					break;
+				default:commonView.displayMessege("Enter the correct option");
+					break;
+				}
 			}
+			catch(NullPointerException e) {
+				return;
+			}
+			
 		}
 	}
 
@@ -75,13 +81,19 @@ public class ConsumerLoginView {
 			commonView.displayMessege("You have Notifications \n"
 					+ "Press 1->For view notifications\n"
 					+ "Press any Number for ignore");
-			int opt = commonView.getInt();
-			if(opt == 1) {
-				viewNotifications();
+			Integer opt = commonView.getInt();
+			try {
+				if(opt == 1) {
+					viewNotifications();
+				}
+				else {
+					commonView.displayMessege("Back to login options");
+				}
 			}
-			else {
-				commonView.displayMessege("Back to login options");
+			catch (NullPointerException e) {
+				return;
 			}
+			
 		}
 		
 	}
@@ -189,23 +201,29 @@ public class ConsumerLoginView {
 				System.out.println((i++)+"."+conn.getServiceNo());
 			}
 			
-			int opt = commonView.getInt();
-			if(opt > conns.size()) {
-				System.out.println("Entering into max value");
-				if(chances >= validate.getMaxChance()) {
-					commonView.displayChancesMessege();
-					commonView.displayMessege("Going back to previous menu");
-					return -1;
+			Integer opt = commonView.getInt();
+			try {
+				if(opt > conns.size()) {
+					if(chances >= validate.getMaxChance()) {
+						commonView.displayChancesMessege();
+						commonView.displayMessege("Going back to previous menu");
+						return -1;
+					}
+					chances++;
+					commonView.displayMessege("Enter correct option");
+					loop = true;
 				}
-				chances++;
-				commonView.displayMessege("Enter correct option");
-				loop = true;
+				else {
+					return conns.get(opt-1).getServiceNo();
+				}
 			}
-			else {
-				return conns.get(opt-1).getServiceNo();
+			catch (NullPointerException e) {
+				return -1;
 			}
+			
 		}
-		return 0;
+		return -1;
+		
 	}
 	public void payBillForParticularConsumer(boolean isAdmin) {
 		long serviceNo = selectConnectionNo();

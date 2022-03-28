@@ -26,27 +26,28 @@ public class ConsumerMenuView {
 					+ "3->View pendings transaction\n"
 					+ "4->View transactions\n"
 					+ "9->Go back to previous menu");
-			int opt = commonView.getInt();
-			
-			switch (opt) {
-			case 1: consumerView.viewConnectionDetails();
-				break;
-			case 2: consumerView.payBillForParticularConsumer(isAdmin);
-				break;
-			case 3: consumerView.viewPendingTransactions();
-				break;
-			case 4: consumerView.viewAllBills();
-				break;
-			case 9: commonView.displayMessege("Going back to previous menu");
-				loop = false;
-				break;
-			default:commonView.displayMessege("Enter correct option");
-				break;
+			Integer opt = commonView.getInt();
+			try {
+				switch (opt) {
+				case 1: consumerView.viewConnectionDetails();
+					break;
+				case 2: consumerView.payBillForParticularConsumer(isAdmin);
+					break;
+				case 3: consumerView.viewPendingTransactions();
+					break;
+				case 4: consumerView.viewAllBills();
+					break;
+				case 9: commonView.displayMessege("Going back to previous menu");
+					loop = false;
+					break;
+				default:commonView.displayMessege("Enter correct option");
+					break;
+				}
+			}
+			catch(NullPointerException e) {
+				return;
 			}
 		}
 		
 	}
-	
-	
-
 }

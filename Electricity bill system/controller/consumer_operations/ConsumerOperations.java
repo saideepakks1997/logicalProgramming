@@ -1,24 +1,24 @@
 package consumer_operations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import add_or_update_files.ConsumerFiles;
 import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
+import eb.SerializedEbObjFromFile;
 import validator_encrypter.Encryption;
 
 public class ConsumerOperations implements IConsumerOperations{
 	ElectricityBoard eb = null;
 	Encryption encrypt = new Encryption();
-	ConsumerFiles consumerFile = null;
+	SerializedEbObjFromFile serialize = SerializedEbObjFromFile.getObj();
 	public ConsumerOperations(ElectricityBoard eb) {
 		this.eb = eb;
-		this.consumerFile = new ConsumerFiles(eb);
 	}
 	@Override
 	public boolean registerUser(long consumerNo, String user_name, String password) {
@@ -27,18 +27,17 @@ public class ConsumerOperations implements IConsumerOperations{
 		consumer.setUser_name(user_name);
 		consumer.setPassword(password);
 		
-//		boolean isDone = consumer.setUserNamePassword(user_name, password);
-		consumerFile.updateConusumer(consumer);
 		this.eb.setConsumerMapping(consumer);
 		
+		serialize.updateEbFile(this.eb);
 		return true;
 	}
 
 	@Override
 	public List<Connection> getConsumerConnection(long consumerNo) {
-		List<Connection> connections = (List<Connection>) this.eb.getConsumers().get(consumerNo).getConnections().values(); 
-				
-		return connections;
+		Collection<Connection> connections = this.eb.getConsumers().get(consumerNo).getConnections().values(); 
+		List<Connection> conns = new ArrayList<>(connections);	
+		return conns;
 	}
 	
 	
@@ -47,7 +46,7 @@ public class ConsumerOperations implements IConsumerOperations{
 		long consumerNo = this.eb.getConsumerNoSeries();
 		Consumer consumer = new Consumer(consumerNo, name, email, phoNo, address);
 		this.eb.setConsumers(consumer);
-		this.consumerFile.addCustomer(consumer);
+		serialize.updateEbFile(this.eb);
 		return consumer.getConsumerNO();
 	}
 	
@@ -60,7 +59,7 @@ public class ConsumerOperations implements IConsumerOperations{
 		System.out.println("New connection reqs "+request);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
-		consumerFile.updateConusumer(consumer);
+		serialize.updateEbFile(this.eb);
 		return request;
 	}
 	@Override
@@ -71,13 +70,10 @@ public class ConsumerOperations implements IConsumerOperations{
 			return null;
 		}
 		long requestNo = this.eb.getRequestNoSeries();
-//		long consumerNo,long serviceNo, TypeOfConnection connType,long requestNo
 		RequestObj request = new RequestObj(consumerNo, serviceNo, connType, requestNo);
-//		ChangeOfConnectionRequest request = new ChangeOfConnectionRequest(consumerNo,serviceNo, connType, requestNo);
-		System.out.println(request);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
-		consumerFile.updateConusumer(consumer);
+		serialize.updateEbFile(this.eb);
 		return request;
 	}
 	@Override
@@ -87,6 +83,11 @@ public class ConsumerOperations implements IConsumerOperations{
 		List<String> notifs = consumer.getNotifis().values().stream().filter(x -> x!=null).collect(Collectors.toList());
 		List<String> notifications = new ArrayList<>(notifs);
 		return notifications;
+	}
+	@Override
+	public  String getUserNameIfAlreadyRegiestered(Long consumerNo) {
+		String user_name = this.eb.getConsumers().get(consumerNo).getUser_name();
+		return user_name ;
 	}
 	
 }

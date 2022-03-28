@@ -98,10 +98,10 @@ public class CommonView {
 	public void displayConnections(List<Connection> consumerConns) {
 		System.out.println("-------------------------------------------");
 		int i=1;
-		System.out.printf("%3s %10s %15s %20s","Sno","ServiceNo","ConnectionType","Address\n");
+		System.out.printf("%3s %10s %25s %20s","Sno","ServiceNo","ConnectionType","Address\n");
 		
 		for(Connection con: consumerConns) {
-			System.out.printf("%3d %10d %15s %20s",(i++),con.getServiceNo(),con.getConnectionType(),con.getConnAddress());
+			System.out.printf("%3d %10d %25s %20s",(i++),con.getServiceNo(),con.getConnectionType(),con.getConnAddress());
 			System.out.println();
 		}
 		System.out.println("-------------------------------------------");
@@ -137,7 +137,7 @@ public class CommonView {
 		System.out.println("--------------------------------------------------");
 	}
 	
-	public int getInt() {
+	public Integer getInt() {
 		int chances = 1;
 		boolean loop = true;
 		int opt = 0;
@@ -151,7 +151,7 @@ public class CommonView {
 					displayChancesMessege();
 					displayMessege("Going back to previous menu");
 					sc = new Scanner(System.in);
-					return -1;
+					return null;
 				}
 				chances++;
 				displayMessege("Wrong input enter correct input(i.e) number");
@@ -164,7 +164,7 @@ public class CommonView {
 		
 		return opt;
 	}
-	public long getLong() {
+	public Long getLong() {
 		int chances = 1;
 		boolean loop = true;
 		long val = 0;
@@ -179,7 +179,7 @@ public class CommonView {
 					displayChancesMessege();
 					displayMessege("Going back to previous menu");
 					sc = new Scanner(System.in);
-					return -1;
+					return null;
 				}
 				chances++;
 				displayMessege("Wrong input enter correct input(i.e) number");
@@ -196,40 +196,41 @@ public class CommonView {
 		return value;
 	}
 	
-	
-	
-
-	
-	
 	public TypeOfConnection selectTypeOfConnection() {
 		int chances = 1;
 		boolean loop = true;
 		List<TypeOfConnection> connTypes = commonOperations.getAllConnectionTypes();
 		while(loop) {
+			loop = false;
 			int i=1;
 			System.out.println("Enter connection type");
 			for(TypeOfConnection ctype: connTypes) {
 				System.out.println((i++)+"."+ctype);
 			}
-			int opt = getInt();
-			if(opt > connTypes.size()) {
-				displayMessege("Please enter valid option");
-			}
-			else {
-				if(chances >= validate.getMaxChance()) {
-					displayChancesMessege();
-					displayMessege("Going back to previous menu");
-					return null;
+			Integer opt = getInt();
+			try {
+				if(opt > connTypes.size()) {
+					if(chances >= validate.getMaxChance()) {
+						displayChancesMessege();
+						displayMessege("Going back to previous menu");
+						return null;
+					}
+					loop = true;
+					chances++;
+					displayMessege("Please enter valid option");
 				}
-				loop = false;
-				return connTypes.get(opt-1);
+				else {
+					return connTypes.get(opt-1);
+				}
 			}
-		
+			catch (NullPointerException e) {
+				return null;
+			}
 		}
 		return null;
 	}
 	
-	public long getConnectionNo() {
+	public Long getConnectionNo() {
 		boolean loop = true;
 		long connNo = 0;
 		int chances = 1;
@@ -237,28 +238,34 @@ public class CommonView {
 			loop = false;
 			System.out.println("Enter connection number");
 			connNo = getLong();
-			
-//			if(connNo == -1)
-//				return -1;
-			
-			boolean isValid = commonOperations.checkIfValidConnectionNo(connNo);
-			if(!isValid) {
-				if(chances >= validate.getMaxChance()) {
-					displayChancesMessege();
-					loop = false;
-					return -1;
+			try {
+				boolean isValid = commonOperations.checkIfValidConnectionNo(connNo);
+				if(!isValid) {
+					if(chances >= validate.getMaxChance()) {
+						displayChancesMessege();
+						loop = false;
+						return null;
+					}
+					displayMessege("Enter valid service number");
+					loop = true;
+					chances++;
 				}
-				displayMessege("Enter valid service number");
-				loop = true;
-				chances++;
+			}
+			catch (NullPointerException e) {
+				return null;
 			}
 		}
 		return connNo;
 	}
 	public void payBill(boolean isAdmin) {
-		long connNo = getConnectionNo();
-		if(connNo != -1)
-			viewAndPayAllPendingPayments(connNo,isAdmin);
+		try {
+			Long connNo = getConnectionNo();
+			if(connNo != -1)
+				viewAndPayAllPendingPayments(connNo,isAdmin);
+		}
+		catch (Exception e) {
+			return;
+		}
 	}
 
 	public void viewAndPayAllPendingPayments(long serviceNo, boolean isAdmin) {
@@ -271,39 +278,47 @@ public class CommonView {
 						+ "enter (-1) to exit without paying");
 				System.out.println("----------------------");
 				displayPendingPayment(pendingPayments);
-				int opt = getInt();
+				Integer opt = getInt();
 				
-				if(opt == -1) {
-					displayMessege("No transaction has been done");
+//				
+				try {
+					if(opt == -1) {
+						displayMessege("No transaction has been done");
+						return;
+					}
+					//If entered option is wrong
+					else if(opt > pendingPayments.size()) {
+						if(chances >= validate.getMaxChance()) {
+							displayChancesMessege();
+							displayMessege("Going back to previous menu");
+							return ;
+						}
+						displayMessege("Enter Valid option");
+						chances++;
+					}
+					
+					else {
+						String paymentThrough = getPaymentOption(isAdmin);
+						if(paymentThrough != null) {
+							Bill bill = commonOperations.acceptPayment(opt, serviceNo,pendingPayments,paymentThrough);
+							if(bill != null) 
+								displayBill(bill);
+							}
+						else {
+							displayMessege("Payment of bill Failed");
+						}
+						//ask whether to continue for payment of bill
+						if(!continuePayBills()) {
+							loop = false;
+							displayMessege("Going back to previous menu");
+						}
+					}
+				}
+				catch (NullPointerException e) {
+					System.out.println("Delat");
 					return;
 				}
-				//If entered option is wrong
-				else if(opt > pendingPayments.size()) {
-					if(chances >= validate.getMaxChance()) {
-						displayChancesMessege();
-						displayMessege("Going back to previous menu");
-						return ;
-					}
-					displayMessege("Enter Valid option");
-					chances++;
-				}
 				
-				else {
-					String paymentThrough = getPaymentOption(isAdmin);
-					if(paymentThrough != null) {
-						Bill bill = commonOperations.acceptPayment(opt, serviceNo,pendingPayments,paymentThrough);
-						if(bill != null) 
-							displayBill(bill);
-						}
-					else {
-						displayMessege("Payment of bill Failed");
-					}
-					//ask whether to continue for payment of bill
-					if(!continuePayBills()) {
-						loop = false;
-						displayMessege("Going back to previous menu");
-					}
-				}
 			}
 			else {
 				displayMessege("No pending payments");
@@ -328,52 +343,132 @@ public class CommonView {
 		int chances = 1;
 		while(loop) {
 			loop = false;
-			if(isAdmin) {
-				int i=1;
-				List<AdminPaymentOptions> paymentopts = commonOperations.getAdminPaymentOptions();
-				System.out.println("Select option");
-				for(AdminPaymentOptions payment: paymentopts) {
-					System.out.println((i++)+"."+payment);
-				}
-				int opt = getInt();
-				if(opt < 0 || opt > paymentopts.size()) {
-					if(chances >= validate.getMaxChance()) {
-						displayChancesMessege();
-						displayMessege("Going back to previous menu");
-						return null;
+			try {
+				if(isAdmin) {
+					int i=1;
+					List<AdminPaymentOptions> paymentopts = commonOperations.getAdminPaymentOptions();
+					System.out.println("Select option");
+					for(AdminPaymentOptions payment: paymentopts) {
+						System.out.println((i++)+"."+payment);
 					}
-					chances++;
-					System.out.println("Enter valid option");
-					loop = true;
+					Integer opt = getInt();
+					if(opt < 0 || opt > paymentopts.size()) {
+						if(chances >= validate.getMaxChance()) {
+							displayChancesMessege();
+							displayMessege("Going back to previous menu");
+							return null;
+						}
+						chances++;
+						System.out.println("Enter valid option");
+						loop = true;
+					}
+					else {
+						paymentType = paymentopts.get(opt-1).toString();
+					}
 				}
 				else {
-					paymentType = paymentopts.get(opt-1).toString();
-				}
-			}
-			else {
-				int i=1;
-				List<ConsumerPaymentOptions> paymentopts = commonOperations.getConsumerPaymentOptions();
-				System.out.println("Select option");
-				for(ConsumerPaymentOptions payment: paymentopts) {
-					System.out.println((i++)+"."+payment);
-				}
-				int opt = getInt();
-				if(opt < 0 || opt > paymentopts.size()) {
-					if(chances >= validate.getMaxChance()) {
-						displayChancesMessege();
-						displayMessege("Going back to previous menu");
-						return null;
+					int i=1;
+					List<ConsumerPaymentOptions> paymentopts = commonOperations.getConsumerPaymentOptions();
+					System.out.println("Select option");
+					for(ConsumerPaymentOptions payment: paymentopts) {
+						System.out.println((i++)+"."+payment);
 					}
-					chances++;
-					System.out.println("Enter valid option");
-					loop = true;
-				}
-				else {
-					paymentType = paymentopts.get(opt-1).toString();
+					int opt = getInt();
+					if(opt < 0 || opt > paymentopts.size()) {
+						if(chances >= validate.getMaxChance()) {
+							displayChancesMessege();
+							displayMessege("Going back to previous menu");
+							return null;
+						}
+						chances++;
+						System.out.println("Enter valid option");
+						loop = true;
+					}
+					else {
+						paymentType = paymentopts.get(opt-1).toString();
+					}
 				}
 			}
+			catch (NullPointerException e) {
+				return null;
+			}
+			
 		}
 		return paymentType;
+	}
+
+
+	public String getEmail() {
+		boolean loop = true;
+		int chances = 1;
+		String email = null;
+		while(loop) {
+			loop = false;
+			System.out.println("Enter email id");
+			email = getString();
+			boolean isValidemail = validate.validateEmail(email);
+//			
+			if(!isValidemail) {
+				loop = true;
+				if(chances >= validate.getMaxChance()) {
+					displayChancesMessege();
+					displayMessege("Connection creation failed \n "
+							+ "Going back to previous menu");
+					return null;
+				}
+				chances++;
+				displayMessege("Please enter valid email id");
+			}
+			else {
+				
+				boolean isEmailAlreadyTaken = commonOperations.isEmailTaken(email);
+				if(isEmailAlreadyTaken) {
+					if(chances >= validate.getMaxChance()) {
+						displayChancesMessege();
+						displayMessege("Connection creation failed \n "
+								+ "Going back to previous menu");
+						return null;
+					}
+					loop = true;
+					chances++;
+					displayMessege("Email id already taken");
+				} 
+			}
+		}
+		return email;
+	}
+
+
+	public Long getPhoNo() {
+		int chances = 1;
+		boolean loop = true;
+		Long phoNo = 0l;
+		while(loop) {
+			loop = false;
+			System.out.println("Enter phone no");
+			phoNo = getLong();
+			try {
+				boolean isPhoNoTaken = commonOperations.isPhoneNoTaken(phoNo);
+				if(isPhoNoTaken) {
+					if(chances >= validate.getMaxChance()) {
+						displayChancesMessege();
+						displayMessege("Connection creation failed \n "
+								+ "Going back to previous menu");
+						return null;
+					}
+					loop = true;
+					chances++;
+					displayMessege("Phone number already taken");
+				}
+			}
+			catch (NullPointerException e) {
+				return null;
+			}
+			
+			
+		}
+			
+		return phoNo;
 	}
 
 

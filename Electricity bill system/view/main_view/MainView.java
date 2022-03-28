@@ -7,11 +7,11 @@ import common_operations.ICommonOperations;
 import common_view.CommonView;
 import consumer_view.ConsumerView;
 import eb.ElectricityBoard;
-import eb.LoadElectricityBoardData;
+import eb.SerializedEbObjFromFile;
 import validator_encrypter.Validator;
 
 public class MainView {
-	
+	SerializedEbObjFromFile ebObj = SerializedEbObjFromFile.getObj();
 	CommonView commonView = null;
 	AdminView adminView = null;
 	ConsumerView consumerView = null;
@@ -19,16 +19,18 @@ public class MainView {
 	Validator validate = new Validator(); 
 	
 	ICommonOperations operations = null;
+	ElectricityBoard eb = null;
+	SerializedEbObjFromFile serialize = SerializedEbObjFromFile.getObj();
+
 	public MainView(ElectricityBoard eb) {
+		this.eb = eb;
 		this.adminView = new AdminView(eb);
 		this.consumerView = new ConsumerView(eb);
 		this.commonView = new CommonView(eb);
 		this.operations = new CommonOperations(eb);
-		
 	}
 	public void askOptions(){
-		operations.gerenateData();
-		operations.loadData();
+		
 		boolean loop = true;
 		boolean isValid = false;
 		while(loop) {
@@ -36,20 +38,28 @@ public class MainView {
 					+ "1->Admin\n"
 					+ "2->Consumer\n"
 					+ "9->Log out");
-			int opt = commonView.getInt();
-			switch (opt) {
-			case 1: isValid = login();
-				if(isValid)
-					adminView.adminOptions();
-				break;
-			case 2: this.consumerView.askConsumerOptions();
-				break;
-			case 9: loop =false;
-				commonView.displayMessege("Logging out");
-				break;
-			default: commonView.displayMessege("Enter correct option");
-				break;
+			Integer opt = commonView.getInt();
+			try {
+				switch (opt) {
+				case 1: isValid = login();
+					if(isValid)
+						adminView.adminOptions();
+					break;
+				case 2: this.consumerView.askConsumerOptions();
+					break;
+				case 9: loop =false;
+//					ebObj.updateEbFile(this.eb);
+					commonView.displayMessege("Logging out");
+					break;
+				default: commonView.displayMessege("Enter correct option");
+					break;
+				}
 			}
+			catch (NullPointerException e) {
+				commonView.displayMessege("Logging out");
+				return;
+			}
+			
 		}
 	}
 	private boolean login() {

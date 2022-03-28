@@ -45,9 +45,10 @@ public interface ICommonOperations {
 	//List of all Consumer payment options
 	public List<ConsumerPaymentOptions> getConsumerPaymentOptions();
 
-	public void gerenateData();
+	public boolean isEmailTaken(String email);
+	
+	public boolean isPhoneNoTaken(Long phono);
 
-	public void loadData();
 
 
 }

@@ -1,6 +1,10 @@
 package consumer;
 
 public class Admin extends User    {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String user_name ;
 	private String password;
 	public Admin(String user_name, String password) {

@@ -38,21 +38,26 @@ public class ConsumerView {
 					+ "3->login\n"
 					+ "4->View all tarrifs\n"
 					+ "9->Back to previous menu");
-			int opt = commonView.getInt();
-			switch (opt) {
-			case 1: commonView.payBill(isAdmin);
-				break;
-			case 2: consumerRegistration();
-				break;
-			case 3: login();
-				break;
-			case 4: viewTarrifs();
-				break;
-			case 9: loop = false;
-				commonView.displayMessege("Back to previous menu");
-				break;	
-			default: commonView.displayMessege("please enter correct option");
-				break;
+			Integer opt = commonView.getInt();
+			try {
+				switch (opt) {
+				case 1: commonView.payBill(isAdmin);
+					break;
+				case 2: consumerRegistration();
+					break;
+				case 3: login();
+					break;
+				case 4: viewTarrifs();
+					break;
+				case 9: loop = false;
+					commonView.displayMessege("Back to previous menu");
+					break;	
+				default: commonView.displayMessege("please enter correct option");
+					break;
+				}
+			}
+			catch(NullPointerException e) {
+				return;
 			}
 		}
 	}
@@ -71,15 +76,21 @@ public class ConsumerView {
 				+ "1->select if you already have connection\n"
 				+ "2->Select if no connection available\n"
 				+ "press any other key for previous menu");
-		int opt = commonView.getInt();
-		switch (opt) {
-		case 1: registerConsumerForExistingConnection();
-			break;
-		case 2: registerConsumerForNewConnection();
-			break;
-		default: commonView.displayMessege("Back to previous menu");
-			break;
+		Integer opt = commonView.getInt();
+		try {
+			switch (opt) {
+			case 1: registerConsumerForExistingConnection();
+				break;
+			case 2: registerConsumerForNewConnection();
+				break;
+			default: commonView.displayMessege("Back to previous menu");
+				break;
+			}
 		}
+		catch (NullPointerException e) {
+			return;
+		}
+		
 	}
 	
 
@@ -87,14 +98,14 @@ public class ConsumerView {
 		
 		boolean loop = true;
 		String user_name = "";
-		int  chances = 0;
+		int  chances = 1;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter user name");
 			user_name = commonView.getString();
 			boolean isValidUserName = commonOperations.checkUserNameAvailable(user_name, isConsumer);
 			if(!isValidUserName) {
-				if(chances >= 2) {
+				if(chances >= validate.getMaxChance()) {
 					commonView.displayMessege("Maximum chances has been give please try after sometime");
 					loop = false;
 					return;
@@ -104,7 +115,7 @@ public class ConsumerView {
 				chances++;
 			}
 		}
-		 chances = 0;
+		 chances = 1;
 		loop = true;
 		while(loop) {
 			loop = false;
@@ -112,9 +123,10 @@ public class ConsumerView {
 			String password = commonView.getString();
 			boolean isValidLoginDetails = commonOperations.validatePassword(user_name, password, "consumer");
 			if(!isValidLoginDetails) {
-				if(chances >= 2) {
+				if(chances >= validate.getMaxChance()) {
 					commonView.displayMessege("Maximum chances has been give please try after sometime");
 					loop = false;
+					return;
 					}
 				loop = true;
 				chances++;
@@ -130,17 +142,36 @@ public class ConsumerView {
 
 	private void registerConsumerForExistingConnection() {
 		boolean loop = true;
-		int consumerNo = 0;
+		Long consumerNo = 0l;
+		int chances = 1;
 		while(loop) {
+			try {
 			loop = false;
 			System.out.println("Enter consumer number");
-			consumerNo = commonView.getInt();
-			boolean isValidConsumerNumber = commonOperations.isValidCustomerNo(consumerNo);
-			if(!isValidConsumerNumber) {
-				loop = true;
-				commonView.displayMessege("Conumer number does not exists please enter valid consumer number");
+			consumerNo = commonView.getLong();
+			
+				String user_name= operations.getUserNameIfAlreadyRegiestered(consumerNo);
+				if(user_name != null) {
+					commonView.displayMessege("The consumer is already registered user name is "+user_name);
+					return;
+				}
+				boolean isValidConsumerNumber = commonOperations.isValidCustomerNo(consumerNo);
+				if(!isValidConsumerNumber) {
+					if(chances >= validate.getMaxChance()) {
+						commonView.displayChancesMessege();
+						commonView.displayMessege("Registration failed");
+						return;
+					}
+					chances++;
+					loop = true;
+					commonView.displayMessege("Conumer number does not exists please enter valid consumer number");
+				}
 			}
-		}
+			catch (NullPointerException e) {
+				return;
+			}
+			}
+			
 		String user_name = registerUser(consumerNo);
 		if(user_name != null) {
 			commonView.displayMessege(user_name+" registered successfully");
@@ -248,18 +279,20 @@ public class ConsumerView {
 		System.out.println("Enter name ");
 		String name = commonView.getString();
 		
-		System.out.println("Enter email id");
-		String email = commonView.getString();
+		String email = commonView.getEmail();
+		if(email == null)
+			return;
 		
-		System.out.println("Enter phone no");
-		long phoNo= commonView.getLong();
+		Long phoNo= commonView.getPhoNo();
+		if(phoNo == null)
+			return;
 		
 		System.out.println("Enter your address");
 		String address = commonView.getString();
 		
 		long consumerNo = operations.createConsumer(name,email,phoNo,address);
 		String user_name = registerUser(consumerNo);
-		commonView.displayMessege("Your consumer number is "+consumerNo);
+		commonView.displayMessege("Your consumer number is "+consumerNo+" and user name is "+user_name);
 		loginView.askLoggedInOptions(consumerNo);
 	}
 	

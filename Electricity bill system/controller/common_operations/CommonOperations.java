@@ -1,34 +1,25 @@
 package common_operations;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import add_or_update_files.ConsumerFiles;
 import bill.Bill;
 import bill.Payment;
 import connection.Connection;
 import connection.TypeOfConnection;
-import consumer.Consumer;
 import eb.ElectricityBoard;
-import eb.LoadElectricityBoardData;
-import files_details.FileDetails;
+import eb.SerializedEbObjFromFile;
 import payment_options.AdminPaymentOptions;
 import payment_options.ConsumerPaymentOptions;
 import validator_encrypter.Encryption;
 
 public class CommonOperations implements ICommonOperations{
-	LoadElectricityBoardData loadData = null;
-	ConsumerFiles consumerFiles = null;
-	
-	FileDetails files = FileDetails.getFiles();
+	SerializedEbObjFromFile serialize = SerializedEbObjFromFile.getObj();
 	ElectricityBoard eb = null;
 	
 	Encryption encrypt = new Encryption();
 	public CommonOperations(ElectricityBoard eb) {
 		this.eb = eb;
-		this.consumerFiles = new ConsumerFiles(eb);
-		this.loadData = new LoadElectricityBoardData(eb);
 	}
 	
 	@Override
@@ -71,8 +62,7 @@ public class CommonOperations implements ICommonOperations{
 			pendingPayments.remove(opt-1);
 			Bill bill = new Bill(this.eb.getBillNoSeries(),payment,paymentThrough);
 			connection.setBills(bill);
-//			connFile.updateConnection(connection);
-			consumerFiles.updateConusumer(connection);
+			serialize.updateEbFile(this.eb);
 			return bill;
 		}
 		catch(Exception e) {
@@ -136,18 +126,14 @@ public class CommonOperations implements ICommonOperations{
 	}
 
 	@Override
-	public void gerenateData() {
-		File consumerFile = files.getConsumerFile();
-		if(!consumerFile.exists() && consumerFile.length() == 0) {
-			Consumer consumer1 = new Consumer(this.eb.getConsumerNoSeries(),"Sai", "ks.sai@gmail.com", 9787898l, "trl");
-			Connection conn1 = new Connection(this.eb.getConnNoSeries(), TypeOfConnection.Domestic,"main road trl",consumer1);
-			consumer1.setConnection(conn1);
-			consumerFiles.addCustomer(consumer1);
-		}
+	public boolean isEmailTaken(String email) {
+//		System.out.println(email);
+		
+		return this.eb.getEmails().contains(email);
 	}
 
 	@Override
-	public void loadData() {
-		loadData.loadConsumer();
+	public boolean isPhoneNoTaken(Long phoNo) {
+		return this.eb.getPhoNos().contains(phoNo);
 	}
 }

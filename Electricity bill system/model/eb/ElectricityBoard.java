@@ -1,31 +1,30 @@
 package eb;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import add_or_update_files.GetSeriesNo;
 import comparator.RequestObjComparator;
 import connection.Connection;
 import consumer.Admin;
 import consumer.Consumer;
 
-public class ElectricityBoard implements Externalizable{
-	GetSeriesNo getSeries = new GetSeriesNo();
+public class ElectricityBoard implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
 	
 	private long billNoSeries = 111111;
 	private long connNoSeries = 22222;
 	private long consumerNoSeries = 1;
 	private long requestNoSeries= 1;
 	
+	private Set<String> emails = new HashSet<String>();
+	private Set<Long> phoNos = new HashSet<Long>();
 	//consumerNo and Consumer
 	private Map<Long, Consumer> consumers = new TreeMap<Long, Consumer>();
 	private Map<String, Long> consumerMapping = new HashMap<String, Long>();
@@ -46,6 +45,8 @@ public class ElectricityBoard implements Externalizable{
 
 	public void setConsumers(Consumer consumer) {
 		this.consumers.put(consumer.getConsumerNO(), consumer);
+		this.phoNos.add(consumer.getPhoNo());
+		this.emails.add(consumer.getEmailId());
 	}
 	
 	public Map<String, Admin> getAdmins() {
@@ -65,19 +66,19 @@ public class ElectricityBoard implements Externalizable{
 	}
 
 	public long getBillNoSeries() {
-		return this.getSeries.getSeries("billNoSeries");
+		return this.billNoSeries++;
 	}
 	
 	public long getConnNoSeries() {
-		return this.getSeries.getSeries("connNoSeries");
+		return this.connNoSeries++;
 	}
 
 	public long getConsumerNoSeries() {
-		return this.getSeries.getSeries("consumerNoSeries");
+		return this.consumerNoSeries++;
 	}
 	
 	public long getRequestNoSeries() {
-		return 	this.getSeries.getSeries("requestNoSeries");
+		return 	this.requestNoSeries++;
 	}
 
 	public Map<String, Long> getConsumerMapping() {
@@ -96,15 +97,12 @@ public class ElectricityBoard implements Externalizable{
 		this.requests.add(request);
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
-		// TODO Auto-generated method stub
-		
+	public Set<String> getEmails() {
+		return emails;
 	}
 
-	@Override
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		
+	public Set<Long> getPhoNos() {
+		return phoNos;
 	}
+	
 }

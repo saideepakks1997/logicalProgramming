@@ -39,8 +39,9 @@ public class NewOrUpdateConnectionView {
 					+ "3->Create new Connection\n"
 					+ "4->Change connection type\n"
 					+ "9->Back to previous menu");
-			int opt = commonView.getInt();
-			switch (opt) {
+			Integer opt = commonView.getInt();
+			try {
+				switch (opt) {
 				case 1: viewAndApproveNewConnection();
 					break;
 				case 2: viewAndChangetype();
@@ -54,6 +55,10 @@ public class NewOrUpdateConnectionView {
 					break;
 				default: commonView.displayMessege("please enter correct option");
 					break;
+			}
+			}
+			catch (NullPointerException e) {
+				return;
 			}
 		}
 	}
@@ -72,35 +77,47 @@ public class NewOrUpdateConnectionView {
 			if(request != null) {
 				System.out.println("Enter 1->For approval and move forward\n"
 						+ "Any other number for non approval");
-				int approvalOpt = commonView.getInt();
-				
-				long consumerNo = request.getConsumerNo();
-				String status = null;
-				if(approvalOpt == 1) {
-					//updating status numbers
-					operations.updateStatus(request);
-					status = RequestStatus.values()[request.getStatusNo()].displayName();
-					commonView.displayMessege("Moved to "+status+" status");
-					status += "  request number( "+request.getRequestNo()+" )";
-					if(request.getStatusNo() == RequestStatus.values().length-1) {
-						Connection con = operations.createConnectionForExistingConsumer(consumerNo,request.getAddress(),request.getConnType());
-						if(con != null) {
-							status += " And your connection number is "+con.getServiceNo();
+				Integer approvalOpt = commonView.getInt();
+				try {
+					String status = null;
+					if(approvalOpt == 1) {
+						long consumerNo = request.getConsumerNo();
+						//updating status numbers
+						operations.updateStatus(request);
+						status = RequestStatus.values()[request.getStatusNo()].displayName();
+						commonView.displayMessege("Moved to "+status+" status");
+						status += "  request number( "+request.getRequestNo()+" )";
+						if(request.getStatusNo() == RequestStatus.values().length-1) {
+							Connection con = operations.createConnectionForExistingConsumer(consumerNo,request.getAddress(),request.getConnType());
+							if(con != null) {
+								status += " And your connection number is "+con.getServiceNo();
+							}
 						}
+						operations.setNotification(request, status);
 					}
-					operations.setNotification(request, status);
+					else {
+						status = RequestStatus.values()[request.getStatusNo()].displayName();
+						String msg = "New connection request has been not approved for request no "+request.getRequestNo()+"  failed at status "+status;
+						
+						commonView.displayMessege(msg);
+						operations.setNotification(request, msg);
+						//remove request from admin
+						operations.removeRequest(request);
+					}
 				}
-				else {
-					String msg = "New connection request has been not approved for request no "+request.getRequestNo();
-					commonView.displayMessege(msg);
-					operations.setNotification(request, status);
-					//remove request from admin
-					operations.removeRequest(request);
+				catch(NullPointerException e) {
+					return;
 				}
-			}						
-			if(!stillAcceptRequest()) 
-				loop = false;
 			}
+			try {
+				if(!stillAcceptRequest()) 
+					loop = false;
+				}
+			catch (NullPointerException e) {
+				return;
+			}
+			}
+			
 	}
 	
 	private void viewAndChangetype() {
@@ -118,30 +135,34 @@ public class NewOrUpdateConnectionView {
 				System.out.println("Enter 1->For approval\n"
 						+ "Any other number for non approval");
 				int approvalOpt = commonView.getInt();
-				
-				String status = null;
-				if(approvalOpt == 1) {
-					//update status number
-					operations.updateStatus(request);
-					status = RequestStatus.values()[request.getStatusNo()].displayName();
-					commonView.displayMessege("Moved to "+status+" status");
-					status += " for request number "+request.getRequestNo();
-//						
-					if(request.getStatusNo() == RequestStatus.values().length-1) {
-						TypeOfConnection conn = request.getConnType();
-						long connNo = request.getServiceNo();
-						operations.changeConnectionType(conn,connNo);
-						commonView.displayMessege(status+"\n"
-								+ "Changed type to "+conn);
+				try {
+					String status = null;
+					if(approvalOpt == 1) {
+						//update status number
+						operations.updateStatus(request);
+						status = RequestStatus.values()[request.getStatusNo()].displayName();
+						commonView.displayMessege("Moved to "+status+" status");
+						status += " for request number "+request.getRequestNo();
+							
+						if(request.getStatusNo() == RequestStatus.values().length-1) {
+							TypeOfConnection conn = request.getConnType();
+							long connNo = request.getServiceNo();
+							operations.changeConnectionType(conn,connNo);
+							commonView.displayMessege(status+"\n"
+									+ "Changed type to "+conn);
+						}
+						operations.setNotification(request, status);
 					}
-					operations.setNotification(request, status);
+					else {
+						status = RequestStatus.values()[request.getStatusNo()].displayName();
+						 String messege = "Change of connection has not approved  for request no "+request.getRequestNo()+" failed at status "+status;
+						commonView.displayMessege(messege);
+						operations.setNotification(request, status);
+						operations.removeRequest(request);
+					}
 				}
-				else {
-					 String messege = "Change of connection has not approved  for request no "+request.getRequestNo();
-					commonView.displayMessege(messege);
-					operations.setNotification(request, status);
-					operations.removeRequest(request);
-				}
+				catch(NullPointerException e) {}
+				
 			}
 			if(!stillAcceptRequest()) 
 				loop = false;
@@ -152,35 +173,60 @@ public class NewOrUpdateConnectionView {
 			commonView.displayMessege("No requests available");
 		return null;
 		}
-		int opt = getRequestOption(requests, isNewConnRequest);
-		if(opt == -1) {
-			commonView.displayMessege("No options selected going back to previous menu");
-		}
-		else if(opt > requests.size() || opt < 0) {
-			commonView.displayMessege("Enter correct option");
-			return null;
-		}
-		else {
-			return requests.get(opt-1);
+		int chances = 1;
+		boolean loop = true;
+		while(loop){
+			try {
+				loop = false;
+				int opt = getRequestOption(requests, isNewConnRequest);
+				if(opt == -1) {
+					commonView.displayMessege("No options selected going back to previous menu");
+				}
+				else if(opt > requests.size() || opt < 0) {
+					if(chances >= validate.getMaxChance()) {
+						commonView.displayChancesMessege();
+						return null;
+					}
+					loop = true;
+					chances++;
+					commonView.displayMessege("Enter correct option");
+					
+				}
+				else {
+					return requests.get(opt-1);
+				}
+				
+			}
+			catch (NullPointerException e) {
+				return null;
+			}
 		}
 		return null;
+		
+		
 	}
 
 	private boolean stillAcceptRequest() {
 		commonView.displayMessege("Still you want to accept the request\n"
 				+ "1->YES\n"
 				+ "Enter any number for NO");
-		int opt = commonView.getInt();
-		if(opt != 1)
+		Integer opt = commonView.getInt();
+		try {
+			if(opt != 1)
+				return false;
+			return true;
+		}
+		catch (NullPointerException e) {
 			return false;
-		return true;
+		}
+		
 	}
 
-	private int getRequestOption(List<RequestObj> requests, boolean isNewConnRequest) {
+	private Integer getRequestOption(List<RequestObj> requests, boolean isNewConnRequest) {
 		System.out.println("Select the request number for approval or not approving\n"
 				+ "(-1) for not selecting anything");
 		commonView.displayRequest(requests,isNewConnRequest);
-		int opt = commonView.getInt();
+		Integer opt = commonView.getInt();
 		return opt;
 	}
 
@@ -192,18 +238,24 @@ public class NewOrUpdateConnectionView {
 		while(loop) {
 			commonView.displayMessege("1->New Consumer\n"
 					+ "2->Existing Conusmer");
-			int opt = commonView.getInt();
-			switch (opt) {
-			case 1: loop = false;
-				createConnectionForNewConsumer();
-				break;
-			case 2: loop = false;
-				createConnectionForExistingConsumer();
-				break;	
-			default: loop = true;
-				commonView.displayMessege("Please enter correct option");
-				break;
+			Integer opt = commonView.getInt();
+			try {
+				switch (opt) {
+				case 1: loop = false;
+					createConnectionForNewConsumer();
+					break;
+				case 2: loop = false;
+					createConnectionForExistingConsumer();
+					break;	
+				default: loop = true;
+					commonView.displayMessege("Please enter correct option");
+					break;
+				}
 			}
+			catch (NullPointerException e) {
+				return;
+			}
+			
 		}
 	}
 	
@@ -211,24 +263,30 @@ public class NewOrUpdateConnectionView {
 	private void createConnectionForExistingConsumer() {
 		int chances = 1;
 		boolean loop = true;
-		int customerNo = 0;
+		Integer customerNo = 0;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter customer number");
 			customerNo = commonView.getInt();
-			boolean isValidCustomerId = commonOperations.isValidCustomerNo(customerNo);
-			if(!isValidCustomerId) {
-				if(chances >= validate.getMaxChance()) {
-					commonView.displayChancesMessege();
-					
-					commonView.displayMessege("Connection Creation failed \n"
-							+ "Going back to previous menu");
-					return;
-				}
-				chances++;
-				loop = true;
-				commonView.displayMessege("Please enter valid consumer no");
-				}
+			try {
+				boolean isValidCustomerId = commonOperations.isValidCustomerNo(customerNo);
+				if(!isValidCustomerId) {
+					if(chances >= validate.getMaxChance()) {
+						commonView.displayChancesMessege();
+						
+						commonView.displayMessege("Connection Creation failed \n"
+								+ "Going back to previous menu");
+						return;
+					}
+					chances++;
+					loop = true;
+					commonView.displayMessege("Please enter valid consumer no");
+					}
+			}
+			catch (NullPointerException e) {
+				return;
+			}
+			
 		}
 		TypeOfConnection connType = commonView.selectTypeOfConnection();
 		if(connType != null) {
@@ -250,28 +308,13 @@ public class NewOrUpdateConnectionView {
 		System.out.println("Enter name ");
 		String name = commonView.getString();
 		
-		String emailId = null;
-		while(loop) {
-			loop = false;
-			System.out.println("Enter email id");
-			emailId = commonView.getString();
-			boolean isValidemail = validate.validateEmail(emailId);
-			if(!isValidemail) {
-				loop = true;
-				if(chances >= validate.getMaxChance()) {
-					commonView.displayChancesMessege();
-					commonView.displayMessege("Connection creation failed \n "
-							+ "Going back to previous menu");
-					return;
-				}
-				chances++;
-				commonView.displayMessege("Please enter valid email id");
-			}
-		}
+		String emailId = commonView.getEmail();
+		if(emailId == null) 
+			return;
 		
-		
-		System.out.println("Enter phone no");
-		long phoNo= commonView.getLong();
+		Long phoNo = commonView.getPhoNo();
+		if(phoNo == null)
+			return;
 		
 		System.out.println("Enter your address");
 		String address = commonView.getString();

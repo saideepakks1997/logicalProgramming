@@ -1,5 +1,6 @@
 package comparator;
 
+import java.io.Serializable;
 //public class RequestObjComparator {
 //
 //}
@@ -9,7 +10,12 @@ import java.util.Comparator;
 import eb.RequestObj;
 
 
-public class RequestObjComparator implements Comparator<RequestObj>{
+public class RequestObjComparator implements Comparator<RequestObj>,Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public int compare(RequestObj obj1, RequestObj obj2) {
