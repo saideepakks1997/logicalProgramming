@@ -302,40 +302,40 @@ public class NewOrUpdateConnectionView {
 	}
 
 	private void createConnectionForNewConsumer() {
-		int chances = 1;
-		boolean loop = true;
-		System.out.println("Start entering consumer details ");
-		System.out.println("Enter name ");
-		String name = commonView.getString();
-		
-		String emailId = commonView.getEmail();
-		if(emailId == null) 
-			return;
-		
-		Long phoNo = commonView.getPhoNo();
-		if(phoNo == null)
-			return;
-		
-		System.out.println("Enter your address");
-		String address = commonView.getString();
-		
-		System.out.println("Enter connection address");
-		String connAddress = commonView.getString();
-		
-		TypeOfConnection connType = commonView.selectTypeOfConnection();
-		if(connType != null) {
-			Connection conn = operations.createConnectionForNewConsumer(name,emailId,phoNo,address,connAddress, connType);
-			if(conn != null) {
-				commonView.displayMessege("Connection has been created successfully service number is "+conn.getServiceNo()+""
-						+ " and consumer no is "+conn.getConsumer().getConsumerNO());
+		try {
+			System.out.println("Start entering consumer details ");
+			System.out.println("Enter name ");
+			String name = commonView.getString();
+			
+			String emailId = commonView.getEmail();
+			
+			Long phoNo = commonView.getPhoNo();
+			
+			System.out.println("Enter your address");
+			String address = commonView.getString();
+			
+			System.out.println("Enter connection address");
+			String connAddress = commonView.getString();
+			
+			TypeOfConnection connType = commonView.selectTypeOfConnection();
+			if(connType != null) {
+				Connection conn = operations.createConnectionForNewConsumer(name,emailId,phoNo,address,connAddress, connType);
+				if(conn != null) {
+					commonView.displayMessege("Connection has been created successfully service number is "+conn.getServiceNo()+""
+							+ " and consumer no is "+conn.getConsumer().getConsumerNO());
+					}
+				else {
+					commonView.displayMessege("Connection creation failed");
 				}
+			}
 			else {
 				commonView.displayMessege("Connection creation failed");
 			}
 		}
-		else {
-			commonView.displayMessege("Connection creation failed");
+		catch (NullPointerException e) {
+			return;
 		}
+		
 		
 	}
 	

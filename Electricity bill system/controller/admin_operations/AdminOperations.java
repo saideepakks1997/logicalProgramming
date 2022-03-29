@@ -82,6 +82,7 @@ public class AdminOperations implements IAdminOperations{
 
 	@Override
 	public Connection createConnectionForNewConsumer(String name,String email,long phoNo,String address,String connAddress, TypeOfConnection connType) {
+		email = email.toLowerCase();
 		Consumer consumer = new Consumer(this.eb.getConsumerNoSeries(),name, email, phoNo, address);
 		
 		long serviceNo = this.eb.getConnNoSeries();

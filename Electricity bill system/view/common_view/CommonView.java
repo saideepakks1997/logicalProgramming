@@ -127,6 +127,8 @@ public class CommonView {
 		System.out.println("Consumer No :- "+consumer.getConsumerNO());
 		System.out.println("Consumer Name :- "+consumer.getName());
 		System.out.println("Consumer Address :- "+consumer.getAddress());
+		System.out.println("Phone No :- "+consumer.getPhoNo());
+		System.out.println("Email  :- "+consumer.getEmailId());
 		System.out.printf("%10s %15s %30s %30s","Serivce No","Current Units","Connection Type","Connection Address");
 		Collection<Connection> connections =  consumer.getConnections().values();
 		for(Connection con: connections) {
@@ -422,7 +424,7 @@ public class CommonView {
 			}
 			else {
 				
-				boolean isEmailAlreadyTaken = commonOperations.isEmailTaken(email);
+				boolean isEmailAlreadyTaken = commonOperations.isEmailTaken(email.toLowerCase());
 				if(isEmailAlreadyTaken) {
 					if(chances >= validate.getMaxChance()) {
 						displayChancesMessege();
@@ -449,8 +451,22 @@ public class CommonView {
 			System.out.println("Enter phone no");
 			phoNo = getLong();
 			try {
-				boolean isPhoNoTaken = commonOperations.isPhoneNoTaken(phoNo);
-				if(isPhoNoTaken) {
+				boolean isValidPhno = validate.validatePhoNo(phoNo);
+				if(isValidPhno) {
+					boolean isPhoNoTaken = commonOperations.isPhoneNoTaken(phoNo);
+					if(isPhoNoTaken) {
+						if(chances >= validate.getMaxChance()) {
+							displayChancesMessege();
+							displayMessege("Connection creation failed \n "
+									+ "Going back to previous menu");
+							return null;
+						}
+						loop = true;
+						chances++;
+						displayMessege("Phone number already taken");
+					}
+				}
+				else {
 					if(chances >= validate.getMaxChance()) {
 						displayChancesMessege();
 						displayMessege("Connection creation failed \n "
@@ -458,9 +474,9 @@ public class CommonView {
 						return null;
 					}
 					loop = true;
-					chances++;
-					displayMessege("Phone number already taken");
+					displayMessege("Phone number should have 10 digits and it should start with 7,8,9");
 				}
+				
 			}
 			catch (NullPointerException e) {
 				return null;

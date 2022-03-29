@@ -11,15 +11,27 @@ import java.io.ObjectOutputStream;
 
 
 public class SerializedEbObjFromFile {
+	
+	private File ebFile = null;
+	public static SerializedEbObjFromFile getSerialize() {
+		return serialize;
+	}
+	
+
 	private static SerializedEbObjFromFile serialize = new SerializedEbObjFromFile();
 	public static SerializedEbObjFromFile getObj() {
 		return serialize;
 	}
-	private SerializedEbObjFromFile() {}
+	private SerializedEbObjFromFile() {
+		setFilePath();
+	}
 	
-	private File ebFile = new File("C:\\file handling examples\\electricity bill board\\Electricity board.txt");
-	private File tempFile = new File("C:\\file handling examples\\electricity bill board\\temp.txt");
-	
+	private void setFilePath() {
+		File objFile = new File("Objects");
+		objFile.mkdir();
+		this.ebFile = new File(objFile+File.separator+"Electricity board.txt");
+	}
+
 	public ElectricityBoard getEbObj() {
 		ElectricityBoard eb = null;
 		if(!ebFile.exists() || ebFile.length() == 0) 

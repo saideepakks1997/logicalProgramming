@@ -127,7 +127,6 @@ public class CommonOperations implements ICommonOperations{
 
 	@Override
 	public boolean isEmailTaken(String email) {
-//		System.out.println(email);
 		
 		return this.eb.getEmails().contains(email);
 	}

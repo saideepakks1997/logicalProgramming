@@ -66,9 +66,8 @@ public class AdminView {
 			}
 			}
 			catch (NullPointerException e) {
-				
+				return;
 			}
-			
 		}
 	}
 	

@@ -7,7 +7,8 @@ public class Validator {
 	
 	 private String PASSWORD_REGEX = 
 			"((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,15})";
-	 private   String EMAIL_REGEX =  "^([A-Za-z\\d\\.-]+)@([A-Za-z\\d-]+)\\.([A-Za-z]{1,8})(\\.[A-Za-z] {1,8})?$";
+	 private String EMAIL_REGEX =  "^([A-Za-z\\d\\.-]+)@([A-Za-z\\d-]+)\\.([A-Za-z]{1,8})(\\.[A-Za-z] {1,8})?$";
+	 private String PHONO_NO_REGEX = "(0|91)?[7-9][0-9]{9}";
 	 private int maxChancesForValidation = 3;
 				
 		public boolean validatePassword(String password) {
@@ -16,6 +17,10 @@ public class Validator {
 		}
 		public boolean validateEmail(String email) {
 			boolean isValid = validate(EMAIL_REGEX, email);
+			return isValid;
+		}
+		public boolean validatePhoNo(Long phoNo) {
+			boolean isValid = validate(PHONO_NO_REGEX, phoNo.toString());
 			return isValid;
 		}
 		private boolean validate(String regex, String field) {
