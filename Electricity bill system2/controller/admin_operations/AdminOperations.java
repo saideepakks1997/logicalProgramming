@@ -14,11 +14,9 @@ import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 import eb.RequestStatus;
-import eb.SerializedEbObjFromFile;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
-	SerializedEbObjFromFile serialize = SerializedEbObjFromFile.getObj();
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
@@ -33,7 +31,6 @@ public class AdminOperations implements IAdminOperations{
 				double readings = newReadings - pastReadings;
 				conn.setCurrentUnit(newReadings);
 				setPendingPayment(readings, conn);
-				serialize.updateEbFile(this.eb);
 				return true;
 			}
 		}
@@ -75,7 +72,6 @@ public class AdminOperations implements IAdminOperations{
 		}
 		else {
 			conn.setConnectionType(connectionType);
-			serialize.updateEbFile(this.eb);
 			return true;
 		}
 	}
@@ -103,7 +99,6 @@ public class AdminOperations implements IAdminOperations{
 		
 		this.eb.setConnections(conn);
 		consumer.setConnection(conn);
-		serialize.updateEbFile(this.eb);
 
 		return conn;
 	}
@@ -144,7 +139,6 @@ public class AdminOperations implements IAdminOperations{
 		if(req.getStatusNo() == RequestStatus.values().length - 1) {
 			removeRequest(req);
 		}
-		serialize.updateEbFile(this.eb);
 		return true;
 	}
 
@@ -152,7 +146,6 @@ public class AdminOperations implements IAdminOperations{
 	public boolean removeRequest(RequestObj req) {
 		boolean isRemoved = this.eb.getRequests().remove(req);
 		req.setRequestCompleted(true);
-		serialize.updateEbFile(this.eb);
 		return isRemoved;
 	}
 
@@ -162,6 +155,5 @@ public class AdminOperations implements IAdminOperations{
 		Consumer consumer = this.eb.getConsumers().get(consumerNo);
 		consumer.setNotifis(req, status);
 		req.setLastUpdatedTime();
-		serialize.updateEbFile(this.eb);
 	}
 }

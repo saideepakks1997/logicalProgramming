@@ -9,11 +9,9 @@ import common_view.DisplayView;
 import common_view.UserInputView;
 import consumer_view.ConsumerView;
 import eb.ElectricityBoard;
-import eb.SerializedEbObjFromFile;
 import validator_encrypter.Validator;
 
 public class MainView {
-	SerializedEbObjFromFile ebObj = SerializedEbObjFromFile.getObj();
 	CommonView commonView = null;
 	AdminView adminView = null;
 	ConsumerView consumerView = null;
@@ -25,7 +23,6 @@ public class MainView {
 	
 	ICommonOperations operations = null;
 	ElectricityBoard eb = null;
-	SerializedEbObjFromFile serialize = SerializedEbObjFromFile.getObj();
 
 	public MainView(ElectricityBoard eb) {
 		this.eb = eb;

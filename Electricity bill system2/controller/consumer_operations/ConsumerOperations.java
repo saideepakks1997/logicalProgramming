@@ -10,13 +10,11 @@ import connection.TypeOfConnection;
 import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
-import eb.SerializedEbObjFromFile;
 import validator_encrypter.Encryption;
 
 public class ConsumerOperations implements IConsumerOperations{
 	ElectricityBoard eb = null;
 	Encryption encrypt = new Encryption();
-	SerializedEbObjFromFile serialize = SerializedEbObjFromFile.getObj();
 	public ConsumerOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
@@ -29,7 +27,6 @@ public class ConsumerOperations implements IConsumerOperations{
 		
 		this.eb.setConsumerMapping(consumer);
 		
-		serialize.updateEbFile(this.eb);
 		return true;
 	}
 
@@ -46,7 +43,6 @@ public class ConsumerOperations implements IConsumerOperations{
 		long consumerNo = this.eb.getConsumerNoSeries();
 		Consumer consumer = new Consumer(consumerNo, name, email, phoNo, address);
 		this.eb.setConsumers(consumer);
-		serialize.updateEbFile(this.eb);
 		return consumer.getConsumerNO();
 	}
 	
@@ -59,7 +55,6 @@ public class ConsumerOperations implements IConsumerOperations{
 		System.out.println("New connection reqs "+request);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
-		serialize.updateEbFile(this.eb);
 		return request;
 	}
 	@Override
@@ -73,7 +68,6 @@ public class ConsumerOperations implements IConsumerOperations{
 		RequestObj request = new RequestObj(consumerNo, serviceNo, connType, requestNo);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
-		serialize.updateEbFile(this.eb);
 		return request;
 	}
 	@Override

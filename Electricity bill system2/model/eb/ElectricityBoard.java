@@ -13,9 +13,8 @@ import connection.Connection;
 import consumer.Admin;
 import consumer.Consumer;
 
-public class ElectricityBoard implements Serializable{
+public class ElectricityBoard {
 	
-	private static final long serialVersionUID = 1L;
 
 	
 	private long billNoSeries = 111111;
