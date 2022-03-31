@@ -1,0 +1,6 @@
+billNoSeries=111111
+connNoSeries=22225
+consumerNoSeries=4
+requestNoSeries=1
+paymentIdSeries=1
+

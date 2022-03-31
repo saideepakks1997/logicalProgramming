@@ -89,13 +89,12 @@ public class ConsumerOperations implements IConsumerOperations{
 		String user_name = this.eb.getConsumers().get(consumerNo).getUser_name();
 		return user_name ;
 	}
+
 	@Override
-	public void removeConsumer(Long consumerNo) {
-		Consumer consumer = this.eb.getConsumers().get(consumerNo);
-		this.eb.getEmails().remove(consumer.getEmailId().toLowerCase());
-		this.eb.getPhoNos().remove(consumer.getPhoNo());
-		this.eb.setConsumerNo();
-		this.eb.getConsumers().remove(consumer.getConsumerNO());
-		}
-	
+	public Consumer registerUser(String name, String email, Long phoNo, String address, String user_name,
+			String password) {
+		password = encrypt.encryptPassword(password);
+		Consumer consumer = new Consumer(this.eb.getConsumerNoSeries(), name, email, phoNo, address, user_name, password);
+		return consumer;
+	}
 }

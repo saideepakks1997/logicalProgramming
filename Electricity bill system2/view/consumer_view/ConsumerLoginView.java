@@ -132,6 +132,7 @@ public class ConsumerLoginView {
 
 	public void viewAllBills() {
 		long serviceNo = selectConnectionNo();
+		System.out.println("Serivicce no =="+serviceNo);
 		if(serviceNo != -1) {
 			List<Bill> bills = commonOperations.getBills(serviceNo);
 			if(bills.size() == 0) {
@@ -139,6 +140,7 @@ public class ConsumerLoginView {
 			}
 			else {
 				for(Bill bill: bills) {
+					System.out.println(bill);
 					display.displayBill(bill);
 				}
 			}
@@ -222,6 +224,7 @@ public class ConsumerLoginView {
 				}
 			}
 			catch (NullPointerException e) {
+				e.printStackTrace();
 				return -1;
 			}
 			

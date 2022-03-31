@@ -8,12 +8,19 @@ import bill.Payment;
 import connection.Connection;
 import connection.TypeOfConnection;
 import eb.ElectricityBoard;
+import files.BillFiles;
+import files.ConnectionFiles;
+import files.PaymentFile;
 import payment_options.AdminPaymentOptions;
 import payment_options.ConsumerPaymentOptions;
 import validator_encrypter.Encryption;
 
 public class CommonOperations implements ICommonOperations{
 	ElectricityBoard eb = null;
+	
+	BillFiles billFiles = new BillFiles();
+	PaymentFile paymentFiles = new PaymentFile();
+	ConnectionFiles connFiles = new ConnectionFiles();
 	
 	Encryption encrypt = new Encryption();
 	public CommonOperations(ElectricityBoard eb) {
@@ -57,9 +64,15 @@ public class CommonOperations implements ICommonOperations{
 		
 		try {
 			Payment payment = pendingPayments.get(opt-1);
+			payment.setPaid(true);
 			pendingPayments.remove(opt-1);
 			Bill bill = new Bill(this.eb.getBillNoSeries(),payment,paymentThrough);
 			connection.setBills(bill);
+			
+			System.out.println(payment.isPaid());
+			billFiles.createBill(bill);//file system
+			paymentFiles.updatePayment(payment);//file system
+			connFiles.updateConnection(connection);
 			return bill;
 		}
 		catch(Exception e) {

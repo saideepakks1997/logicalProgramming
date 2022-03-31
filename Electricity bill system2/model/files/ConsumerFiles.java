@@ -14,54 +14,60 @@ import java.util.TreeMap;
 
 import connection.Connection;
 import consumer.Consumer;
+import eb.ElectricityBoard;
 import eb.RequestObj;
 
 public class ConsumerFiles {
+	ElectricityBoardFile ebFile = new ElectricityBoardFile();
+
 	CommonProperties common = CommonProperties.getObj();
-	File consumerFile = null;
-	public ConsumerFiles() {
-		setFile();
-	}
-	private void setFile() {
-		File objFile = new File("All Files");
-		objFile.mkdir();
-		this.consumerFile = new File(objFile+File.separator+"Consumer File.txt");
-		
-	}
+	String fileName = "Consumer File.txt";
+	File consumerFile = common.setFile(fileName);
+	File tempFile = new File("temp.txt");
+	
+	
 //	consumerNo,name,email,phoNo,address,user_name,password,connections,request
 	public void createConsumer(Consumer consumer) {
+		String field = "consumerNoSeries";
 		try(
 				FileOutputStream fos = new FileOutputStream(this.consumerFile,true);
 				PrintStream ps = new PrintStream(fos);
 				){
 			if(!this.consumerFile.exists() || this.consumerFile.length()==0) {
-				ps.print("consumerNo,");
-				ps.print("name,");
-				ps.print("email,");
-				ps.print("phoNo,");
-				ps.print("address,");
-				ps.print("user_name,");
-				ps.print("password,");
-				ps.print("connections,");
-				ps.print("requests");
-				ps.println();
+				
+				addFields(ps);
 			}
 			printIntoFile(consumer, ps);
-			ps.println();
+			ebFile.updateSeriesNo(field);
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	private void addFields(PrintStream ps) {
+		ps.print("consumerNo,");
+		ps.print("name,");
+		ps.print("email,");
+		ps.print("phoNo,");
+		ps.print("address,");
+		ps.print("user_name,");
+		ps.print("password,");
+		ps.print("connections,");
+		ps.print("requests");
+		ps.println();
+	}
+
 	public void updateConsumer(Consumer consumer) {
 		if(this.consumerFile.exists() && this.consumerFile.length() > 0) {
 			try(
-					FileOutputStream fos = new FileOutputStream(common.getTempFile());
+					FileOutputStream fos = new FileOutputStream(tempFile);
 					PrintStream ps = new PrintStream(fos);
 					FileReader fis = new FileReader(this.consumerFile);
 					BufferedReader bis = new BufferedReader(fis);
 					){
+				addFields(ps);
 				String currLine = bis.readLine();
 				String[] record = currLine.split(",");
 				int targetIndex = common.getIndex(record, "consumerNo");
@@ -70,7 +76,6 @@ public class ConsumerFiles {
 					record = currLine.split(",");
 					if(Long.parseLong(record[targetIndex]) == consumer.getConsumerNO()) {
 						printIntoFile(consumer, ps);
-						ps.println();
 					}
 					else {
 						ps.print(currLine);
@@ -82,7 +87,7 @@ public class ConsumerFiles {
 				ps.close();
 				bis.close();
 				this.consumerFile.delete();
-				common.getTempFile().renameTo(this.consumerFile);
+				tempFile.renameTo(this.consumerFile);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -101,6 +106,9 @@ public class ConsumerFiles {
 		String connections = getConnectionNos(consumer);
 		String requests = getRequests(consumer);
 		
+		connections = (connections.length() == 0)?null:connections;
+		requests = (requests.length() == 0)?null:requests;
+		
 		ps.print(consumerNo+",");
 		ps.print(name+",");
 		ps.print(email+",");
@@ -109,7 +117,8 @@ public class ConsumerFiles {
 		ps.print(user_name+",");
 		ps.print(password+",");
 		ps.print(connections+",");
-		ps.print(requests+"");
+		ps.print(requests);
+		ps.println();
 		
 	}
 	private String getRequests(Consumer consumer) {
@@ -123,7 +132,7 @@ public class ConsumerFiles {
 		for(RequestObj key:keys) {
 			long requestNo = key.getRequestNo();
 			String notification = notifis.get(i++);
-			result += requestNo+"="+notification+"|";
+			result += requestNo+"="+notification+"/";
 		}
 		return result;
 	}
@@ -132,8 +141,63 @@ public class ConsumerFiles {
 		Map<Long, Connection> connections = consumer.getConnections();
 		Collection<Long> conns = connections.keySet();
 		for(Long conNo:conns) {
-			result += conNo+"|";
+			result += conNo+"/";
 		}
 		return result;
+	}
+
+	public void loadConsumersToEb(ElectricityBoard eb) {
+		if(this.consumerFile.exists()) {
+			ConnectionFiles connFile = new ConnectionFiles();
+			RequestObjFiles reqFile = new RequestObjFiles();
+//			long consumerNo, String name, String email, long phoNo,String address,user_name,password
+			Consumer consumer = null;
+			try(
+					FileReader fis = new FileReader(this.consumerFile);
+					BufferedReader bis = new BufferedReader(fis);
+					){
+				String currLine = bis.readLine();
+				String record[] = currLine.split(",");
+				int consumerNoIndex = common.getIndex(record, "consumerNo");
+				int nameIndex = common.getIndex(record, "name");
+				int emailIndex = common.getIndex(record, "email");
+				int phoNoIndex = common.getIndex(record, "phoNo");
+				int addressIndex = common.getIndex(record, "address");
+				int user_nameIndex = common.getIndex(record, "user_name");
+				int passwordIndex = common.getIndex(record, "password");
+				int connectionsIndex = common.getIndex(record, "connections");
+				int requestsIndex = common.getIndex(record, "requests");
+				
+				currLine = bis.readLine();
+				record = currLine.split(",");
+				while(currLine != null) {
+					Long consumerNo = Long.parseLong(record[consumerNoIndex]);
+					String name = record[nameIndex];
+					String email = record[emailIndex];
+					Long phoNo = Long.parseLong(record[phoNoIndex]); 
+					String address = record[addressIndex];
+					String user_name = record[user_nameIndex];
+					String password = record[passwordIndex];
+					String[] connNos = record[connectionsIndex].split("/");
+					String[] requests = record[requestsIndex].split("/");
+					if(record[user_nameIndex] == "null") {
+						consumer = new Consumer(consumerNo, name, email, phoNo, address);
+						eb.setConsumers(consumer);
+					}
+					else {
+						consumer = new Consumer(consumerNo, name, email, phoNo, address,user_name, password);
+						eb.setConsumers(consumer);
+						eb.setConsumerMapping(consumer);
+					}
+					System.out.println(record[connectionsIndex]);
+					connFile.loadConnection(eb,connNos,consumer);
+					reqFile.loadRequests(eb, requests,consumer);
+					currLine = bis.readLine();
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

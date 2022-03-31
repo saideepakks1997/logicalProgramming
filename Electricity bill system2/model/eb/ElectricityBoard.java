@@ -21,6 +21,7 @@ public class ElectricityBoard {
 	private long connNoSeries = 22222;
 	private long consumerNoSeries = 1;
 	private long requestNoSeries= 1;
+	private long paymentIdSeries = 1;
 	
 	private Set<String> emails = new HashSet<String>();
 	private Set<Long> phoNos = new HashSet<Long>();
@@ -76,10 +77,6 @@ public class ElectricityBoard {
 		return this.consumerNoSeries++;
 	}
 	
-	public void setConsumerNo() {
-		this.consumerNoSeries--;
-	}
-	
 	public long getRequestNoSeries() {
 		return 	this.requestNoSeries++;
 	}
@@ -108,6 +105,25 @@ public class ElectricityBoard {
 		return phoNos;
 	}
 
+	public long getPaymentIdSeries() {
+		return paymentIdSeries++;
+	}
+
+	public void setPaymentIdSeries(long paymentIdSeries) {
+		this.paymentIdSeries = paymentIdSeries;
+	}
+	public void setBillNoSeries(long billNoSeries) {
+		this.billNoSeries = billNoSeries;
+	}
+	public void setConsumerNoSeries(long consumerNoSeries) {
+		this.consumerNoSeries = paymentIdSeries;
+	}
+	public void setConnectionNoSeries(long connNoSeries) {
+		this.connNoSeries = connNoSeries;
+	}
+	public void setRequestNoSeries(long requestNoSeries) {
+		this.requestNoSeries = requestNoSeries;
+	}
 	
 	
 }

@@ -3,7 +3,6 @@ package files;
 import java.io.File;
 
 public class CommonProperties {
-	private File tempFile = null;
 	
 	private static CommonProperties common = new CommonProperties();
 	
@@ -12,7 +11,6 @@ public class CommonProperties {
 	}
 	
 	private CommonProperties() {
-		setFile();
 	}
 	
 	public int getIndex(String[] record, String field) {
@@ -24,13 +22,13 @@ public class CommonProperties {
 		return index;
 	}
 
-	public File getTempFile() {
-		return tempFile;
+	
+	
+	public File setFile(String fileName) {
+		File objDir = new File("All Files");
+		objDir.mkdir();
+		return new File(objDir+File.separator+""+fileName);
 	}
 	
-	private void setFile() {
-		File objFile = new File("All Files");
-		objFile.mkdir();
-		tempFile = new File(objFile+File.separator+"temp.txt");
-	}
+	
 }

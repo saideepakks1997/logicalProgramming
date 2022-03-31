@@ -14,9 +14,19 @@ import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 import eb.RequestStatus;
+import files.ConnectionFiles;
+import files.ConsumerFiles;
+import files.PaymentFile;
+import files.RequestObjFiles;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
+	
+	ConnectionFiles connFile = new ConnectionFiles();
+	ConsumerFiles consumerFile = new ConsumerFiles();
+	PaymentFile paymentFile = new PaymentFile();
+	
+	RequestObjFiles reqObjFile = new RequestObjFiles();
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
 	}
@@ -28,20 +38,24 @@ public class AdminOperations implements IAdminOperations{
 			if(pastReadings > newReadings)
 				return false;
 			else {
-				double readings = newReadings - pastReadings;
+				System.out.println(newReadings);
+				long readings = newReadings - pastReadings;
 				conn.setCurrentUnit(newReadings);
 				setPendingPayment(readings, conn);
+				connFile.updateConnection(conn);//file update
 				return true;
 			}
 		}
 	
-	private boolean setPendingPayment(double readings, Connection conn) {
+	private boolean setPendingPayment(Long readings, Connection conn) {
 		double payableAmount = conn.getConnectionType().getObj().calculateBill(readings);
 
 		if(payableAmount > 0) {
-			Payment payment = new Payment(payableAmount, readings); 
+			Payment payment = new Payment(this.eb.getPaymentIdSeries(),payableAmount, readings); 
 			conn.setPendingPayments(payment);
+			paymentFile.createPayment(payment);//file system
 		}
+		
 //		consumerFiles.updateConusumer(conn);
 		
 		return true;
@@ -72,6 +86,7 @@ public class AdminOperations implements IAdminOperations{
 		}
 		else {
 			conn.setConnectionType(connectionType);
+			connFile.updateConnection(conn);//file system
 			return true;
 		}
 	}
@@ -99,7 +114,10 @@ public class AdminOperations implements IAdminOperations{
 		
 		this.eb.setConnections(conn);
 		consumer.setConnection(conn);
-
+		
+		connFile.createConnection(conn);//file system
+		consumerFile.updateConsumer(consumer);//file system
+		
 		return conn;
 	}
 
@@ -136,16 +154,24 @@ public class AdminOperations implements IAdminOperations{
 	@Override
 	public boolean updateStatus(RequestObj req) {
 		req.setStatusNo();
+		Consumer consumer = this.eb.getConsumers().get(req.getConsumerNo());
 		if(req.getStatusNo() == RequestStatus.values().length - 1) {
 			removeRequest(req);
 		}
+		reqObjFile.updateRequest(req);//file system
+		consumerFile.updateConsumer(consumer);//file system
 		return true;
 	}
 
 	@Override
 	public boolean removeRequest(RequestObj req) {
+		Consumer consumer = this.eb.getConsumers().get(req.getConsumerNo());
 		boolean isRemoved = this.eb.getRequests().remove(req);
 		req.setRequestCompleted(true);
+		
+		reqObjFile.updateRequest(req);//file system
+		consumerFile.updateConsumer(consumer);//file system
+		
 		return isRemoved;
 	}
 
@@ -154,6 +180,9 @@ public class AdminOperations implements IAdminOperations{
 		long consumerNo = req.getConsumerNo();
 		Consumer consumer = this.eb.getConsumers().get(consumerNo);
 		consumer.setNotifis(req, status);
+		
+		consumerFile.updateConsumer(consumer);//file system
+		
 		req.setLastUpdatedTime();
 	}
 }

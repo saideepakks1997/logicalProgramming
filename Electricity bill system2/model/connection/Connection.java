@@ -1,10 +1,7 @@
 package connection;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import bill.Bill;
 import bill.Payment;
@@ -24,6 +21,14 @@ public class Connection {
 	public Connection(long serviceNo, TypeOfConnection connectionType,String connAddress, Consumer consumer) {
 		this.setServiceNo(serviceNo);
 		this.setConnectionType(connectionType);
+		this.setConnAddress(connAddress);
+		this.setConsumer(consumer);
+	}
+	
+	public Connection(long serviceNo, TypeOfConnection connectionType,long currentUnits,String connAddress, Consumer consumer) {
+		this.setServiceNo(serviceNo);
+		this.setConnectionType(connectionType);
+		this.setCurrentUnit(currentUnits);
 		this.setConnAddress(connAddress);
 		this.setConsumer(consumer);
 	}

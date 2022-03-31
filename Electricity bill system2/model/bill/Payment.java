@@ -1,6 +1,5 @@
 package bill;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Payment {
@@ -8,15 +7,22 @@ public class Payment {
 	private double payableAmount;
 	private boolean isPaid;
 	private LocalDate dueDate;
-	private double unitsConsumed;
+	private Long unitsConsumed;
 	
-	public Payment(double payableAmount, double unitsConsumed) {
+	public Payment(long id,double payableAmount, Long unitsConsumed) {
+		this.id = id;
 		this.payableAmount = payableAmount;
 		this.isPaid = false;
 		this.unitsConsumed = unitsConsumed;
 		this.dueDate = LocalDate.now().plusDays(10);
 	}
-	
+	public Payment(long id,double payableAmount,boolean isPaid, Long unitsConsumed,LocalDate dueDate) {
+		this.id = id;
+		this.payableAmount = payableAmount;
+		this.isPaid = isPaid;
+		this.unitsConsumed = unitsConsumed;
+		this.dueDate = dueDate;
+	}
 	public String toString() {
 		String payment = "Payable amount :- "+(double)Math.round(this.getPayableAmount() * 100) / 100 +"  "
 				+ "Units Consumed :- "+this.getUnitsConsumed()+"  "
@@ -41,10 +47,10 @@ public class Payment {
 	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
-	public double getUnitsConsumed() {
+	public Long getUnitsConsumed() {
 		return unitsConsumed;
 	}
-	public void setUnitsConsumed(double unitsConsumed) {
+	public void setUnitsConsumed(Long unitsConsumed) {
 		this.unitsConsumed = unitsConsumed;
 	}
 

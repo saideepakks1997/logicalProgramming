@@ -19,6 +19,13 @@ public class Bill {
 		this.setPaidThrough(paidThrough);
 	}
 	
+	public Bill(long billNo, Payment payment,LocalDateTime paymentDate,String paidThrough) {
+		this.setBillNo(billNo);
+		this.setPayment(payment);
+		this.setPaymentDate(paymentDate);
+		this.setPaidThrough(paidThrough);
+	}
+	
 	public long getBillNo() {
 		return billNo;
 	}

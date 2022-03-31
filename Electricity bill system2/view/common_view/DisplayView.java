@@ -64,16 +64,21 @@ public class DisplayView {
 	
 	public void displayBill(Bill bill) {
 		int i=1;
-		System.out.println("------------------");
-		System.out.println("Amount has been paid successfully\n"
-				+ "S.no:- "+(i++)+"\n"
-				+ "bill No :- "+bill.getBillNo()+"\n"
-				+ "Paid amount :- "+bill.getPayment().getPayableAmount()+"\n"
-				+ "Units consumed :- "+bill.getPayment().getUnitsConsumed()+"\n"
-				+ "Paid date :- "+bill.getPaymentDate().format(dateFormatter)+"\n"
-				+ "Paid time :- "+bill.getPaymentDate().format(timeFormatter)+"\n"
-				+ "Paid Through :- "+bill.getPaidThrough());
-		System.out.println("------------------");
+		try {
+			System.out.println("------------------");
+			System.out.println("Amount has been paid successfully\n"
+					+ "bill No :- "+bill.getBillNo()+"\n"
+					+ "Paid amount :- "+bill.getPayment().getPayableAmount()+"\n"
+					+ "Units consumed :- "+bill.getPayment().getUnitsConsumed()+"\n"
+					+ "Paid date :- "+bill.getPaymentDate().format(dateFormatter)+"\n"
+					+ "Paid time :- "+bill.getPaymentDate().format(timeFormatter)+"\n"
+					+ "Paid Through :- "+bill.getPaidThrough());
+			System.out.println("------------------");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 

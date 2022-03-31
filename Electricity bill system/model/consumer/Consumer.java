@@ -30,6 +30,17 @@ public class Consumer extends User {
 		this.setAddress(address);
 	}
 
+	public Consumer(long consumerNo, String name, String email, Long phoNo, String address, String user_name,
+			String password) {
+		this.setConsumerNO(consumerNo);
+		this.setName(name);
+		this.setEmailId(email);
+		this.setPhoNo(phoNo);
+		this.setAddress(address);
+		this.setUser_name(user_name);
+		this.setPassword(password);
+	}
+
 	public long getConsumerNO() {
 		return consumerNO;
 	}

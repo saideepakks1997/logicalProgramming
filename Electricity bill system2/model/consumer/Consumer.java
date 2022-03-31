@@ -28,7 +28,17 @@ public class Consumer extends User {
 		this.setPhoNo(phoNo);
 		this.setAddress(address);
 	}
-
+	
+	public Consumer(long consumerNo, String name, String email, long phoNo,String address,String user_name, String password) {
+		this.setConsumerNO(consumerNo);
+		this.setName(name);
+		this.setEmailId(email);
+		this.setPhoNo(phoNo);
+		this.setAddress(address);
+		this.setUser_name(user_name);
+		this.setPassword(password);
+	}
+	
 	public long getConsumerNO() {
 		return consumerNO;
 	}
@@ -51,9 +61,11 @@ public class Consumer extends User {
 	}
 	
 	public void setUser_name(String user_name) {
+		user_name = (user_name.equals("null"))?null:user_name;
 		this.user_name = user_name;
 	}
 	public void setPassword(String password) {
+		password = (password.equals("null"))?null:password;
 		this.password = password;
 	}
 	public String getPassword() {
@@ -63,12 +75,15 @@ public class Consumer extends User {
 		
 		return this.password.equals(password);
 	}
-
+	
+	public void setNotifis(RequestObj req, String notification) {
+		notification = (notification.equals("null"))?null:notification;
+		this.notifis.put(req, notification);
+	}
+	
 	public Map<RequestObj, String> getNotifis() {
 		return notifis;
 	}
 
-	public void setNotifis(RequestObj req, String notification) {
-		this.notifis.put(req, notification);
-	}
+	
 }

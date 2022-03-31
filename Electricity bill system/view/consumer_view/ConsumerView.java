@@ -8,6 +8,7 @@ import common_view.CommonView;
 import common_view.DisplayView;
 import common_view.UserInputView;
 import connection.TypeOfConnection;
+import consumer.Consumer;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
@@ -281,18 +282,37 @@ public class ConsumerView {
 
 	private void registerConsumerForNewConnection() {
 		try {
-			Long consumerNo = commonView.getConsumerDetails(); 
-			String user_name = registerUser(consumerNo);
+			System.out.println("Start entering details");
+			System.out.println("Enter name ");
+			String name = input.getString();
+			
+			String email = commonView.getEmail();
+			if(email == null)
+				return;
+			Long phoNo= commonView.getPhoNo();
+			if(phoNo == null)
+				return;
+			
+			System.out.println("Enter your address");
+			String address = input.getString();
+			
+			System.out.println("Enter login details to set");
+			String user_name = getUserNameFromUser();
 			if(user_name == null) {
-				display.displayMessege("Consumer creation failed");
-				operations.removeConsumer(consumerNo);
 				return;
 			}
-				
-			display.displayMessege("Your consumer number is "+consumerNo+" and user name is "+user_name);
-			loginView.askLoggedInOptions(consumerNo);
+			
+			String password = getPasswordFromUser();
+			if(password != null) {
+				Consumer consumer = operations.registerUser(name,email,phoNo,address,user_name, password);
+				if(consumer != null) {
+					display.displayMessege("Consumer registered successfully and your consumer number is "+consumer.getConsumerNO());
+				}
+				else
+					display.displayMessege("Creation of consumer Failed");
+			}
 		}
-		catch(NullPointerException e) {
+		catch (NullPointerException e) {
 			return;
 		}
 		

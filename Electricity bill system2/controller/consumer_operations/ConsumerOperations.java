@@ -10,9 +10,13 @@ import connection.TypeOfConnection;
 import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
+import files.ConsumerFiles;
+import files.RequestObjFiles;
 import validator_encrypter.Encryption;
 
 public class ConsumerOperations implements IConsumerOperations{
+	ConsumerFiles consumerFile = new ConsumerFiles();
+	RequestObjFiles reqObjFile = new RequestObjFiles();
 	ElectricityBoard eb = null;
 	Encryption encrypt = new Encryption();
 	public ConsumerOperations(ElectricityBoard eb) {
@@ -26,7 +30,7 @@ public class ConsumerOperations implements IConsumerOperations{
 		consumer.setPassword(password);
 		
 		this.eb.setConsumerMapping(consumer);
-		
+		consumerFile.updateConsumer(consumer);//file system
 		return true;
 	}
 
@@ -43,6 +47,9 @@ public class ConsumerOperations implements IConsumerOperations{
 		long consumerNo = this.eb.getConsumerNoSeries();
 		Consumer consumer = new Consumer(consumerNo, name, email, phoNo, address);
 		this.eb.setConsumers(consumer);
+		
+		consumerFile.createConsumer(consumer);//file system
+		
 		return consumer.getConsumerNO();
 	}
 	
@@ -55,6 +62,10 @@ public class ConsumerOperations implements IConsumerOperations{
 		System.out.println("New connection reqs "+request);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
+		
+		reqObjFile.createRequest(request);//file system
+		consumerFile.updateConsumer(consumer);//file system
+		
 		return request;
 	}
 	@Override
@@ -68,6 +79,9 @@ public class ConsumerOperations implements IConsumerOperations{
 		RequestObj request = new RequestObj(consumerNo, serviceNo, connType, requestNo);
 		consumer.setNotifis(request, null);
 		this.eb.setRequests(request);
+		
+		reqObjFile.createRequest(request);//file system
+		consumerFile.updateConsumer(consumer);//file system
 		return request;
 	}
 	@Override
@@ -83,13 +97,16 @@ public class ConsumerOperations implements IConsumerOperations{
 		String user_name = this.eb.getConsumers().get(consumerNo).getUser_name();
 		return user_name ;
 	}
+
 	@Override
-	public void removeConsumer(Long consumerNo) {
-		Consumer consumer = this.eb.getConsumers().get(consumerNo);
-		this.eb.getEmails().remove(consumer.getEmailId().toLowerCase());
-		this.eb.getPhoNos().remove(consumer.getPhoNo());
-		this.eb.setConsumerNo();
-		this.eb.getConsumers().remove(consumer.getConsumerNO());
-		}
+	public Consumer registerUser(String name, String email, Long phoNo, String address, String user_name,
+			String password) {
+		password = encrypt.encryptPassword(password);
+		Consumer consumer = new Consumer(this.eb.getConsumerNoSeries(), name, email, phoNo, address, user_name, password);
+		this.eb.setConsumers(consumer);
+		this.eb.setConsumerMapping(consumer);
+		consumerFile.createConsumer(consumer);//file system
+		return consumer;
+	}
 	
 }

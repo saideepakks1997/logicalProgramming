@@ -40,6 +40,27 @@ public class RequestObj {
 		this.setRequestCompleted(false);
 	}
 	
+	public RequestObj(int statusNo,long requestNo, long consumerNo,long serviceNo,TypeOfConnection connType, String address, 
+		LocalDateTime requestedTime,LocalDateTime updatedTime, boolean isNewConn,boolean isReqCompleted) {
+		this.setStatusNo(statusNo);
+		this.setRequestNo(requestNo);
+		this.setConsumerNo(consumerNo);
+		this.setServiceNo(serviceNo);
+		this.setConnType(connType);
+		this.setRequestedTime(requestedTime);
+		this.setLastUpdatedTime(updatedTime);
+		this.setAddress(address);
+		this.setIsNewConnectionReq(isNewConn);
+		this.setRequestCompleted(isReqCompleted);
+	}
+	
+	public  void setLastUpdatedTime(LocalDateTime updatedTime) {
+		this.lastUpdatedTime = updatedTime;
+		
+	}
+	public void setStatusNo(int statusNo) {
+		this.statusNo = statusNo;
+		}
 	public int getStatusNo() {
 		return statusNo;
 	}

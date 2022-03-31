@@ -4,6 +4,7 @@ import java.util.List;
 
 import connection.Connection;
 import connection.TypeOfConnection;
+import consumer.Consumer;
 import eb.RequestObj;
 
 public interface IConsumerOperations {
@@ -27,7 +28,9 @@ public interface IConsumerOperations {
 
 	public String checkUserIfAlreadyRegiestered(Long consumerNo);
 	
-	public void removeConsumer(Long consumerNo);
+
+	public Consumer registerUser(String name, String email, Long phoNo, String address, String user_name,
+			String password);
 
 
 }
