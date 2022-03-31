@@ -169,8 +169,9 @@ public class ConsumerFiles {
 				int requestsIndex = common.getIndex(record, "requests");
 				
 				currLine = bis.readLine();
-				record = currLine.split(",");
+				
 				while(currLine != null) {
+					record = currLine.split(",");
 					Long consumerNo = Long.parseLong(record[consumerNoIndex]);
 					String name = record[nameIndex];
 					String email = record[emailIndex];
@@ -180,7 +181,8 @@ public class ConsumerFiles {
 					String password = record[passwordIndex];
 					String[] connNos = record[connectionsIndex].split("/");
 					String[] requests = record[requestsIndex].split("/");
-					if(record[user_nameIndex] == "null") {
+					System.out.println("Repeating");
+					if(record[user_nameIndex].equals("null")) {
 						consumer = new Consumer(consumerNo, name, email, phoNo, address);
 						eb.setConsumers(consumer);
 					}
@@ -189,7 +191,6 @@ public class ConsumerFiles {
 						eb.setConsumers(consumer);
 						eb.setConsumerMapping(consumer);
 					}
-					System.out.println(record[connectionsIndex]);
 					connFile.loadConnection(eb,connNos,consumer);
 					reqFile.loadRequests(eb, requests,consumer);
 					currLine = bis.readLine();

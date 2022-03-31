@@ -116,7 +116,7 @@ public class ElectricityBoard {
 		this.billNoSeries = billNoSeries;
 	}
 	public void setConsumerNoSeries(long consumerNoSeries) {
-		this.consumerNoSeries = paymentIdSeries;
+		this.consumerNoSeries = consumerNoSeries;
 	}
 	public void setConnectionNoSeries(long connNoSeries) {
 		this.connNoSeries = connNoSeries;

@@ -1,4 +1,7 @@
 serviceNo,connectionType,currentUnits,consumerNo,connAddress,pendingPayments,bills
-22223,Domestic,0,2,sfdlaj,null,null
+22223,Domestic,122,2,sfdlaj,1/,null
 22224,LtCommercial,0,3,ksfdaj,null,null
 22224,PowerLooms,0,1,sdfa,null,null
+22225,PublicWorkshop,0,1,safd,null,null
+22226,PublicWorkshop,0,1,safd,null,null
+22227,LtCommercial,0,1,sfadj,null,null
