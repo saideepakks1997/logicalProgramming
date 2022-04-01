@@ -44,8 +44,8 @@ public class ConsumerView {
 					+ "3->login\n"
 					+ "4->View all tarrifs\n"
 					+ "9->Back to previous menu");
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
+			
 				switch (opt) {
 				case 1: commonView.payBill(isAdmin);
 					break;
@@ -53,28 +53,26 @@ public class ConsumerView {
 					break;
 				case 3: login();
 					break;
-				case 4: viewTarrifs();
-					break;
+//				case 4: viewTarrifs();
+//					break;
 				case 9: loop = false;
-				display.displayMessege("Back to previous menu");
-					break;	
+					display.displayMessege("Back to previous menu");
+					break;
+				case -1:loop = false;
+					break;
 				default: display.displayMessege("please enter correct option");
 					break;
 				}
-			}
-			catch(NullPointerException e) {
-				return;
-			}
 		}
 	}
-	private void viewTarrifs() {
-		List<TypeOfConnection> conns = commonOperations.getAllConnectionTypes();
-		for(TypeOfConnection conn:conns) {
-			System.out.println("Connection Type:- "+conn);
-			display.displayMessege(conn.getObj());
-		}
-		
-	}
+//	private void viewTarrifs() {
+//		List<TypeOfConnection> conns = commonOperations.getAllConnectionTypes();
+//		for(TypeOfConnection conn:conns) {
+//			System.out.println("Connection Type:- "+conn);
+//			display.displayMessege(conn.getObj());
+//		}
+//		
+//	}
 
 
 	private void consumerRegistration() {
@@ -82,8 +80,8 @@ public class ConsumerView {
 				+ "1->select if you already have connection\n"
 				+ "2->Select if no connection available\n"
 				+ "press any other key for previous menu");
-		Integer opt = input.getInt();
-		try {
+		int opt = input.getInt();
+		
 			switch (opt) {
 			case 1: registerConsumerForExistingConnection();
 				break;
@@ -92,10 +90,6 @@ public class ConsumerView {
 			default: display.displayMessege("Back to previous menu");
 				break;
 			}
-		}
-		catch (NullPointerException e) {
-			return;
-		}
 		
 	}
 	
@@ -148,14 +142,13 @@ public class ConsumerView {
 
 	private void registerConsumerForExistingConnection() {
 		boolean loop = true;
-		Long consumerNo = 0l;
+		long consumerNo = 0l;
 		int chances = 1;
 		while(loop) {
-			try {
 			loop = false;
 			System.out.println("Enter consumer number");
 			consumerNo = input.getLong();
-			
+			if(consumerNo != -1) {
 				String user_name= operations.checkUserIfAlreadyRegiestered(consumerNo);
 				if(user_name != null) {
 					display.displayMessege("The consumer is already registered user name is "+user_name);
@@ -172,9 +165,6 @@ public class ConsumerView {
 					loop = true;
 					display.displayMessege("Conumer number does not exists please enter valid consumer number");
 				}
-			}
-			catch (NullPointerException e) {
-				return;
 			}
 			}
 			
@@ -281,7 +271,7 @@ public class ConsumerView {
 
 
 	private void registerConsumerForNewConnection() {
-		try {
+		
 			System.out.println("Start entering details");
 			System.out.println("Enter name ");
 			String name = input.getString();
@@ -310,11 +300,7 @@ public class ConsumerView {
 				}
 				else
 					display.displayMessege("Creation of consumer Failed");
-			}
-		}
-		catch (NullPointerException e) {
-			return;
-		}	
+			}	
 	}
 	
 }

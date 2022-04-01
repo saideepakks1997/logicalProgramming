@@ -17,7 +17,7 @@ import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 
-public class ConsumerFiles {
+public class ConsumerFiles implements IConsumerFiles{
 	ElectricityBoardFile ebFile = new ElectricityBoardFile();
 
 	CommonProperties common = CommonProperties.getObj();

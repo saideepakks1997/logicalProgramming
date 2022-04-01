@@ -8,7 +8,7 @@ import java.io.PrintStream;
 
 import eb.ElectricityBoard;
 
-public class ElectricityBoardFile {
+public class ElectricityBoardFile implements IElectricityBoardFile{
 	CommonProperties common = CommonProperties.getObj();
 	
 	String fileName = "Electricity board file.txt";

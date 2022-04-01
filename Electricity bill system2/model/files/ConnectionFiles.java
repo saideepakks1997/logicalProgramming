@@ -14,10 +14,13 @@ import connection.Connection;
 import connection.TypeOfConnection;
 import consumer.Consumer;
 import eb.ElectricityBoard;
+import factory.ConnectionFactoryObj;
 
-public class ConnectionFiles {
+public class ConnectionFiles implements IConnectionFiles{
 	ElectricityBoardFile ebFile = new ElectricityBoardFile();
 	CommonProperties common = CommonProperties.getObj();
+	ConnectionFactoryObj connFactory = new ConnectionFactoryObj();
+	
 	String fileName = "Connection File.txt";
 	File connFile = common.setFile(fileName);
 	File tempFile = new File("temp.txt");
@@ -165,8 +168,8 @@ public class ConnectionFiles {
 								long currUnits = Long.parseLong(record[currUnitsIndex]);
 								String connAddress = record[addressIndex];
 								
-								Connection con = new Connection(serviceNo, connType, currUnits, connAddress, consumer);
-								
+								Connection con = connFactory.getConnectionObj(serviceNo, connType, connAddress, consumer); 
+								con.setCurrentUnit(currUnits);
 								eb.setConnections(con);
 								consumer.setConnection(con);
 								paymentFile.loadPayment(con,record[paymentIndex].split("/"));

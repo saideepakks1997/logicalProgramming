@@ -14,7 +14,7 @@ public class Connection {
 	private long currentUnit;
 	private Consumer consumer;
 	private String connAddress;
-	
+	double charges = 10;
 	private List<Payment> pendingPayments = new ArrayList<>();
 	private List<Bill> bills = new ArrayList<Bill>();
 	
@@ -32,6 +32,7 @@ public class Connection {
 		this.setConnAddress(connAddress);
 		this.setConsumer(consumer);
 	}
+	
 	
 	public Long getServiceNo() {
 		return serviceNo;
@@ -90,4 +91,7 @@ public class Connection {
 		this.connAddress = address;
 	}
 	
+	public double calculateBill(double units) {
+		return this.charges * units;
+	}
 }

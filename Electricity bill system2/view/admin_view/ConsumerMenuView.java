@@ -23,7 +23,6 @@ public class ConsumerMenuView {
 
 	public void askOptions(int consumerNo) {
 		boolean loop = true;
-		
 		this.consumerView.consumerNo = consumerNo;
 		while(loop) {
 			display.displayMessege("Enter option \n"
@@ -32,8 +31,7 @@ public class ConsumerMenuView {
 					+ "3->View pendings transaction\n"
 					+ "4->View transactions\n"
 					+ "9->Go back to previous menu");
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
 				switch (opt) {
 				case 1: consumerView.viewConnectionDetails();
 					break;
@@ -46,14 +44,10 @@ public class ConsumerMenuView {
 				case 9: display.displayMessege("Going back to previous menu");
 					loop = false;
 					break;
+				case -1:loop = false;
 				default:display.displayMessege("Enter correct option");
 					break;
 				}
 			}
-			catch(NullPointerException e) {
-				return;
-			}
 		}
-		
-	}
 }

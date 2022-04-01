@@ -40,9 +40,8 @@ public class MainView {
 					+ "1->Admin\n"
 					+ "2->Consumer\n"
 					+ "9->Log out");
-			Integer opt = input.getInt();
-			try {
-				switch (opt) {
+			int opt = input.getInt();
+			switch (opt) {
 				case 1: isValid = login();
 					if(isValid)
 						adminView.adminOptions();
@@ -56,12 +55,6 @@ public class MainView {
 				default: display.displayMessege("Enter correct option");
 					break;
 				}
-			}
-			catch (NullPointerException e) {
-				display.displayMessege("Logging out");
-				return;
-			}
-			
 		}
 	}
 	private boolean login() {

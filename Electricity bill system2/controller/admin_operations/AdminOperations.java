@@ -14,18 +14,24 @@ import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 import eb.RequestStatus;
+import factory.ConnectionFactoryObj;
+import factory.IConnectionFactory;
 import files.ConnectionFiles;
 import files.ConsumerFiles;
+import files.IConnectionFiles;
+import files.IConsumerFiles;
+import files.IPaymentFile;
 import files.PaymentFile;
 import files.RequestObjFiles;
 
 public class AdminOperations implements IAdminOperations{
 	ElectricityBoard eb = null;
 	
-	ConnectionFiles connFile = new ConnectionFiles();
-	ConsumerFiles consumerFile = new ConsumerFiles();
-	PaymentFile paymentFile = new PaymentFile();
+	IConnectionFiles connFile = new ConnectionFiles();
+	IConsumerFiles consumerFile = new ConsumerFiles();
+	IPaymentFile paymentFile = new PaymentFile();
 	
+	IConnectionFactory connFactory = new ConnectionFactoryObj();
 	RequestObjFiles reqObjFile = new RequestObjFiles();
 	public AdminOperations(ElectricityBoard eb) {
 		this.eb = eb;
@@ -48,16 +54,12 @@ public class AdminOperations implements IAdminOperations{
 		}
 	
 	private boolean setPendingPayment(Long readings, Connection conn) {
-		double payableAmount = conn.getConnectionType().getObj().calculateBill(readings);
-
+		double payableAmount = conn.calculateBill(readings);
 		if(payableAmount > 0) {
 			Payment payment = new Payment(this.eb.getPaymentIdSeries(),payableAmount, readings); 
 			conn.setPendingPayments(payment);
 			paymentFile.createPayment(payment);//file system
-		}
-		
-//		consumerFiles.updateConusumer(conn);
-		
+		}		
 		return true;
 	}
 	
@@ -108,20 +110,23 @@ public class AdminOperations implements IAdminOperations{
 
 	@Override
 	public Connection createConnection(long customerNo,String connAddress, TypeOfConnection connType) {
+		
+		
 		long serviceNo = this.eb.getConnNoSeries();
 		Consumer consumer = this.eb.getConsumers().get(customerNo);
-		Connection conn = new Connection(serviceNo, connType, connAddress, consumer);
+//		Connection conn = new Connection(serviceNo, connType, connAddress, consumer);
+		Connection con = connFactory.getConnectionObj(serviceNo, connType, connAddress, consumer);
+		this.eb.setConnections(con);
+		consumer.setConnection(con);
 		
-		this.eb.setConnections(conn);
-		consumer.setConnection(conn);
-		
-		connFile.createConnection(conn);//file system
+		connFile.createConnection(con);//file system
 		consumerFile.updateConsumer(consumer);//file system
 		
-		return conn;
+		return con;
 	}
 
 
+	
 	@Override
 	public Map<Long, Consumer> getAllConsumers() {
 		return this.eb.getConsumers();

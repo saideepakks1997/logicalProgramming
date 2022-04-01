@@ -48,8 +48,8 @@ public class ConsumerLoginView {
 					+ "6->View transactions\n"
 					+ "7->Notifications\n"
 					+ "9->Log out");
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
+			
 				switch (opt) {
 				case 1: viewConnectionDetails();
 					break;
@@ -68,15 +68,12 @@ public class ConsumerLoginView {
 				case 9: loop = false;
 					display.displayMessege("Logging out");
 					break;
+				case -1: loop = false;
+					break;
 				default:display.displayMessege("Enter the correct option");
 					break;
 				}
 			}
-			catch(NullPointerException e) {
-				return;
-			}
-			
-		}
 	}
 
 	private void askToViewNotifications() {
@@ -85,19 +82,13 @@ public class ConsumerLoginView {
 			display.displayMessege("You have Notifications \n"
 					+ "Press 1->For view notifications\n"
 					+ "Press any Number for ignore");
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
 				if(opt == 1) {
 					viewNotifications();
 				}
 				else {
 					display.displayMessege("Back to login options");
 				}
-			}
-			catch (NullPointerException e) {
-				return;
-			}
-			
 		}
 		
 	}
@@ -207,8 +198,8 @@ public class ConsumerLoginView {
 				System.out.println((i++)+"."+conn.getServiceNo());
 			}
 			
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
+			if(opt != -1) {
 				if(opt > conns.size()) {
 					if(chances >= validate.getMaxChance()) {
 						display.displayChancesMessege();
@@ -223,14 +214,8 @@ public class ConsumerLoginView {
 					return conns.get(opt-1).getServiceNo();
 				}
 			}
-			catch (NullPointerException e) {
-				e.printStackTrace();
-				return -1;
-			}
-			
 		}
 		return -1;
-		
 	}
 	public void payBillForParticularConsumer(boolean isAdmin) {
 		long serviceNo = selectConnectionNo();

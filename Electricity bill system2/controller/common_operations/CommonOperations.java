@@ -10,6 +10,9 @@ import connection.TypeOfConnection;
 import eb.ElectricityBoard;
 import files.BillFiles;
 import files.ConnectionFiles;
+import files.IBillFile;
+import files.IConnectionFiles;
+import files.IPaymentFile;
 import files.PaymentFile;
 import payment_options.AdminPaymentOptions;
 import payment_options.ConsumerPaymentOptions;
@@ -18,9 +21,9 @@ import validator_encrypter.Encryption;
 public class CommonOperations implements ICommonOperations{
 	ElectricityBoard eb = null;
 	
-	BillFiles billFiles = new BillFiles();
-	PaymentFile paymentFiles = new PaymentFile();
-	ConnectionFiles connFiles = new ConnectionFiles();
+	IBillFile billFiles = new BillFiles();
+	IPaymentFile paymentFiles = new PaymentFile();
+	IConnectionFiles connFiles = new ConnectionFiles();
 	
 	Encryption encrypt = new Encryption();
 	public CommonOperations(ElectricityBoard eb) {

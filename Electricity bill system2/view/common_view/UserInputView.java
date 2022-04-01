@@ -12,10 +12,10 @@ public class UserInputView {
 	Validator validate = new Validator();
 	Scanner sc = new Scanner(System.in);
 	DisplayView display = new DisplayView();
-	public Integer getInt() {
+	public int getInt() {
 		int chances = 1;
 		boolean loop = true;
-		Integer opt = 0;
+		int opt = 0;
 		while(loop) {
 			loop = false;
 			try {
@@ -26,7 +26,7 @@ public class UserInputView {
 					display.displayChancesMessege();
 					display.displayMessege("Going back to previous menu");
 					sc = new Scanner(System.in);
-					return null;
+					return -1;
 				}
 				chances++;
 				display.displayMessege("Wrong input enter correct input(i.e) number");
@@ -38,7 +38,7 @@ public class UserInputView {
 		}
 		return opt;
 	}
-	public Long getLong() {
+	public long getLong() {
 		int chances = 1;
 		boolean loop = true;
 		long val = 0;
@@ -53,7 +53,7 @@ public class UserInputView {
 					display.displayChancesMessege();
 					display.displayMessege("Going back to previous menu");
 					sc = new Scanner(System.in);
-					return null;
+					return -1;
 				}
 				chances++;
 				display.displayMessege("Wrong input enter correct input(i.e) number");

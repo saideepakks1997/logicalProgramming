@@ -12,7 +12,7 @@ import bill.Bill;
 import bill.Payment;
 import connection.Connection;
 
-public class BillFiles {
+public class BillFiles implements IBillFile{
 	ElectricityBoardFile ebFile = new ElectricityBoardFile();
 	CommonProperties common = CommonProperties.getObj();
 	String fileName = "Bill File.txt";

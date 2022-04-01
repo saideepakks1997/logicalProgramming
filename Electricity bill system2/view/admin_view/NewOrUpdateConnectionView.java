@@ -43,8 +43,7 @@ public class NewOrUpdateConnectionView {
 					+ "3->Create new Connection\n"
 					+ "4->Change connection type\n"
 					+ "9->Back to previous menu");
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
 				switch (opt) {
 				case 1: viewAndApproveNewConnection();
 					break;
@@ -55,15 +54,15 @@ public class NewOrUpdateConnectionView {
 				case 4: changeConnectionType();
 					break;
 				case 9: loop = false;
-				display.displayMessege("Back to previous menu");
-					break;
+						display.displayMessege("Going back to previos menu");
+						break;
+				case -1: loop = false;
+						break;
 				default: display.displayMessege("please enter correct option");
 					break;
 			}
-			}
-			catch (NullPointerException e) {
-				return;
-			}
+			
+			
 		}
 	}
 	//view requests for approval of new connection which 
@@ -81,8 +80,8 @@ public class NewOrUpdateConnectionView {
 			if(request != null) {
 				System.out.println("Enter 1->For approval and move forward\n"
 						+ "Any other number for non approval");
-				Integer approvalOpt = input.getInt();
-				try {
+				int approvalOpt = input.getInt();
+				if(approvalOpt != -1) {
 					String status = null;
 					if(approvalOpt == 1) {
 						long consumerNo = request.getConsumerNo();
@@ -109,17 +108,15 @@ public class NewOrUpdateConnectionView {
 						operations.removeRequest(request);
 					}
 				}
-				catch(NullPointerException e) {
-					return;
-				}
+					
+//				}
+//				catch(NullPointerException e) {
+//					return;
+//				}
 			}
-			try {
+			
 				if(!stillAcceptRequest()) 
 					loop = false;
-				}
-			catch (NullPointerException e) {
-				return;
-			}
 			}
 			
 	}
@@ -139,7 +136,7 @@ public class NewOrUpdateConnectionView {
 				System.out.println("Enter 1->For approval\n"
 						+ "Any other number for non approval");
 				int approvalOpt = input.getInt();
-				try {
+				if(approvalOpt != -1) {
 					String status = null;
 					if(approvalOpt == 1) {
 						//update status number
@@ -165,7 +162,9 @@ public class NewOrUpdateConnectionView {
 						operations.removeRequest(request);
 					}
 				}
-				catch(NullPointerException e) {}
+					
+//				}
+//				catch(NullPointerException e) {}
 				
 			}
 			if(!stillAcceptRequest()) 
@@ -175,12 +174,11 @@ public class NewOrUpdateConnectionView {
 	private RequestObj getRequestObjectFromAdmin(List<RequestObj> requests, boolean isNewConnRequest) {
 		if(requests.size() == 0) {
 			display.displayMessege("No requests available");
-		return null;
+			return null;
 		}
 		int chances = 1;
 		boolean loop = true;
 		while(loop){
-			try {
 				loop = false;
 				int opt = getRequestOption(requests, isNewConnRequest);
 				if(opt == -1) {
@@ -199,11 +197,6 @@ public class NewOrUpdateConnectionView {
 				else {
 					return requests.get(opt-1);
 				}
-				
-			}
-			catch (NullPointerException e) {
-				return null;
-			}
 		}
 		return null;
 		
@@ -214,15 +207,10 @@ public class NewOrUpdateConnectionView {
 		display.displayMessege("Still you want to accept the request\n"
 				+ "1->YES\n"
 				+ "Enter any number for NO");
-		Integer opt = input.getInt();
-		try {
+		int opt = input.getInt();
 			if(opt != 1)
 				return false;
 			return true;
-		}
-		catch (NullPointerException e) {
-			return false;
-		}
 		
 	}
 
@@ -242,23 +230,22 @@ public class NewOrUpdateConnectionView {
 		while(loop) {
 			display.displayMessege("1->New Consumer\n"
 					+ "2->Existing Conusmer");
-			Integer opt = input.getInt();
-			try {
-				switch (opt) {
+			int opt = input.getInt();
+			switch (opt) {
 				case 1: loop = false;
 					createConnectionForNewConsumer();
 					break;
 				case 2: loop = false;
 					createConnectionForExistingConsumer();
-					break;	
+					break;
+				case -1: loop = false;
+					break;
 				default: loop = true;
 				display.displayMessege("Please enter correct option");
 					break;
 				}
-			}
-			catch (NullPointerException e) {
-				return;
-			}
+			
+			
 			
 		}
 	}
@@ -267,12 +254,12 @@ public class NewOrUpdateConnectionView {
 	private void createConnectionForExistingConsumer() {
 		int chances = 1;
 		boolean loop = true;
-		Integer customerNo = 0;
+		int customerNo = 0;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter customer number");
 			customerNo = input.getInt();
-			try {
+			if(customerNo != -1) {
 				boolean isValidCustomerId = commonOperations.isValidCustomerNo(customerNo);
 				if(!isValidCustomerId) {
 					if(chances >= validate.getMaxChance()) {
@@ -286,11 +273,10 @@ public class NewOrUpdateConnectionView {
 					loop = true;
 					display.displayMessege("Please enter valid consumer no");
 					}
-			}
-			catch (NullPointerException e) {
+				}
+			else {
 				return;
 			}
-			
 		}
 		TypeOfConnection connType = commonView.selectTypeOfConnection();
 		if(connType != null) {
@@ -306,9 +292,8 @@ public class NewOrUpdateConnectionView {
 	}
 
 	private void createConnectionForNewConsumer() {
-		try {
-			Long consumerNo = commonView.getConsumerDetails();
-			if(consumerNo == null)
+			long consumerNo = commonView.getConsumerDetails();
+			if(consumerNo == -1)
 				return ;
 			System.out.println("Enter connection address");
 			String connAddress = input.getString();
@@ -327,10 +312,6 @@ public class NewOrUpdateConnectionView {
 			else {
 				display.displayMessege("Connection creation failed");
 			}
-		}
-		catch (NullPointerException e) {
-			return;
-		}
 	}
 	
 	private void changeConnectionType() {

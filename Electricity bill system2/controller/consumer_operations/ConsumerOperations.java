@@ -11,12 +11,15 @@ import consumer.Consumer;
 import eb.ElectricityBoard;
 import eb.RequestObj;
 import files.ConsumerFiles;
+import files.IConsumerFiles;
+import files.IRequestObjFile;
 import files.RequestObjFiles;
 import validator_encrypter.Encryption;
 
 public class ConsumerOperations implements IConsumerOperations{
-	ConsumerFiles consumerFile = new ConsumerFiles();
-	RequestObjFiles reqObjFile = new RequestObjFiles();
+	IConsumerFiles consumerFile = new ConsumerFiles();
+	IRequestObjFile reqObjFile = new RequestObjFiles();
+	
 	ElectricityBoard eb = null;
 	Encryption encrypt = new Encryption();
 	public ConsumerOperations(ElectricityBoard eb) {

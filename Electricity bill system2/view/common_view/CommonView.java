@@ -45,8 +45,8 @@ public class CommonView {
 			for(TypeOfConnection ctype: connTypes) {
 				System.out.println((i++)+"."+ctype.getResponse());
 			}
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
+			if(opt != -1) {
 				if(opt > connTypes.size()) {
 					if(chances >= validate.getMaxChance()) {
 						display.displayChancesMessege();
@@ -61,14 +61,11 @@ public class CommonView {
 					return connTypes.get(opt-1);
 				}
 			}
-			catch (NullPointerException e) {
-				return null;
-			}
 		}
 		return null;
 	}
 	
-	public Long getConnectionNo() {
+	public long getConnectionNo() {
 		boolean loop = true;
 		long connNo = 0;
 		int chances = 1;
@@ -76,34 +73,29 @@ public class CommonView {
 			loop = false;
 			System.out.println("Enter connection number");
 			connNo = input.getLong();
-			try {
+			if(connNo != -1) {
 				boolean isValid = commonOperations.checkIfValidConnectionNo(connNo);
 				if(!isValid) {
 					if(chances >= validate.getMaxChance()) {
 						display.displayChancesMessege();
 						loop = false;
-						return null;
+						return -1;
 					}
 					display.displayMessege("Enter valid service number");
 					loop = true;
 					chances++;
 				}
 			}
-			catch (NullPointerException e) {
-				return null;
+			else {
+				return -1;
 			}
 		}
 		return connNo;
 	}
 	public void payBill(boolean isAdmin) {
-		try {
-			Long connNo = getConnectionNo();
-			if(connNo != null)
+			long connNo = getConnectionNo();
+			if(connNo != -1)
 				viewAndPayAllPendingPayments(connNo,isAdmin);
-		}
-		catch (Exception e) {
-			return;
-		}
 	}
 
 	public void viewAndPayAllPendingPayments(long serviceNo, boolean isAdmin) {
@@ -113,14 +105,12 @@ public class CommonView {
 			List<Payment> pendingPayments = commonOperations.getAllPedingPayments(serviceNo);
 			if(pendingPayments != null) {
 				display.displayMessege("Enter option to accept the payment \n"
-						+ "enter (-1) to exit without paying");
+						+ "enter (-999) to exit without paying");
 				
 				display.displayPendingPayment(pendingPayments);
-				Integer opt = input.getInt();
-				
-//				
-				try {
-					if(opt == -1) {
+				int opt = input.getInt();
+				if(opt != -1) {
+					if(opt == -999) {
 						display.displayMessege("No transaction has been done");
 						return;
 					}
@@ -151,13 +141,11 @@ public class CommonView {
 							display.displayMessege("Going back to previous menu");
 						}
 					}
+				
 				}
-				catch (NullPointerException e) {
-					System.out.println("Delat");
+				else
 					return;
 				}
-				
-			}
 			else {
 				display.displayMessege("No pending payments");
 				loop = false;
@@ -181,7 +169,7 @@ public class CommonView {
 		int chances = 1;
 		while(loop) {
 			loop = false;
-			try {
+			
 				if(isAdmin) {
 					int i=1;
 					List<AdminPaymentOptions> paymentopts = commonOperations.getAdminPaymentOptions();
@@ -190,18 +178,23 @@ public class CommonView {
 						System.out.println((i++)+"."+payment);
 					}
 					Integer opt = input.getInt();
-					if(opt < 0 || opt > paymentopts.size()) {
-						if(chances >= validate.getMaxChance()) {
-							display.displayChancesMessege();
-							display.displayMessege("Going back to previous menu");
-							return null;
+					if(opt != -1) {
+						if(opt < 0 || opt > paymentopts.size()) {
+							if(chances >= validate.getMaxChance()) {
+								display.displayChancesMessege();
+								display.displayMessege("Going back to previous menu");
+								return null;
+							}
+							chances++;
+							System.out.println("Enter valid option");
+							loop = true;
 						}
-						chances++;
-						System.out.println("Enter valid option");
-						loop = true;
+						else {
+							paymentType = paymentopts.get(opt-1).toString();
+						}
 					}
 					else {
-						paymentType = paymentopts.get(opt-1).toString();
+						return null;
 					}
 				}
 				else {
@@ -212,26 +205,26 @@ public class CommonView {
 						System.out.println((i++)+"."+payment);
 					}
 					int opt = input.getInt();
-					if(opt < 0 || opt > paymentopts.size()) {
-						if(chances >= validate.getMaxChance()) {
-							display.displayChancesMessege();
-							display.displayMessege("Going back to previous menu");
-							return null;
+					if(opt != -1) {
+						if(opt < 0 || opt > paymentopts.size()) {
+							if(chances >= validate.getMaxChance()) {
+								display.displayChancesMessege();
+								display.displayMessege("Going back to previous menu");
+								return null;
+							}
+							chances++;
+							System.out.println("Enter valid option");
+							loop = true;
 						}
-						chances++;
-						System.out.println("Enter valid option");
-						loop = true;
+						else {
+							paymentType = paymentopts.get(opt-1).toString();
+						}
 					}
 					else {
-						paymentType = paymentopts.get(opt-1).toString();
+						return null;
 					}
 				}
 			}
-			catch (NullPointerException e) {
-				return null;
-			}
-			
-		}
 		return paymentType;
 	}
 
@@ -278,15 +271,15 @@ public class CommonView {
 	}
 
 
-	public Long getPhoNo() {
+	public long getPhoNo() {
 		int chances = 1;
 		boolean loop = true;
-		Long phoNo = 0l;
+		long phoNo = 0l;
 		while(loop) {
 			loop = false;
 			System.out.println("Enter phone no");
 			phoNo = input.getLong();
-			try {
+			if(phoNo != -1) {
 				boolean isValidPhno = validate.validatePhoNo(phoNo);
 				if(isValidPhno) {
 					boolean isPhoNoTaken = commonOperations.isPhoneNoTaken(phoNo);
@@ -295,7 +288,7 @@ public class CommonView {
 							display.displayChancesMessege();
 							display.displayMessege("Connection creation failed \n "
 									+ "Going back to previous menu");
-							return null;
+							return -1;
 						}
 						loop = true;
 						chances++;
@@ -307,41 +300,34 @@ public class CommonView {
 						display.displayChancesMessege();
 						display.displayMessege("Connection creation failed \n "
 								+ "Going back to previous menu");
-						return null;
+						return -1;
 					}
 					loop = true;
 					display.displayMessege("Phone number should have 10 digits and it should start with 7,8,9");
 				}
-				
-			}
-			catch (NullPointerException e) {
-				return null;
 			}
 		}
 		return phoNo;
 	}
 	
-	public Long getConsumerDetails(){
-		Long consumerNo = null; 
-		try {
+	public long getConsumerDetails(){
+		long consumerNo = 0l;
+		if(consumerNo != -1) {
 			System.out.println("Start entering details");
 			System.out.println("Enter name ");
 			String name = input.getString();
 			
 			String email = getEmail();
 			if(email == null)
-				return null;
-			Long phoNo= getPhoNo();
-			if(phoNo == null)
-				return null;
+				return -1;
+			long phoNo= getPhoNo();
+			if(phoNo == -1)
+				return -1;
 			
 			System.out.println("Enter your address");
 			String address = input.getString();
 			
 			consumerNo = consumerOperations.createConsumer(name,email,phoNo,address);
-		}
-		catch (Exception e) {
-			return null;
 		}
 		return consumerNo;
 	}

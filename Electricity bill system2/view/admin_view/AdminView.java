@@ -48,8 +48,7 @@ public class AdminView {
 					+ "5->View all consumers\n"
 					+ "6->Go to consumer menu\n"
 					+ "9->log out");
-			Integer opt = input.getInt();
-			try {
+			int opt = input.getInt();
 				switch(opt) {
 				case 1: setUnitsConsumed();
 		 			break;
@@ -69,10 +68,6 @@ public class AdminView {
 				default: display.displayMessege("please enter correct option");
 					break;
 			}
-			}
-			catch (NullPointerException e) {
-				return;
-			}
 		}
 	}
 	
@@ -80,7 +75,6 @@ public class AdminView {
 	//  month reading 100 and next month may be 175
 	private void setUnitsConsumed() {
 		boolean loop = true;
-		try {
 			while(loop) {
 				loop = false;
 				long connNo = commonView.getConnectionNo();
@@ -95,10 +89,10 @@ public class AdminView {
 						display.displayMessege("Entered reading is less than past reading please check the readings ");
 				}
 			}
-		}
-		catch (NullPointerException e) {
-			return;
-		}
+//		}
+//		catch (NullPointerException e) {
+//			return;
+//		}
 		
 	}
 	
@@ -136,8 +130,8 @@ public class AdminView {
 		while(loop) {
 			loop = false;
 			System.out.println("Enter Conumer number");
-			Integer consumerNo = input.getInt();
-			try {
+			int consumerNo = input.getInt();
+			if(consumerNo != -1) {
 				boolean isValid = commonOperations.isValidCustomerNo(consumerNo);
 				if(!isValid) {
 					if(chances >= 2) {
@@ -153,9 +147,12 @@ public class AdminView {
 					cmenuView.askOptions(consumerNo);
 				}
 			}
-			catch (NullPointerException e) {
-				return;
-			}
+				
+				
+//			}
+//			catch (NullPointerException e) {
+//				return;
+//			}
 		}
 	}
 }

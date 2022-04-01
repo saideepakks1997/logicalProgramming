@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import bill.Payment;
 import connection.Connection;
 
-public class PaymentFile {
+public class PaymentFile implements IPaymentFile{
 	ElectricityBoardFile ebFile = new ElectricityBoardFile();
 
 	CommonProperties common = CommonProperties.getObj();
