@@ -22,9 +22,7 @@ public class ConnectionFiles {
 	File connFile = common.setFile(fileName);
 	File tempFile = new File("temp.txt");
 	
-	
-	
-	
+	//Add new connection to file system
 	public void createConnection(Connection con)
 		{
 		String field = "connNoSeries";
@@ -54,7 +52,30 @@ public class ConnectionFiles {
 		ps.print("bills");
 		ps.println();
 	}
-
+	
+	
+	private void printIntoFile(Connection con, PrintStream ps) {
+		long serviceNo  = con.getServiceNo();
+		String connectionType = con.getConnectionType().toString();
+		Long currentUnits = con.getCurrentUnit();
+		Long consumerNo = con.getConsumer().getConsumerNO();
+		String connAddress = con.getConnAddress();
+		String pendingPayments = getPendingPaymentIds(con);
+		String bills = getBillNos(con);
+		
+		pendingPayments = (pendingPayments.length() == 0)?null:pendingPayments;
+		bills = (bills.length() == 0)?null:bills;
+		
+		ps.print(serviceNo+",");
+		ps.print(connectionType+",");
+		ps.print(currentUnits+",");
+		ps.print(consumerNo+",");
+		ps.print(connAddress+",");
+		ps.print(pendingPayments+",");
+		ps.print(bills);
+		ps.println();
+	}
+	//update connection
 	public void updateConnection(Connection con) {
 		if(this.connFile.exists() && this.connFile.length() > 0) {
 			try(
@@ -91,28 +112,8 @@ public class ConnectionFiles {
 		}
 	}
 
-	private void printIntoFile(Connection con, PrintStream ps) {
-		long serviceNo  = con.getServiceNo();
-		String connectionType = con.getConnectionType().toString();
-		Long currentUnits = con.getCurrentUnit();
-		Long consumerNo = con.getConsumer().getConsumerNO();
-		String connAddress = con.getConnAddress();
-		String pendingPayments = getPendingPaymentIds(con);
-		String bills = getBillNos(con);
-		
-		pendingPayments = (pendingPayments.length() == 0)?null:pendingPayments;
-		bills = (bills.length() == 0)?null:bills;
-		
-		ps.print(serviceNo+",");
-		ps.print(connectionType+",");
-		ps.print(currentUnits+",");
-		ps.print(consumerNo+",");
-		ps.print(connAddress+",");
-		ps.print(pendingPayments+",");
-		ps.print(bills);
-		ps.println();
-	}
-
+	
+	//get all bills of particular connection return as string
 	private String getBillNos(Connection con) {
 		String result = "";
 		List<Bill> bills = con.getBills();
@@ -122,7 +123,7 @@ public class ConnectionFiles {
 		return result;
 	}
 	
-
+	//get all pending payments return as string
 	private String getPendingPaymentIds(Connection con) {
 		String result = "";
 		List<Payment> payments = con.getPendingPayments();
@@ -131,7 +132,7 @@ public class ConnectionFiles {
 		}
 		return result;
 	}
-
+	//Load connection into the application at beginning of application
 	public void loadConnection(ElectricityBoard eb, String[] connNos,Consumer consumer) {
 		if(this.connFile.exists()) {
 			FileReader fis = null;
@@ -151,36 +152,36 @@ public class ConnectionFiles {
 				int addressIndex = common.getIndex(record, "connAddress");
 				int paymentIndex = common.getIndex(record, "pendingPayments");
 				int billsIndex = common.getIndex(record, "bills");
-				for(String conn:connNos) {
-					System.out.println("conn==>"+conn);
-					currLine = bis.readLine();
-					System.out.println(currLine);
-					while(currLine != null) {
-						record = currLine.split(",");
-						Long serviceNo = Long.parseLong(record[connNoIndex]);
-						System.out.println(Long.parseLong(conn) == serviceNo);
-						if(Long.parseLong(conn) == serviceNo) {
-							System.out.println("Entering");
-//							long serviceNo, TypeOfConnection connectionType,long currentUnits,String connAddress, Consumer consumer
-							TypeOfConnection connType = TypeOfConnection.valueOf(record[connTypeIndex]);
-							long currUnits = Long.parseLong(record[currUnitsIndex]);
-							String connAddress = record[addressIndex];
-							
-							Connection con = new Connection(serviceNo, connType, currUnits, connAddress, consumer);
-							
-							eb.setConnections(con);
-							consumer.setConnection(con);
-							paymentFile.loadPayment(con,record[paymentIndex].split("/"));
-							billFiles.loadBills(con,record[billsIndex].split("/"));
-							bis.close();
-							break;
-						}
+				
+				if(!connNos[0].equals("null")) {
+					for(String conn:connNos) {
 						currLine = bis.readLine();
+						
+						while(currLine != null) {
+							record = currLine.split(",");
+							Long serviceNo = Long.parseLong(record[connNoIndex]);
+							if(Long.parseLong(conn) == serviceNo) {
+								TypeOfConnection connType = TypeOfConnection.valueOf(record[connTypeIndex]);
+								long currUnits = Long.parseLong(record[currUnitsIndex]);
+								String connAddress = record[addressIndex];
+								
+								Connection con = new Connection(serviceNo, connType, currUnits, connAddress, consumer);
+								
+								eb.setConnections(con);
+								consumer.setConnection(con);
+								paymentFile.loadPayment(con,record[paymentIndex].split("/"));
+								billFiles.loadBills(con,record[billsIndex].split("/"));
+								bis.close();
+								break;
+							}
+							currLine = bis.readLine();
+						}
+						fis = new FileReader(this.connFile);
+						bis = new BufferedReader(fis);
+						bis.readLine();
 					}
-					fis = new FileReader(this.connFile);
-					bis = new BufferedReader(fis);
-					bis.readLine();
 				}
+				
 			}
 			catch (Exception e) {
 				e.printStackTrace();

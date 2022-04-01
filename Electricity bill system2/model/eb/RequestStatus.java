@@ -1,6 +1,5 @@
 package eb;
 
-import java.io.Serializable;
 
 public enum RequestStatus {
 	status1("Requested"),

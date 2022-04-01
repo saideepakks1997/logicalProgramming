@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import bill.Bill;
@@ -19,11 +18,8 @@ public class BillFiles {
 	String fileName = "Bill File.txt";
 	File billFile = common.setFile(fileName);
 	
-//	private long billNo;
-//	private Payment payment;
-//	private LocalDateTime paymentDate;
-//	private String paidThrough;
-	
+
+	//Add bill in file system
 	public void createBill(Bill bill) {
 		String field = "billNoSeries";
 		try(
@@ -61,11 +57,8 @@ public class BillFiles {
 		ps.println();
 	}
 	
-//	private long billNo;
-//	private Payment payment;
-//	private LocalDateTime paymentDate;
-//	private String paidThrough;
-	
+
+	//Load bills at starting of application
 	public void loadBills(Connection con, String[] bills)  {
 		if(this.billFile.exists()) {
 			PaymentFile paymentFile = new PaymentFile();
@@ -77,37 +70,37 @@ public class BillFiles {
 				
 				String currLine = bis.readLine();
 				String record[] = currLine.split(",");
+				
 				int billNoIndex = common.getIndex(record, "billNo");
 				int paymentIdIndex = common.getIndex(record, "payment");
 				int paymentDateIndex = common.getIndex(record, "paymentDate");
 				int paidThroughIndex = common.getIndex(record, "paidThrough");
 				
-				System.out.println(bills[0]+"---"+bills[1]);
-				for(String b:bills) {
-					currLine = bis.readLine();
-					while(currLine != null) {
-						record = currLine.split(",");
-						Long billNo = Long.parseLong(record[billNoIndex]);
-						if(Long.parseLong(b) == billNo) {
-							System.out.println(Long.parseLong(b) == billNo);
-							Long payment = Long.parseLong(record[paymentIdIndex]);
-							LocalDateTime paymentDate = LocalDateTime.parse(record[paymentDateIndex]);
-							String paidThrough = record[paidThroughIndex];
-							
-							Payment payObj = paymentFile.getPayment(payment);
-							
-							Bill bill = new Bill(billNo, payObj, paymentDate, paidThrough);
-							con.setBills(bill);
-							bis.close();
-							break;
-						}
+				if(!bills[0].equals("null")) {
+					for(String b:bills) {
 						currLine = bis.readLine();
+						while(currLine != null) {
+							record = currLine.split(",");
+							Long billNo = Long.parseLong(record[billNoIndex]);
+							if(Long.parseLong(b) == billNo) {
+								Long payment = Long.parseLong(record[paymentIdIndex]);
+								LocalDateTime paymentDate = LocalDateTime.parse(record[paymentDateIndex]);
+								String paidThrough = record[paidThroughIndex];
+								
+								Payment payObj = paymentFile.getPayment(payment);
+								
+								Bill bill = new Bill(billNo, payObj, paymentDate, paidThrough);
+								con.setBills(bill);
+								bis.close();
+								break;
+							}
+							currLine = bis.readLine();
+						}
+						fis = new FileReader(this.billFile);
+						bis = new BufferedReader(fis);
+						bis.readLine();
 					}
-					fis = new FileReader(this.billFile);
-					bis = new BufferedReader(fis);
-					bis.readLine();
 				}
-				
 			}
 			catch (Exception e) {
 				e.printStackTrace();

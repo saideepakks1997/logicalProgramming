@@ -1,9 +1,7 @@
 package bill;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import payment_options.ConsumerPaymentOptions;
 
 public class Bill {
 	

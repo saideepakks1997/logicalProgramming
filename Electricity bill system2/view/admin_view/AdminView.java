@@ -121,6 +121,9 @@ public class AdminView {
 	private void ViewAllConsumers() {
 		Map<Long, Consumer> consumers = operations.getAllConsumers();
 		Set<Long> consumerNos = consumers.keySet();
+		if(consumerNos.size() == 0) {
+			display.displayMessege("No  Consumers available");
+		}
 		for(Long cNo: consumerNos) {
 			display.displayConsumerConnection(consumers.get(cNo));
 			}

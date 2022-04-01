@@ -95,6 +95,7 @@ public class ConsumerFiles {
 		}
 		
 	}
+	
 	private void printIntoFile(Consumer consumer, PrintStream ps) {
 		long consumerNo = consumer.getConsumerNO();
 		String name = consumer.getName();
@@ -121,6 +122,7 @@ public class ConsumerFiles {
 		ps.println();
 		
 	}
+	
 	private String getRequests(Consumer consumer) {
 		String result = "";
 		Map<RequestObj, String> requests = consumer.getNotifis();
@@ -150,7 +152,6 @@ public class ConsumerFiles {
 		if(this.consumerFile.exists()) {
 			ConnectionFiles connFile = new ConnectionFiles();
 			RequestObjFiles reqFile = new RequestObjFiles();
-//			long consumerNo, String name, String email, long phoNo,String address,user_name,password
 			Consumer consumer = null;
 			try(
 					FileReader fis = new FileReader(this.consumerFile);
@@ -181,7 +182,6 @@ public class ConsumerFiles {
 					String password = record[passwordIndex];
 					String[] connNos = record[connectionsIndex].split("/");
 					String[] requests = record[requestsIndex].split("/");
-					System.out.println("Repeating");
 					if(record[user_nameIndex].equals("null")) {
 						consumer = new Consumer(consumerNo, name, email, phoNo, address);
 						eb.setConsumers(consumer);

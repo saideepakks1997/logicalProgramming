@@ -1,6 +1,5 @@
 package eb;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -124,6 +123,4 @@ public class ElectricityBoard {
 	public void setRequestNoSeries(long requestNoSeries) {
 		this.requestNoSeries = requestNoSeries;
 	}
-	
-	
 }

@@ -83,7 +83,6 @@ public class RequestObjFiles {
 				int targetIndex = common.getIndex(record, "requestNo");
 				currLine = bis.readLine();
 				while(currLine!= null) {
-					System.out.println("Entering into while loop");
 					record = currLine.split(",");
 					if(Long.parseLong(record[targetIndex]) == request.getRequestNo()) {
 						printIntoFile(request, ps);
@@ -133,9 +132,6 @@ public class RequestObjFiles {
 
 	public void loadRequests(ElectricityBoard eb, String[] requests, Consumer consumer) {
 		if(this.requestFile.exists()) {
-//			int statusNo,long requestNo, long consumerNo,long serviceNo,TypeOfConnection connType, String address, 
-//			LocalDateTime requestedTime,LocalDateTime updatedTime, boolean isNewConn,boolean isReqCompleted
-//			String field = "serviceNo";
 			FileReader fis = null;
 			BufferedReader bis = null;
 			PaymentFile paymentFile = new PaymentFile();
@@ -146,17 +142,7 @@ public class RequestObjFiles {
 				
 				String currLine = bis.readLine();
 				String record[] = currLine.split(",");
-//				 long requestNo;
 
-//				 int statusNo;
-//				 long consumerNo;
-//				 long serviceNo;
-//				 TypeOfConnection connType;
-//				 LocalDateTime requestedTime;
-//				 LocalDateTime lastUpdatedTime;
-//				 String address;
-//				 boolean isNewConnectionReq;
-//				 boolean isRequestCompleted;
 				
 				int statusNoIndex = common.getIndex(record, "statusNo");
 				int requestNoIndex = common.getIndex(record, "requestNo");
@@ -168,42 +154,43 @@ public class RequestObjFiles {
 				int updatedTimeIndex = common.getIndex(record, "lastUpdatedTime");
 				int isNewConnIndex = common.getIndex(record, "isNewConnectionReq");
 				int isReqCompletedIndex= common.getIndex(record, "isRequestCompleted");
-				
-				for(String req:requests) {
-					String[] keyValue = req.split("=");//0 is request no and 1 is notification
-					currLine = bis.readLine();
-					while(currLine != null) {
-						record = currLine.split(",");
-						
-						Long requestNo = Long.parseLong(record[requestNoIndex]);
-						if(Long.parseLong(keyValue[0]) == requestNo) {
-//							
-							 int statusNo = Integer.parseInt(record[statusNoIndex]);
-							 long consumerNo = Long.parseLong(record[consumerNoIndex]);
-							 long serviceNo = Long.parseLong(record[serviceNoIndex]);
-							 TypeOfConnection connType = TypeOfConnection.valueOf(record[connTypeIndex]);
-							 LocalDateTime requestedTime = LocalDateTime.parse(record[requestedTimeIndex]);
-							 LocalDateTime lastUpdatedTime = LocalDateTime.parse(record[updatedTimeIndex]);;
-							 String address = record[addressIndex];
-							 boolean isNewConnectionReq = Boolean.parseBoolean(record[isNewConnIndex]);
-							 boolean isRequestCompleted = Boolean.parseBoolean(record[isReqCompletedIndex]);
-							 
-							RequestObj request = new RequestObj(statusNo, requestNo, consumerNo, serviceNo, connType, address, requestedTime,lastUpdatedTime , isNewConnectionReq, isRequestCompleted);
-							if(isRequestCompleted) {
-								consumer.setNotifis(request, keyValue[1]);
-							}
-							else {
-								consumer.setNotifis(request, keyValue[1]);
-								eb.setRequests(request);
-							}
-							bis.close();
-							break;
-						}
+				if(!requests[0].equals("null")) {
+					for(String req:requests) {
+						String[] keyValue = req.split("=");//0 is request no and 1 is notification
 						currLine = bis.readLine();
+						while(currLine != null) {
+							record = currLine.split(",");
+							
+							Long requestNo = Long.parseLong(record[requestNoIndex]);
+							if(Long.parseLong(keyValue[0]) == requestNo) {
+//								
+								 int statusNo = Integer.parseInt(record[statusNoIndex]);
+								 long consumerNo = Long.parseLong(record[consumerNoIndex]);
+								 long serviceNo = Long.parseLong(record[serviceNoIndex]);
+								 TypeOfConnection connType = TypeOfConnection.valueOf(record[connTypeIndex]);
+								 LocalDateTime requestedTime = LocalDateTime.parse(record[requestedTimeIndex]);
+								 LocalDateTime lastUpdatedTime = LocalDateTime.parse(record[updatedTimeIndex]);;
+								 String address = record[addressIndex];
+								 boolean isNewConnectionReq = Boolean.parseBoolean(record[isNewConnIndex]);
+								 boolean isRequestCompleted = Boolean.parseBoolean(record[isReqCompletedIndex]);
+								 
+								RequestObj request = new RequestObj(statusNo, requestNo, consumerNo, serviceNo, connType, address, requestedTime,lastUpdatedTime , isNewConnectionReq, isRequestCompleted);
+								if(isRequestCompleted) {
+									consumer.setNotifis(request, keyValue[1]);
+								}
+								else {
+									consumer.setNotifis(request, keyValue[1]);
+									eb.setRequests(request);
+								}
+								bis.close();
+								break;
+							}
+							currLine = bis.readLine();
+						}
+						fis = new FileReader(this.requestFile);
+						bis = new BufferedReader(fis);
+						bis.readLine();
 					}
-					fis = new FileReader(this.requestFile);
-					bis = new BufferedReader(fis);
-					bis.readLine();
 				}
 			}
 			catch (Exception e) {

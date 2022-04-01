@@ -1,6 +1,6 @@
-billNoSeries=111111
-connNoSeries=22228
-consumerNoSeries=7
+billNoSeries=111112
+connNoSeries=22224
+consumerNoSeries=4
 requestNoSeries=1
 paymentIdSeries=2
 

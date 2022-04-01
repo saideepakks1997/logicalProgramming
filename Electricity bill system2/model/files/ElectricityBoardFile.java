@@ -29,7 +29,6 @@ public class ElectricityBoardFile {
 	}
 	private void loadConsumers(ElectricityBoard eb) {
 		ConsumerFiles consumerFile = new ConsumerFiles();
-//		consumerFile.setConsumersToEb();
 		consumerFile.loadConsumersToEb(eb);
 		
 		

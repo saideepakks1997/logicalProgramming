@@ -27,7 +27,6 @@ public class PaymentFile {
 				PrintStream ps = new PrintStream(fos);
 				){
 			if(!this.paymentFile.exists() || this.paymentFile.length()==0) {
-				System.out.println("Exists -->"+this.paymentFile.exists());
 				addFields(ps);
 				
 			}
@@ -35,30 +34,12 @@ public class PaymentFile {
 			ps.flush();
 			ps.close();
 			ebFile.updateSeriesNo(field);
-//			displayFile();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-//	public void displayFile() {
-//		try(
-//				FileReader fis = new FileReader(this.paymentFile);
-//				BufferedReader bis = new BufferedReader(fis);
-//				){
-//			String currLine = bis.readLine();
-//			while(currLine != null) {
-//				System.out.println(currLine);
-//				currLine = bis.readLine();
-//			}
-//			bis.close();
-//		}
-//		catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
 
 	private void addFields(PrintStream ps) {
 		ps.print("id,");
@@ -70,13 +51,11 @@ public class PaymentFile {
 	}
 
 	private void printIntoFile(Payment payment, PrintStream ps) {
-		System.out.println("2-->");
 		long id = payment.getId();
 		double payableAmount = payment.getPayableAmount();
 		boolean isPaid = payment.isPaid();
 		String dueDate = payment.getDueDate().toString();
 		Long unitsConsumed = payment.getUnitsConsumed();
-		System.out.println("id-->"+id);
 		ps.print(id+",");
 		ps.print(payableAmount+",");
 		ps.print(isPaid+",");
@@ -138,7 +117,6 @@ public class PaymentFile {
 				int dateIndex = common.getIndex(record, "dueDate");
 				if(!payments[0].equals("null")) {
 					for(String p: payments) {
-//						System.out.println();
 							currLine = bis.readLine();
 							while(currLine != null) {
 								record = currLine.split(",");
@@ -158,7 +136,6 @@ public class PaymentFile {
 								if(currLine == null)
 									bis.close();
 							}
-						
 						
 						fis = new FileReader(this.paymentFile);
 						bis = new BufferedReader(fis);
@@ -212,13 +189,9 @@ public class PaymentFile {
 			}
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return null;
 	}
-//	ps.print("id,");
-//	ps.print("payableAmount,");
-//	ps.print("isPaid,");
-//	ps.print("dueDate,");
-//	ps.print("unitsConsumed");
+
 }

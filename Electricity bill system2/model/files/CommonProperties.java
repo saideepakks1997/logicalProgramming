@@ -22,8 +22,6 @@ public class CommonProperties {
 		return index;
 	}
 
-	
-	
 	public File setFile(String fileName) {
 		File objDir = new File("All Files");
 		objDir.mkdir();
