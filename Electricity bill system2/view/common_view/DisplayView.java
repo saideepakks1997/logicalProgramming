@@ -10,6 +10,7 @@ import connection.Connection;
 import consumer.Consumer;
 import eb.RequestObj;
 import eb.RequestStatus;
+import eb.Tarrifs;
 
 public class DisplayView {
 	
@@ -129,5 +130,44 @@ public class DisplayView {
 			}
 			System.out.println("--------------------------------------------------");
 		}
+	}
+
+
+	public void displayDomesticTariffs(Tarrifs tarrifs) {
+		System.out.println("---------------------------");
+		System.out.println("Connection type:- Domestic Connection Charges");
+		String val = "--------------Category 1(Below 100 units)---------\n"
+				+ "No charges free\n"
+				+ "--------------Category 2(Below 200 units)---------\n"
+				+ "0 to 100 units :-   free\n"
+				+ "Next 100 units :-  "+tarrifs.getDomes200lessThan200()+" rupees per unit\n"
+				+ "--------------Category 3(Below 500 units)---------\n"
+				+ "0 to 100 units:-   free\n"
+				+ "100 to 200 units:-  "+tarrifs.getDomes500lessThan200()+" rupees per unit\n"
+				+ "200 to 500 units:-  "+tarrifs.getDomes500above200()+"rupees per unit\n"
+				+ "--------------Category 4(Above 500 units)---------\n"
+				+ "0 to 100 units:-   free\n"
+				+ "100 to 200 units:-  "+tarrifs.getDomesAbove500lessThan200()+"rupees per unit\n"
+				+ "200 to 500 units:-  "+tarrifs.getDomesAbove500lessThan500()+"rupees per unit\n"
+				+ "Above 500 units:-  "+tarrifs.getDomesAbove500Above500()+"rupees per unit\n";
+		System.out.println(val);
+		System.out.println("---------------------------");
+		
+	}
+	public void displaySplitChargesConn(String connType,int minUnits,double chargesBelowMin, double chargesAboveMin) {
+		System.out.println("---------------------------");
+		System.out.println("Connection type:-"+connType);
+		String val = "less than "+minUnits+" units :- "+chargesBelowMin+" rupees per unit\n"
+				+ "greater than "+minUnits+" units :- "+chargesAboveMin+" rupees per unit";
+		System.out.println(val);
+		System.out.println("---------------------------");
+	}
+	
+	public void displaySameCharges(String connType, double charges) {
+		System.out.println("---------------------------");
+		System.out.println("Connection type:-"+connType);
+		String val = "All units :- "+charges +" rupees per unit";
+		System.out.println(val);
+		System.out.println("---------------------------");
 	}
 }

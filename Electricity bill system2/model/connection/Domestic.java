@@ -1,24 +1,15 @@
 package connection;
 
 import consumer.Consumer;
+import eb.Tarrifs;
 
 public class Domestic extends Connection{
 	
-	public Domestic(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
-		super(serviceNo, connectionType, connAddress, consumer);
+	public Domestic(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
+		super(serviceNo, connectionType, connAddress, consumer, tarrifs);
 	}
 
-	public Domestic(long serviceNo, TypeOfConnection connectionType, long currentUnits, String connAddress,
-			Consumer consumer) {
-		super(serviceNo, connectionType, currentUnits, connAddress, consumer);
-	}
-
-	
-
-	
-
-
-	int freeUnits = 100;
+	int freeUnits = this.tarrif.getDomesFreeUnits();
 	
 	@Override
 	public double calculateBill(double units) {
@@ -38,29 +29,30 @@ public class Domestic extends Connection{
 	}
 
 	private double lessThan200Units(double units) {
+		double lessThan200 = this.tarrif.getDomes200lessThan200();
 		double amount;
 		units -= 100;
-		amount = units * 1.5;
+		amount = units * lessThan200;
 		System.out.println("Amount :- "+amount);
 		return amount;
 	}
 	
 	private double lessThan500Units(double units) {
 		double amount;
-		double chargesLessThan200 = 2;
-		double chargesAbove200 = 3;
+		double chargesLessThan200 = this.tarrif.getDomes500lessThan200();
+		double chargesAbove200 = this.tarrif.getDomes500above200();
 		units -= 100;
 		amount = 100 * chargesLessThan200;
 		units -= 100;
-		amount = units * chargesAbove200;
+		amount += (units * chargesAbove200);
 		return amount;
 	}
 	
 	private double greaterThan500(double units) {
 		double amount;
-		double chargesLessThan200 = 3.5;
-		double chargesLessThan500 = 4.6;
-		double chargesGreaterThan500 = 6.6;
+		double chargesLessThan200 = this.tarrif.getDomesAbove500lessThan200();
+		double chargesLessThan500 = this.tarrif.getDomesAbove500lessThan500();
+		double chargesGreaterThan500 = this.tarrif.getDomesAbove500Above500();
 		units -= 100;
 		amount = 100 * chargesLessThan200;
 		units -= 100;
@@ -68,23 +60,5 @@ public class Domestic extends Connection{
 		units -= 300;
 		amount += (units * chargesGreaterThan500);
 		return amount;
-	}
-	
-	public String toString() {
-		String val = "--------------Category 1(Below 100 units)---------\n"
-				+ "No charges free\n"
-				+ "--------------Category 2(Below 200 units)---------\n"
-				+ "0 to 100 units :-   free\n"
-				+ "Next 100 units :-  1.5 rupees per unit\n"
-				+ "--------------Category 3(Below 500 units)---------\n"
-				+ "0 to 100 units:-   free\n"
-				+ "100 to 200 units:-  3 rupees per unit\n"
-				+ "200 to 500 units:-  4 rupees per unit\n"
-				+ "--------------Category 4(Above 500 units)---------\n"
-				+ "0 to 100 units:-   free\n"
-				+ "100 to 200 units:-  3.5 rupees per unit\n"
-				+ "200 to 500 units:-  4.5 rupees per unit\n"
-				+ "Above 500 units:-  6.6 rupees per unit";
-		return val;
 	}
 }

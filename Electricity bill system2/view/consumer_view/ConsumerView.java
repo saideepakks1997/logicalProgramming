@@ -12,6 +12,7 @@ import consumer.Consumer;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
+import eb.Tarrifs;
 import validator_encrypter.Validator;
 
 public class ConsumerView {
@@ -26,12 +27,14 @@ public class ConsumerView {
 	ICommonOperations commonOperations = null;
 	
 	boolean isConsumer = true;
+	Tarrifs tarrifs = null;
 	public ConsumerView(ElectricityBoard eb) {
 		this.commonView = new CommonView(eb);
 		this.loginView = new ConsumerLoginView(eb);
 		
 		this.commonOperations = new CommonOperations(eb);
 		this.operations = new ConsumerOperations(eb);
+		this.tarrifs = eb.getTarrifs();
 	}
 	
 	public void askConsumerOptions() {
@@ -53,8 +56,8 @@ public class ConsumerView {
 					break;
 				case 3: login();
 					break;
-//				case 4: viewTarrifs();
-//					break;
+				case 4: viewTarrifs();
+					break;
 				case 9: loop = false;
 					display.displayMessege("Back to previous menu");
 					break;
@@ -65,15 +68,53 @@ public class ConsumerView {
 				}
 		}
 	}
-//	private void viewTarrifs() {
-//		List<TypeOfConnection> conns = commonOperations.getAllConnectionTypes();
-//		for(TypeOfConnection conn:conns) {
-//			System.out.println("Connection Type:- "+conn);
-//			display.displayMessege(conn.getObj());
-//		}
-//		
-//	}
 
+	
+	private void viewTarrifs() {
+		display.displayDomesticTariffs(this.tarrifs);
+		//Lt Commercial
+		display.displaySplitChargesConn(
+				"Lt Commercial",
+				tarrifs.getCommercialMinUnits(), 
+				tarrifs.getCommercialChargesBelowMin(), 
+				tarrifs.getCommercialChargesAboveMin()
+				);
+		//Public workshop
+		display.displaySplitChargesConn(
+				"Public workshop",
+				tarrifs.getWorkshopMinUnits(), 
+				tarrifs.getWorkshopChargesBelowMin(), 
+				tarrifs.getWorkshopChargesAboveMin()
+				);
+		//Cottage industries
+		display.displaySplitChargesConn(
+				"Cottage industries",
+				tarrifs.getCottageMinUnits(), 
+				tarrifs.getCottageChargesBelowMin(), 
+				tarrifs.getCottageChargesAboveMin()
+				);
+		//Power looms
+		display.displaySplitChargesConn(
+				"Power looms",
+				tarrifs.getLoomsMinUnits(), 
+				tarrifs.getLoomsChargesBelowMin(), 
+				tarrifs.getLoomsChargesAboveMin()
+				);
+		//public village lights
+		display.displaySameCharges("public village lights",tarrifs.getIndustrialMetroCharges());
+		
+		//Temporary Supply
+		display.displaySameCharges("Temporary Supply",tarrifs.getTempSupplyCharges());
+		
+		//Public Light Town
+		display.displaySameCharges("Public Light Town",tarrifs.getLightTowncharges());
+		
+		//Govn Aided Places
+		display.displaySameCharges("Govn Aided Places",tarrifs.getGovnPlacesCharges());
+		
+		//Private Hostpital Institution
+		display.displaySameCharges("Private Hostpital Institution",tarrifs.getPrivateHospitalCharges());
+	}
 
 	private void consumerRegistration() {
 		display.displayMessege("Enter option before registration\n"

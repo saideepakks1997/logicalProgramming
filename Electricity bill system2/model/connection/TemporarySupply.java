@@ -1,19 +1,12 @@
 package connection;
 
 import consumer.Consumer;
+import eb.Tarrifs;
 
 public class TemporarySupply extends Connection{
-	public double charges = 12;
-	
-	public TemporarySupply(long serviceNo, TypeOfConnection connectionType, long currentUnits, String connAddress,
-			Consumer consumer) {
-		super(serviceNo, connectionType, currentUnits, connAddress, consumer);
-		
-	}
+	public double charges = this.tarrif.getTempSupplyCharges();
 
-	public TemporarySupply(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
-		super(serviceNo, connectionType, connAddress, consumer);
-		
+	public TemporarySupply(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
+		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
+		}
 	}
-
-}

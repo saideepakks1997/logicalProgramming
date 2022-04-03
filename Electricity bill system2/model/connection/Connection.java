@@ -6,6 +6,7 @@ import java.util.List;
 import bill.Bill;
 import bill.Payment;
 import consumer.Consumer;
+import eb.Tarrifs;
 
 public class Connection {
 	
@@ -17,20 +18,13 @@ public class Connection {
 	double charges = 10;
 	private List<Payment> pendingPayments = new ArrayList<>();
 	private List<Bill> bills = new ArrayList<Bill>();
-	
-	public Connection(long serviceNo, TypeOfConnection connectionType,String connAddress, Consumer consumer) {
+	public Tarrifs tarrif = null;
+	public Connection(long serviceNo, TypeOfConnection connectionType,String connAddress, Consumer consumer,Tarrifs tarrifs) {
 		this.setServiceNo(serviceNo);
 		this.setConnectionType(connectionType);
 		this.setConnAddress(connAddress);
 		this.setConsumer(consumer);
-	}
-	
-	public Connection(long serviceNo, TypeOfConnection connectionType,long currentUnits,String connAddress, Consumer consumer) {
-		this.setServiceNo(serviceNo);
-		this.setConnectionType(connectionType);
-		this.setCurrentUnit(currentUnits);
-		this.setConnAddress(connAddress);
-		this.setConsumer(consumer);
+		this.tarrif = tarrifs;
 	}
 	
 	

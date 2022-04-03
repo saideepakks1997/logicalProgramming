@@ -1,3 +1,3 @@
 serviceNo,connectionType,currentUnits,consumerNo,connAddress,pendingPayments,bills
-22222,Domestic,120,1,asjgkd,null,111111/
+22222,Domestic,1260,1,asjgkd,2/3/4/,111111/
 22223,CottageAndTinyIndustries,0,2,asdfhsdf,null,null

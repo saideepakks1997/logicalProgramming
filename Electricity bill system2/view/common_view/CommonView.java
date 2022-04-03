@@ -177,7 +177,7 @@ public class CommonView {
 					for(AdminPaymentOptions payment: paymentopts) {
 						System.out.println((i++)+"."+payment);
 					}
-					Integer opt = input.getInt();
+					int opt = input.getInt();
 					if(opt != -1) {
 						if(opt < 0 || opt > paymentopts.size()) {
 							if(chances >= validate.getMaxChance()) {

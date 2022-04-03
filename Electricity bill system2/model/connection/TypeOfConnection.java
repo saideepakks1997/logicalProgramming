@@ -1,6 +1,5 @@
 package connection;
 
-import connection_obj.*;
 
 public enum TypeOfConnection {
 	Domestic("Domestic"),

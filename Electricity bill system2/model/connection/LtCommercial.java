@@ -1,23 +1,21 @@
 package connection;
 
 import consumer.Consumer;
+import eb.Tarrifs;
 
 public class LtCommercial extends Connection{
 	
 	
 
-	public double minUnits = 100;
-	public double chargesBelowMin = 5;
-	public double chargesAboveMin = 8.05;
+	public double minUnits = this.tarrif.getCommercialMinUnits();
+	public double chargesBelowMin = this.tarrif.getCommercialChargesBelowMin();
+	public double chargesAboveMin = this.tarrif.getCommercialChargesAboveMin();
 	
-	public LtCommercial(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
-		super(serviceNo, connectionType, connAddress, consumer);
+	public LtCommercial(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
+		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
 	}
 	
-	public LtCommercial(long serviceNo, TypeOfConnection connectionType, long currentUnits, String connAddress,
-			Consumer consumer) {
-		super(serviceNo, connectionType, currentUnits, connAddress, consumer);
-	}
+	
 	
 	@Override
 	public double calculateBill(double units) {
@@ -27,11 +25,4 @@ public class LtCommercial extends Connection{
 			return units * chargesAboveMin;
 	}
 	
-
-	@Override
-	public String toString() {
-		String val = "less than "+(int)minUnits+" units :- "+chargesBelowMin+" rupees per unit\n"
-				+ "greater than "+(int)minUnits+" units :- "+chargesAboveMin+" rupees per unit";
-		return val;
-	}
 }

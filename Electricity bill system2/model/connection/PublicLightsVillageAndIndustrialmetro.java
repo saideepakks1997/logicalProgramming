@@ -1,20 +1,14 @@
 package connection;
 
 import consumer.Consumer;
+import eb.Tarrifs;
 
 public class PublicLightsVillageAndIndustrialmetro extends Connection{
-	public double charges = 6.35;
+	public double charges = this.tarrif.getIndustrialMetroCharges();
 	
-	public PublicLightsVillageAndIndustrialmetro(long serviceNo, TypeOfConnection connectionType, long currentUnits,
-			String connAddress, Consumer consumer) {
-		super(serviceNo, connectionType, currentUnits, connAddress, consumer);
-	}
-
-	
-
 	public PublicLightsVillageAndIndustrialmetro(long serviceNo, TypeOfConnection connectionType, String connAddress,
-			Consumer consumer) {
-		super(serviceNo, connectionType, connAddress, consumer);
+			Consumer consumer,Tarrifs tarrifs) {
+		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
 	}
 	
 }

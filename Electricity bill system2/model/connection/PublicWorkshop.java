@@ -1,27 +1,15 @@
 package connection;
 
 import consumer.Consumer;
+import eb.Tarrifs;
 
 public class PublicWorkshop extends Connection{
 	
-	public double minUnits = 120;
-	public double chargesBelowMin = 2.85;
-	public double chargesAboveMin = 5.75;
+	public double minUnits = this.tarrif.getWorkshopMinUnits();
+	public double chargesBelowMin = this.tarrif.getWorkshopChargesBelowMin();
+	public double chargesAboveMin = this.tarrif.getWorkshopChargesAboveMin();
 	
-	
-	public PublicWorkshop(long serviceNo, TypeOfConnection connectionType, long currentUnits, String connAddress,
-			Consumer consumer) {
-		super(serviceNo, connectionType, currentUnits, connAddress, consumer);
+	public PublicWorkshop(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
+		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
 	}
-	public PublicWorkshop(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
-		super(serviceNo, connectionType, connAddress, consumer);
-	}
-	
-	@Override
-	public String toString() {
-		String val = "less than "+(int)minUnits+" units :- "+chargesBelowMin+" rupees per unit\n"
-				+ "greater than "+(int)minUnits+" units :- "+chargesAboveMin+" rupees per unit";
-		return val;
-	}
-	
 }

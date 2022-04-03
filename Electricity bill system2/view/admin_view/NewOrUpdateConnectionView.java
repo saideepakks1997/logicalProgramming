@@ -214,11 +214,11 @@ public class NewOrUpdateConnectionView {
 		
 	}
 
-	private Integer getRequestOption(List<RequestObj> requests, boolean isNewConnRequest) {
+	private int getRequestOption(List<RequestObj> requests, boolean isNewConnRequest) {
 		System.out.println("Select the request number for approval or not approving\n"
 				+ "(-1) for not selecting anything");
 		display.displayRequest(requests,isNewConnRequest);
-		Integer opt = input.getInt();
+		int opt = input.getInt();
 		return opt;
 	}
 

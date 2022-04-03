@@ -1,22 +1,20 @@
 package connection;
 
 import consumer.Consumer;
+import eb.Tarrifs;
 
 public class PowerLooms extends Connection{
 	
 
-	public int minUnits = 1000;
-	public double chargesBelowMin = 2.3;
-	public double chargesAboveMin = 4.6;
+	public int minUnits = this.tarrif.getLoomsMinUnits();
+	public double chargesBelowMin = this.tarrif.getLoomsChargesBelowMin();
+	public double chargesAboveMin = this.tarrif.getLoomsChargesAboveMin();
 	
-	public PowerLooms(long serviceNo, TypeOfConnection connectionType, long currentUnits, String connAddress,
-			Consumer consumer) {
-		super(serviceNo, connectionType, currentUnits, connAddress, consumer);
-	}
+	
 
 	
-	public PowerLooms(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
-		super(serviceNo, connectionType, connAddress, consumer);
+	public PowerLooms(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
+		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
 	}
 	
 	@Override
@@ -25,12 +23,5 @@ public class PowerLooms extends Connection{
 			return units * chargesBelowMin;
 		else
 			return units * chargesAboveMin;
-	}
-	
-	@Override
-	public String toString() {
-		String val = "less than "+(int)minUnits+" units :- "+chargesBelowMin+" rupees per unit\n"
-				+ "greater than "+(int)minUnits+" units :- "+chargesAboveMin+" rupees per unit";
-		return val;
 	}
 }

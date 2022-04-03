@@ -81,12 +81,15 @@ public class AdminView {
 				if(connNo != -1) {
 					System.out.println("Enter the reading to set");
 					Long readings = input.getLong();
-					
-					boolean isReadingsSet = operations.setReading(connNo, readings);
-					if(isReadingsSet)
-						display.displayMessege("Reading has been set to "+readings);
+					if(readings != -1) {
+						boolean isReadingsSet = operations.setReading(connNo, readings);
+						if(isReadingsSet)
+							display.displayMessege("Reading has been set to "+readings);
+						else
+							display.displayMessege("Entered reading is less than past reading please check the readings ");
+					}
 					else
-						display.displayMessege("Entered reading is less than past reading please check the readings ");
+						return;
 				}
 			}
 //		}
