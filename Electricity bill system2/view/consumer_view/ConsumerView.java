@@ -12,7 +12,7 @@ import consumer.Consumer;
 import consumer_operations.ConsumerOperations;
 import consumer_operations.IConsumerOperations;
 import eb.ElectricityBoard;
-import eb.Tarrifs;
+import connection.Tarrifs;
 import validator_encrypter.Validator;
 
 public class ConsumerView {

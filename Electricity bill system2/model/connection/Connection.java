@@ -6,7 +6,6 @@ import java.util.List;
 import bill.Bill;
 import bill.Payment;
 import consumer.Consumer;
-import eb.Tarrifs;
 
 public class Connection {
 	

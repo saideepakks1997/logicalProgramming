@@ -1,7 +1,6 @@
 package connection;
 
 import consumer.Consumer;
-import eb.Tarrifs;
 
 public class PublicLightTown extends Connection {
 	

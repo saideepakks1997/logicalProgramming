@@ -1,7 +1,6 @@
 package connection;
 
 import consumer.Consumer;
-import eb.Tarrifs;
 
 public class PrivateHostpitalInstitution extends Connection{
 	public double charges = Tarrifs.privateHospitalCharges;

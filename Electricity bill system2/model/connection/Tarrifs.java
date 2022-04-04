@@ -1,4 +1,4 @@
-package eb;
+package connection;
 
 public interface Tarrifs {
 	

@@ -13,7 +13,6 @@ import connection.PublicWorkshop;
 import connection.TemporarySupply;
 import connection.TypeOfConnection;
 import consumer.Consumer;
-import eb.Tarrifs;
 
 public class ConnectionFactoryObj implements IConnectionFactory{
 

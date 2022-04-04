@@ -10,7 +10,7 @@ import connection.Connection;
 import consumer.Consumer;
 import eb.RequestObj;
 import eb.RequestStatus;
-import eb.Tarrifs;
+import connection.Tarrifs;
 
 public class DisplayView {
 	
@@ -64,7 +64,6 @@ public class DisplayView {
 	}
 	
 	public void displayBill(Bill bill) {
-		int i=1;
 		try {
 			System.out.println("------------------");
 			System.out.println("Amount has been paid successfully\n"
