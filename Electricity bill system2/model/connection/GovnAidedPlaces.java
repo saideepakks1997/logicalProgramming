@@ -6,9 +6,9 @@ import eb.Tarrifs;
 public class GovnAidedPlaces extends Connection{
 	
 
-	public double charges = this.tarrif.getGovnPlacesCharges();
+	public double charges = Tarrifs.govnPlacesCharges;
 
-	public GovnAidedPlaces(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
-		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
+	public GovnAidedPlaces(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
+		super(serviceNo, connectionType, connAddress, consumer);
 	}
 }

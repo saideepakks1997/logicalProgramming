@@ -7,12 +7,12 @@ public class LtCommercial extends Connection{
 	
 	
 
-	public double minUnits = this.tarrif.getCommercialMinUnits();
-	public double chargesBelowMin = this.tarrif.getCommercialChargesBelowMin();
-	public double chargesAboveMin = this.tarrif.getCommercialChargesAboveMin();
+	public double minUnits = Tarrifs.commercialMinUnits;
+	public double chargesBelowMin = Tarrifs.commercialChargesBelowMin;
+	public double chargesAboveMin = Tarrifs.commercialChargesAboveMin;
 	
-	public LtCommercial(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
-		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
+	public LtCommercial(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
+		super(serviceNo, connectionType, connAddress, consumer);
 	}
 	
 	

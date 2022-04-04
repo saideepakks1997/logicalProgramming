@@ -34,7 +34,6 @@ public class ElectricityBoard {
 	private Set<RequestObj> requests = new TreeSet<>(new RequestObjComparator());
 	
 	
-	private Tarrifs tarrifs = new Tarrifs();
 	
 	public ElectricityBoard() {
 		Admin admin1 = new Admin("admin1", "admin1");
@@ -125,10 +124,6 @@ public class ElectricityBoard {
 	}
 	public void setRequestNoSeries(long requestNoSeries) {
 		this.requestNoSeries = requestNoSeries;
-	}
-
-	public Tarrifs getTarrifs() {
-		return tarrifs;
 	}
 
 }

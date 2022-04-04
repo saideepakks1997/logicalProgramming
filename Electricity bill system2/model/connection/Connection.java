@@ -18,13 +18,13 @@ public class Connection {
 	double charges = 10;
 	private List<Payment> pendingPayments = new ArrayList<>();
 	private List<Bill> bills = new ArrayList<Bill>();
-	public Tarrifs tarrif = null;
-	public Connection(long serviceNo, TypeOfConnection connectionType,String connAddress, Consumer consumer,Tarrifs tarrifs) {
+	
+	public Connection(long serviceNo, TypeOfConnection connectionType,String connAddress, Consumer consumer) {
 		this.setServiceNo(serviceNo);
 		this.setConnectionType(connectionType);
 		this.setConnAddress(connAddress);
 		this.setConsumer(consumer);
-		this.tarrif = tarrifs;
+		
 	}
 	
 	

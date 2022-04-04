@@ -5,8 +5,8 @@ import eb.Tarrifs;
 
 public class PublicLightTown extends Connection {
 	
-	public double charges = this.tarrif.getLightTowncharges();
-	public PublicLightTown(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
-		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
+	public double charges = Tarrifs.lightTowncharges;
+	public PublicLightTown(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
+		super(serviceNo, connectionType, connAddress, consumer);
 	}
 }		

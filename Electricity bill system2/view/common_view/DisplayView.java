@@ -133,23 +133,23 @@ public class DisplayView {
 	}
 
 
-	public void displayDomesticTariffs(Tarrifs tarrifs) {
+	public void displayDomesticTariffs() {
 		System.out.println("---------------------------");
 		System.out.println("Connection type:- Domestic Connection Charges");
 		String val = "--------------Category 1(Below 100 units)---------\n"
 				+ "No charges free\n"
 				+ "--------------Category 2(Below 200 units)---------\n"
 				+ "0 to 100 units :-   free\n"
-				+ "Next 100 units :-  "+tarrifs.getDomes200lessThan200()+" rupees per unit\n"
+				+ "Next 100 units :-  "+Tarrifs.domes200lessThan200+" rupees per unit\n"
 				+ "--------------Category 3(Below 500 units)---------\n"
 				+ "0 to 100 units:-   free\n"
-				+ "100 to 200 units:-  "+tarrifs.getDomes500lessThan200()+" rupees per unit\n"
-				+ "200 to 500 units:-  "+tarrifs.getDomes500above200()+"rupees per unit\n"
+				+ "100 to 200 units:-  "+Tarrifs.domes500lessThan200+" rupees per unit\n"
+				+ "200 to 500 units:-  "+Tarrifs.domes500above200+" rupees per unit\n"
 				+ "--------------Category 4(Above 500 units)---------\n"
 				+ "0 to 100 units:-   free\n"
-				+ "100 to 200 units:-  "+tarrifs.getDomesAbove500lessThan200()+"rupees per unit\n"
-				+ "200 to 500 units:-  "+tarrifs.getDomesAbove500lessThan500()+"rupees per unit\n"
-				+ "Above 500 units:-  "+tarrifs.getDomesAbove500Above500()+"rupees per unit\n";
+				+ "100 to 200 units:-  "+Tarrifs.domesAbove500lessThan200+"  rupees per unit\n"
+				+ "200 to 500 units:-  "+Tarrifs.domesAbove500lessThan500+"rupees per unit\n"
+				+ "Above 500 units:-  "+Tarrifs.domesAbove500Above500+" rupees per unit\n";
 		System.out.println(val);
 		System.out.println("---------------------------");
 		

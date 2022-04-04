@@ -6,15 +6,15 @@ import eb.Tarrifs;
 public class PowerLooms extends Connection{
 	
 
-	public int minUnits = this.tarrif.getLoomsMinUnits();
-	public double chargesBelowMin = this.tarrif.getLoomsChargesBelowMin();
-	public double chargesAboveMin = this.tarrif.getLoomsChargesAboveMin();
+	public int minUnits = Tarrifs.loomsMinUnits;
+	public double chargesBelowMin = Tarrifs.loomsChargesBelowMin;
+	public double chargesAboveMin = Tarrifs.loomsChargesAboveMin;
 	
 	
 
 	
-	public PowerLooms(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
-		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
+	public PowerLooms(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
+		super(serviceNo, connectionType, connAddress, consumer);
 	}
 	
 	@Override

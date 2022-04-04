@@ -115,7 +115,7 @@ public class AdminOperations implements IAdminOperations{
 		long serviceNo = this.eb.getConnNoSeries();
 		Consumer consumer = this.eb.getConsumers().get(customerNo);
 //		Connection conn = new Connection(serviceNo, connType, connAddress, consumer);
-		Connection con = connFactory.getConnectionObj(serviceNo, connType, connAddress, consumer,this.eb.getTarrifs());
+		Connection con = connFactory.getConnectionObj(serviceNo, connType, connAddress, consumer);
 		this.eb.setConnections(con);
 		consumer.setConnection(con);
 		

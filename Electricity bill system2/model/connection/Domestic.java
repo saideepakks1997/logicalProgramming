@@ -5,11 +5,11 @@ import eb.Tarrifs;
 
 public class Domestic extends Connection{
 	
-	public Domestic(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
-		super(serviceNo, connectionType, connAddress, consumer, tarrifs);
+	public Domestic(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
+		super(serviceNo, connectionType, connAddress, consumer);
 	}
 
-	int freeUnits = this.tarrif.getDomesFreeUnits();
+	int freeUnits = Tarrifs.domesFreeUnits;
 	
 	@Override
 	public double calculateBill(double units) {
@@ -29,7 +29,7 @@ public class Domestic extends Connection{
 	}
 
 	private double lessThan200Units(double units) {
-		double lessThan200 = this.tarrif.getDomes200lessThan200();
+		double lessThan200 = Tarrifs.domes200lessThan200;
 		double amount;
 		units -= 100;
 		amount = units * lessThan200;
@@ -39,8 +39,8 @@ public class Domestic extends Connection{
 	
 	private double lessThan500Units(double units) {
 		double amount;
-		double chargesLessThan200 = this.tarrif.getDomes500lessThan200();
-		double chargesAbove200 = this.tarrif.getDomes500above200();
+		double chargesLessThan200 = Tarrifs.domes500lessThan200;
+		double chargesAbove200 = Tarrifs.domes500above200;
 		units -= 100;
 		amount = 100 * chargesLessThan200;
 		units -= 100;
@@ -50,9 +50,9 @@ public class Domestic extends Connection{
 	
 	private double greaterThan500(double units) {
 		double amount;
-		double chargesLessThan200 = this.tarrif.getDomesAbove500lessThan200();
-		double chargesLessThan500 = this.tarrif.getDomesAbove500lessThan500();
-		double chargesGreaterThan500 = this.tarrif.getDomesAbove500Above500();
+		double chargesLessThan200 = Tarrifs.domesAbove500lessThan200;
+		double chargesLessThan500 = Tarrifs.domesAbove500lessThan500;
+		double chargesGreaterThan500 = Tarrifs.domesAbove500Above500;
 		units -= 100;
 		amount = 100 * chargesLessThan200;
 		units -= 100;

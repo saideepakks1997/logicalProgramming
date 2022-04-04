@@ -7,5 +7,5 @@ import eb.Tarrifs;
 
 public interface IConnectionFactory {
 	public Connection getConnectionObj(long serviceNo, TypeOfConnection connType, String connAddress,
-			Consumer consumer,Tarrifs tarrif);
+			Consumer consumer);
 }

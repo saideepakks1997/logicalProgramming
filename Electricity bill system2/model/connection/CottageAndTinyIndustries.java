@@ -5,15 +5,15 @@ import eb.Tarrifs;
 
 public class CottageAndTinyIndustries extends Connection{
 	
-	public double minUnits = this.tarrif.getCottageMinUnits();
-	public double chargesBelowMin = this.tarrif.getCottageChargesBelowMin();
-	public double chargesAboveMin = this.tarrif.getCottageChargesAboveMin();
+	public double minUnits = Tarrifs.cottageMinUnits;
+	public double chargesBelowMin = Tarrifs.cottageChargesBelowMin;
+	public double chargesAboveMin = Tarrifs.cottageChargesAboveMin;
 	
 	
 	
 	public CottageAndTinyIndustries(long serviceNo, TypeOfConnection connectionType, String connAddress,
-			Consumer consumer,Tarrifs tarrifs) {
-		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
+			Consumer consumer) {
+		super(serviceNo, connectionType, connAddress, consumer);
 	}
 	
 	@Override

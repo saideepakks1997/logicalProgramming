@@ -27,15 +27,14 @@ public class ConsumerView {
 	ICommonOperations commonOperations = null;
 	
 	boolean isConsumer = true;
-	Tarrifs tarrifs = null;
+	
 	public ConsumerView(ElectricityBoard eb) {
 		this.commonView = new CommonView(eb);
 		this.loginView = new ConsumerLoginView(eb);
 		
 		this.commonOperations = new CommonOperations(eb);
 		this.operations = new ConsumerOperations(eb);
-		this.tarrifs = eb.getTarrifs();
-	}
+		}
 	
 	public void askConsumerOptions() {
 		boolean isAdmin = false;
@@ -71,49 +70,49 @@ public class ConsumerView {
 
 	
 	private void viewTarrifs() {
-		display.displayDomesticTariffs(this.tarrifs);
+		display.displayDomesticTariffs();
 		//Lt Commercial
 		display.displaySplitChargesConn(
 				"Lt Commercial",
-				tarrifs.getCommercialMinUnits(), 
-				tarrifs.getCommercialChargesBelowMin(), 
-				tarrifs.getCommercialChargesAboveMin()
+				Tarrifs.commercialMinUnits, 
+				Tarrifs.commercialChargesBelowMin, 
+				Tarrifs.commercialChargesAboveMin
 				);
 		//Public workshop
 		display.displaySplitChargesConn(
 				"Public workshop",
-				tarrifs.getWorkshopMinUnits(), 
-				tarrifs.getWorkshopChargesBelowMin(), 
-				tarrifs.getWorkshopChargesAboveMin()
+				Tarrifs.workshopMinUnits, 
+				Tarrifs.workshopChargesBelowMin, 
+				Tarrifs.workshopChargesAboveMin
 				);
 		//Cottage industries
 		display.displaySplitChargesConn(
 				"Cottage industries",
-				tarrifs.getCottageMinUnits(), 
-				tarrifs.getCottageChargesBelowMin(), 
-				tarrifs.getCottageChargesAboveMin()
+				Tarrifs.cottageMinUnits, 
+				Tarrifs.cottageChargesBelowMin, 
+				Tarrifs.cottageChargesAboveMin
 				);
 		//Power looms
 		display.displaySplitChargesConn(
 				"Power looms",
-				tarrifs.getLoomsMinUnits(), 
-				tarrifs.getLoomsChargesBelowMin(), 
-				tarrifs.getLoomsChargesAboveMin()
+				Tarrifs.loomsMinUnits, 
+				Tarrifs.loomsChargesBelowMin, 
+				Tarrifs.loomsChargesAboveMin
 				);
-		//public village lights
-		display.displaySameCharges("public village lights",tarrifs.getIndustrialMetroCharges());
+		//public village lights 
+		display.displaySameCharges("public village lights",Tarrifs.industrialMetroCharges);
 		
 		//Temporary Supply
-		display.displaySameCharges("Temporary Supply",tarrifs.getTempSupplyCharges());
+		display.displaySameCharges("Temporary Supply",Tarrifs.tempSupplyCharges);
 		
 		//Public Light Town
-		display.displaySameCharges("Public Light Town",tarrifs.getLightTowncharges());
+		display.displaySameCharges("Public Light Town",Tarrifs.lightTowncharges);
 		
 		//Govn Aided Places
-		display.displaySameCharges("Govn Aided Places",tarrifs.getGovnPlacesCharges());
+		display.displaySameCharges("Govn Aided Places",Tarrifs.govnPlacesCharges);
 		
 		//Private Hostpital Institution
-		display.displaySameCharges("Private Hostpital Institution",tarrifs.getPrivateHospitalCharges());
+		display.displaySameCharges("Private Hostpital Institution",Tarrifs.privateHospitalCharges);
 	}
 
 	private void consumerRegistration() {
@@ -131,8 +130,7 @@ public class ConsumerView {
 			default: display.displayMessege("Back to previous menu");
 				break;
 			}
-		
-	}
+		}
 	
 
 	private void login() {

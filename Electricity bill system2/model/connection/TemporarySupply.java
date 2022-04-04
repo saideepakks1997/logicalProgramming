@@ -4,9 +4,9 @@ import consumer.Consumer;
 import eb.Tarrifs;
 
 public class TemporarySupply extends Connection{
-	public double charges = this.tarrif.getTempSupplyCharges();
+	public double charges = Tarrifs.tempSupplyCharges;
 
-	public TemporarySupply(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer,Tarrifs tarrifs) {
-		super(serviceNo, connectionType, connAddress, consumer,tarrifs);
+	public TemporarySupply(long serviceNo, TypeOfConnection connectionType, String connAddress, Consumer consumer) {
+		super(serviceNo, connectionType, connAddress, consumer);
 		}
 	}

@@ -168,7 +168,7 @@ public class ConnectionFiles implements IConnectionFiles{
 								long currUnits = Long.parseLong(record[currUnitsIndex]);
 								String connAddress = record[addressIndex];
 								
-								Connection con = connFactory.getConnectionObj(serviceNo, connType, connAddress, consumer, eb.getTarrifs()); 
+								Connection con = connFactory.getConnectionObj(serviceNo, connType, connAddress, consumer); 
 								con.setCurrentUnit(currUnits);
 								eb.setConnections(con);
 								consumer.setConnection(con);
